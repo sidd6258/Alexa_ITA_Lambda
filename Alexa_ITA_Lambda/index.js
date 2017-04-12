@@ -12,7 +12,7 @@
 
 const Alexa = require('alexa-sdk');
 const request=require('request');
-const APP_ID = "amzn1.ask.skill.06e1a5f6-c4a2-4b77-844b-8e86b0e465a2";  // TODO replace with your app ID (OPTIONAL).
+const APP_ID = "amzn1.ask.skill.37118132-2457-4a2e-809e-b976b1c66e33";  // TODO replace with your app ID (OPTIONAL).
 
 const languageStrings = {
     'en-GB': {
@@ -93,15 +93,13 @@ const handlers = {
     'LaunchRequest': function () {
         this.emit('GetFact');
     },
-    'FlightIntent': function () {
+    'HotelIntent': function () {
         // Get a random space fact from the space facts list
     	var myJSONObject={};
-        var origin=this.event.request.intent.slots.origin.value;
-        var destination=this.event.request.intent.slots.destination.value;
-        var date=this.event.request.intent.slots.date.value;
-        myJSONObject={"origin":origin,
-        		"destination":destination,
-        		"date":date};
+        var input=this.event.request.intent.slots.input.value;
+        var sdatetime=this.event.request.intent.slots.sdatetime.value;
+        var edatetime=this.event.request.intent.slots.edatetime.value;
+        myJSONObject={"input":input,"sdatetime":sdatetime,"edatetime":edatetime};
         request({
     	    url: "http://Sample-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/flight",
     	    method: "POST",
@@ -110,17 +108,20 @@ const handlers = {
     	}, function (error, response, body){
     		 console.log("res"+response);
     		if (!error && response.statusCode == 200) {
-               // console.log("res"+JSON.parse(response));
                 console.log("place"+JSON.stringify(response));
-        		this.emit(':tell',origin);
+                console.log("chal ku nhi raha");
+        		this.emit(':tell','Siddharth');
                 //res.send(response);
             }
     		else
     			{
     			console.log("error"+response+error);
-    			//res.send("error");
+    			const speechOutput = "Something went wrong";
+    	        const reprompt = "what can i do for you";
+    	        this.emit(':ask', speechOutput, reprompt);
     			}
     	});
+        this.emit(':tell','Siddharth');
 		
     },
     'AMAZON.HelpIntent': function () {
