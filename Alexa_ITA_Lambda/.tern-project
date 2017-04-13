@@ -1,18 +1,1 @@
-{
-  "plugins": {
-    "outline": {
-      
-    },
-    "es_modules": {
-      
-    },
-    "node": {
-      
-    }
-  },
-  "libs": [
-    "ecma5",
-    "ecma6"
-  ],
-  "ecmaVersion": 6
-}
+{"plugins":{"outline":{},"es_modules":{},"node":{}},"libs":["ecma5","ecma6"],"ecmaVersion":6,"ide":{}}
