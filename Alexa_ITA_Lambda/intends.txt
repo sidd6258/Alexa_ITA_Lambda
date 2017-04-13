@@ -1,0 +1,47 @@
+{
+  "intents": [
+    {
+      "slots": [
+        {
+          "name": "origin",
+          "type": "AMAZON.US_CITY"
+        },
+        {
+          "name": "date",
+          "type": "AMAZON.DATE"
+        },
+        {
+          "name": "destination",
+          "type": "AMAZON.US_CITY"
+        }
+      ],
+      "intent": "FlightIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "input",
+          "type": "AMAZON.US_CITY"
+        },
+        {
+          "name": "startdate",
+          "type": "AMAZON.DATE"
+        },
+        {
+          "name": "enddate",
+          "type": "AMAZON.DATE"
+        }
+      ],
+      "intent": "HotelSearchIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}
