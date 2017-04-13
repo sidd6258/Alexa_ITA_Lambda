@@ -1,9 +1,23 @@
-FlightIntent I want to fly to {destination}
-FlightIntent I wanto to book flight ticket to {destination}
-FlightIntent search flights to  {destination}
-FlightIntent I want to fly to {destination} from {origin}
-FlightIntent I wanto to book flight tickect to {destination} from {origin}
-FlightIntent I wanto to book flight tickect to {destination} from {origin} on {date}
-FlightIntent I want to fly to {destination} from {origin} on {date}
-FlightIntent search flights to  {destination} from {origin} on {date}
-HotelSearchIntent search hotels in {input} on {startdate} till {enddate}
+CarRentalIntent to book a car from {pickuplocation} on {pickupdate} and return on {dropoffdate}
+CarRentalIntent to rent a car from {pickuplocation} on {pickupdate} and return on {dropoffdate}
+CarRentalIntent to rent a car
+CarRentalIntent to book a car
+CarRentalIntent to book a car from {pickuplocation}
+CarRentalIntent to rent a car from {pickuplocation}
+CarRentalIntent to rent a car at {pickuplocation}
+CarRentalIntent to book a car from {pickuplocation} on {pickupdate}
+CarRentalIntent to rent a car from {pickuplocation} on {pickupdate}
+CarRentalIntent to rent a car at {pickuplocation} on {pickupdate}
+CarRentalIntent to book a car from {pickuplocation} on {pickupdate} at {pickuptime}
+CarRentalIntent to rent a car from {pickuplocation} on {pickupdate} at {pickuptime}
+CarRentalIntent to rent a car at {pickuplocation} on {pickupdate} at {pickuptime}
+CarRentalIntent to book a car from {pickuplocation} on {pickupdate} at {pickuptime} for {days}
+CarRentalIntent to rent a car from {pickuplocation} on {pickupdate} at {pickuptime} for {days}
+CarRentalIntent to rent a car at {pickuplocation} on {pickupdate} at {pickuptime} for {days}
+CarRentalIntent to book a car from {pickuplocation} on {pickupdate} at {pickuptime} and return on {dropoffdate}
+CarRentalIntent to rent a car from {pickuplocation} on {pickupdate} at {pickuptime} and return on {dropoffdate}
+CarRentalIntent to rent a car at {pickuplocation} on {pickupdate} at {pickuptime} and return on {dropoffdate}
+CarRentalIntent to book a car from {pickuplocation} on {pickupdate} at {pickuptime} and return on {dropoffdate} at {dropofftime}
+CarRentalIntent to rent a car from {pickuplocation} on {pickupdate} at {pickuptime} and return on {dropoffdate} at {dropofftime}
+CarRentalIntent to rent a car at {pickuplocation} on {pickupdate} at {pickuptime} and return on {dropoffdate} at {dropofftime}
+CarRentalIntent pick up location is {pickuplocation}
