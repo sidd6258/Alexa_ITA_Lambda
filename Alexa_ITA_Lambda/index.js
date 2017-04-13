@@ -178,7 +178,7 @@ const handlers = {
         		"sdatetime":sdatetime,
         		"edatetime":edatetime};
         request({
-    	    url: "http://Default-Environment.iwgyjx3zzn.us-east-1.elasticbeanstalk.com/htl",
+    	    url: "http://Sample-env.3ypbe4xuwp.us-east-1.elasticbeanstalk.com/htl",
     	    method: "POST",
     	    json: true,   // <--Very important!!!
     	    body: myJSONObject
