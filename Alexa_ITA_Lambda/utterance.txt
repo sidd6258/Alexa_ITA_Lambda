@@ -1,0 +1,9 @@
+FlightIntent I want to fly to {destination}
+FlightIntent I wanto to book flight ticket to {destination}
+FlightIntent search flights to  {destination}
+FlightIntent I want to fly to {destination} from {origin}
+FlightIntent I wanto to book flight tickect to {destination} from {origin}
+FlightIntent I wanto to book flight tickect to {destination} from {origin} on {date}
+FlightIntent I want to fly to {destination} from {origin} on {date}
+FlightIntent search flights to  {destination} from {origin} on {date}
+HotelSearchIntent search hotels in {input} on {startdate} till {enddate}
