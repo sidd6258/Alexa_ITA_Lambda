@@ -1,0 +1,23 @@
+CarRentalIntent to book a car from {pickuplocation} on {pickupdate} and return on {dropoffdate}
+CarRentalIntent to rent a car from {pickuplocation} on {pickupdate} and return on {dropoffdate}
+CarRentalIntent to rent a car
+CarRentalIntent to book a car
+CarRentalIntent to book a car from {pickuplocation}
+CarRentalIntent to rent a car from {pickuplocation}
+CarRentalIntent to rent a car at {pickuplocation}
+CarRentalIntent to book a car from {pickuplocation} on {pickupdate}
+CarRentalIntent to rent a car from {pickuplocation} on {pickupdate}
+CarRentalIntent to rent a car at {pickuplocation} on {pickupdate}
+CarRentalIntent to book a car from {pickuplocation} on {pickupdate} at {pickuptime}
+CarRentalIntent to rent a car from {pickuplocation} on {pickupdate} at {pickuptime}
+CarRentalIntent to rent a car at {pickuplocation} on {pickupdate} at {pickuptime}
+CarRentalIntent to book a car from {pickuplocation} on {pickupdate} at {pickuptime} for {days}
+CarRentalIntent to rent a car from {pickuplocation} on {pickupdate} at {pickuptime} for {days}
+CarRentalIntent to rent a car at {pickuplocation} on {pickupdate} at {pickuptime} for {days}
+CarRentalIntent to book a car from {pickuplocation} on {pickupdate} at {pickuptime} and return on {dropoffdate}
+CarRentalIntent to rent a car from {pickuplocation} on {pickupdate} at {pickuptime} and return on {dropoffdate}
+CarRentalIntent to rent a car at {pickuplocation} on {pickupdate} at {pickuptime} and return on {dropoffdate}
+CarRentalIntent to book a car from {pickuplocation} on {pickupdate} at {pickuptime} and return on {dropoffdate} at {dropofftime}
+CarRentalIntent to rent a car from {pickuplocation} on {pickupdate} at {pickuptime} and return on {dropoffdate} at {dropofftime}
+CarRentalIntent to rent a car at {pickuplocation} on {pickupdate} at {pickuptime} and return on {dropoffdate} at {dropofftime}
+CarRentalIntent pick up location is {pickuplocation}

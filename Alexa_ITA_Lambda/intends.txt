@@ -1,0 +1,42 @@
+{
+  "intents": [
+    {
+      "slots": [
+        {
+          "name": "pickuplocation",
+          "type": "AMAZON.US_CITY"
+        },
+        {
+          "name": "pickupdate",
+          "type": "AMAZON.DATE"
+        },
+        {
+          "name": "pickuptime",
+          "type": "AMAZON.TIME"
+        },
+        {
+          "name": "days",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "dropoffdate",
+          "type": "AMAZON.DATE"
+        },
+        {
+          "name": "dropofftime",
+          "type": "AMAZON.TIME"
+        }
+      ],
+      "intent": "CarRentalIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}

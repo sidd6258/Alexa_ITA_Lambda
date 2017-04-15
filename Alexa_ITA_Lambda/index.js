@@ -210,6 +210,48 @@ const handlers = {
     	// this.emit(':tell', "hello");
 		
     },
+    'CarRentalIntent': function () {
+        // Get a random space fact from the space facts list
+    	var myJSONObject={};
+        var input=this.event.request.intent.slots.input.value;
+        var sdatetime=this.event.request.intent.slots.startdate.value;
+        var edatetime=this.event.request.intent.slots.enddate.value;
+        myJSONObject={"input":input,
+        		"sdatetime":sdatetime,
+        		"edatetime":edatetime};
+        request({
+    	    url: "http://Sample-env.3ypbe4xuwp.us-east-1.elasticbeanstalk.com/htl",
+    	    method: "POST",
+    	    json: true,   // <--Very important!!!
+    	    body: myJSONObject
+    	}, function (error, response, body){
+    		 // console.log("res"+response);
+    		if (!error && response.statusCode == 200) {
+               // console.log("res"+JSON.parse(response));
+                console.log("place"+JSON.stringify(response));
+                // var replymsg = JSON.parse(response);
+                var hotelinform = response["body"]["hotels"];
+                console.log(hotelinform);
+                var speechText = "The top 10 results are. ";
+                speechText += hotelinform;
+                console.log(speechText);
+             //    var speechText = "";
+        	    // speechText += "Welcome to " + SKILL_NAME + ".  ";
+        	    // speechText += "You can ask a question like, search for hotels near golden gate bridge, san fransisco.  ";
+        	    var repromptText = "For instructions on what you can say, please say help me.";
+        	    this.emit(':tell', speechText);
+                //res.send(response);
+            }
+    		else
+    			{
+    			console.log("error"+response+error);
+    			
+    			//res.send("error");
+    			}
+    	}.bind(this));
+    	// this.emit(':tell', "hello");
+		
+    },
     'AMAZON.HelpIntent': function () {
         const speechOutput = this.t('HELP_MESSAGE');
         const reprompt = this.t('HELP_MESSAGE');
