@@ -13,7 +13,7 @@
 const Alexa = require('alexa-sdk');
 const request=require('request');
 const APP_ID = "amzn1.ask.skill.06e1a5f6-c4a2-4b77-844b-8e86b0e465a2"; // TODO replace with your app ID (OPTIONAL).
-var flights=require('./flights');
+//var flights=require('./flights');
 var Speech=require('ssml-builder');
 const languageStrings = {
 	    'en-GB': {
@@ -211,11 +211,12 @@ const handlers = {
 		
     },
     'CarRentalIntent': function () {
+    	console.log("air");
         // Get a random space fact from the space facts list
     	var myJSONObject={};
         var input=this.event.request.intent.slots.input.value;
-        var sdatetime=this.event.request.intent.slots.startdate.value;
-        var edatetime=this.event.request.intent.slots.enddate.value;
+        var sdatetime=this.event.request.intent.slots.sdatetime.value;
+        var edatetime=this.event.request.intent.slots.edatetime.value;
         myJSONObject={"input":input,
         		"sdatetime":sdatetime,
         		"edatetime":edatetime};
@@ -225,13 +226,13 @@ const handlers = {
     	    json: true,   // <--Very important!!!
     	    body: myJSONObject
     	}, function (error, response, body){
-    		 // console.log("res"+response);
+    		  console.log("res"+response);
     		if (!error && response.statusCode == 200) {
-               // console.log("res"+JSON.parse(response));
+                //console.log("res"+JSON.parse(response));
                 console.log("place"+JSON.stringify(response));
                 // var replymsg = JSON.parse(response);
-                var carinfo = response["body"]["hotels"];
-                console.log(carinfo);
+                var carinfo = body.cars;
+                console.log("car object is"+carinfo);
                 var speechText = "";
                 speechText += carinfo;
                 console.log(speechText);
