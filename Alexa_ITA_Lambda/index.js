@@ -188,10 +188,10 @@ const handlers = {
                // console.log("res"+JSON.parse(response));
                 console.log("place"+JSON.stringify(response));
                 // var replymsg = JSON.parse(response);
-                var hotelinform = response["body"]["hotels"];
-                console.log(hotelinform);
+                var carinfo = response["body"]["hotels"];
+                console.log(carinfo);
                 var speechText = "The top 10 results are. ";
-                speechText += hotelinform;
+                speechText += carinfo;
                 console.log(speechText);
              //    var speechText = "";
         	    // speechText += "Welcome to " + SKILL_NAME + ".  ";
@@ -220,7 +220,7 @@ const handlers = {
         		"sdatetime":sdatetime,
         		"edatetime":edatetime};
         request({
-    	    url: "http://Sample-env.3ypbe4xuwp.us-east-1.elasticbeanstalk.com/htl",
+    	    url: "http://Sample-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
     	    method: "POST",
     	    json: true,   // <--Very important!!!
     	    body: myJSONObject
@@ -230,10 +230,10 @@ const handlers = {
                // console.log("res"+JSON.parse(response));
                 console.log("place"+JSON.stringify(response));
                 // var replymsg = JSON.parse(response);
-                var hotelinform = response["body"]["hotels"];
-                console.log(hotelinform);
-                var speechText = "The top 10 results are. ";
-                speechText += hotelinform;
+                var carinfo = response["body"]["hotels"];
+                console.log(carinfo);
+                var speechText = "";
+                speechText += carinfo;
                 console.log(speechText);
              //    var speechText = "";
         	    // speechText += "Welcome to " + SKILL_NAME + ".  ";
