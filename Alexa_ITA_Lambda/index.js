@@ -210,7 +210,7 @@ var destinationStateHandlers = Alexa.CreateStateHandler(states.DESTINATION, {
     "AMAZON.CancelIntent": function () {
         var speechText = snippets.STOP;
         this.emit(":tell", speechText);
-    },
+    },f
     "AMAZON.StartOverIntent": function () {
         this.emitWithState("Start")
     },
@@ -631,12 +631,7 @@ function isFutureDate(edate,sdate) {
 exports.handler = (event, context) => {
     const alexa = Alexa.handler(event, context);
     alexa.APP_ID = APP_ID;
-<<<<<<< HEAD
-    // To enable string internationalization (i18n) features, set a resources object.
-    alexa.registerHandlers(handlers);
-=======
     alexa.registerHandlers(newSessionHandlers, startStateHandlers,destinationStateHandlers,hotelStartDateHandler,hotelEndDateHandler,hotelGuestsHandler);
->>>>>>> refs/remotes/origin/Sid
     alexa.execute();
 };
 
