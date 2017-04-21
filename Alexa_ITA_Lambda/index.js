@@ -13,7 +13,7 @@
 const Alexa = require('alexa-sdk');
 const request=require('request');
 const APP_ID = "amzn1.ask.skill.06e1a5f6-c4a2-4b77-844b-8e86b0e465a2"; // TODO replace with your app ID (OPTIONAL).
-//var flights=require('./flights');
+
 var Speech=require('ssml-builder');
 const handlers = {
     'LaunchRequest': function () {
@@ -205,13 +205,5 @@ exports.handler = (event, context) => {
     // To enable string internationalization (i18n) features, set a resources object.
     alexa.registerHandlers(handlers);
     alexa.execute();
-<<<<<<< HEAD
 };
 
-
-
-
-
-=======
-};
->>>>>>> refs/remotes/origin/Sid
