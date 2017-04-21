@@ -13,7 +13,7 @@
 const Alexa = require('alexa-sdk');
 const request=require('request');
 const APP_ID = "amzn1.ask.skill.06e1a5f6-c4a2-4b77-844b-8e86b0e465a2"; // TODO replace with your app ID (OPTIONAL).
-var flights=require('./flights');
+//var flights=require('./flights');
 var Speech=require('ssml-builder');
 const languageStrings = {
 	    'en-GB': {
@@ -174,6 +174,10 @@ const handlers = {
         var input=this.event.request.intent.slots.input.value;
         var sdatetime=this.event.request.intent.slots.startdate.value;
         var edatetime=this.event.request.intent.slots.startdate.value;
+        var speech=new Speech();
+        speech.say("The top results for hotel in "+ input+"are:");
+        speech.pause("500ms");
+        
         myJSONObject={"input":input,
         		"sdatetime":sdatetime,
         		"edatetime":edatetime};
@@ -192,12 +196,15 @@ const handlers = {
                 console.log(hotelinform);
                 var speechText = "The top 10 results are. ";
                 speechText += hotelinform;
+                speech.say(hotelinform);
+                var speechOutput = speech.ssml(true);
+                console.log(speechOutput);
                 console.log(speechText);
              //    var speechText = "";
         	    // speechText += "Welcome to " + SKILL_NAME + ".  ";
         	    // speechText += "You can ask a question like, search for hotels near golden gate bridge, san fransisco.  ";
         	    var repromptText = "For instructions on what you can say, please say help me.";
-        	    this.emit(':tell', speechText);
+        	    this.emit(':tell', speechOutput);
                 //res.send(response);
             }
     		else
