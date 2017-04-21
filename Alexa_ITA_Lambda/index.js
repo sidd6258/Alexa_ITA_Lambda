@@ -447,6 +447,7 @@ function isFutureDate(edate,sdate) {
 
 
 
+
 //const handlers = {
 //    'LaunchRequest': function () {
 //    	var speechText = snippets.WELCOME;
