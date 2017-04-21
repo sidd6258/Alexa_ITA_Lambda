@@ -174,10 +174,13 @@ const handlers = {
         var input=this.event.request.intent.slots.input.value;
         var sdatetime=this.event.request.intent.slots.startdate.value;
         var edatetime=this.event.request.intent.slots.startdate.value;
+<<<<<<< HEAD
         var speech=new Speech();
         speech.say("The top results for hotel in "+ input+"are:");
         speech.pause("500ms");
         
+=======
+>>>>>>> refs/remotes/origin/Sid
         myJSONObject={"input":input,
         		"sdatetime":sdatetime,
         		"edatetime":edatetime};
@@ -192,6 +195,7 @@ const handlers = {
                // console.log("res"+JSON.parse(response));
                 console.log("place"+JSON.stringify(response));
                 // var replymsg = JSON.parse(response);
+<<<<<<< HEAD
                 var hotelinform = response["body"]["hotels"];
                 console.log(hotelinform);
                 var speechText = "The top 10 results are. ";
@@ -199,12 +203,65 @@ const handlers = {
                 speech.say(hotelinform);
                 var speechOutput = speech.ssml(true);
                 console.log(speechOutput);
+=======
+                var carinfo = response["body"]["hotels"];
+                console.log(carinfo);
+                var speechText = "The top 10 results are. ";
+                speechText += carinfo;
                 console.log(speechText);
              //    var speechText = "";
         	    // speechText += "Welcome to " + SKILL_NAME + ".  ";
         	    // speechText += "You can ask a question like, search for hotels near golden gate bridge, san fransisco.  ";
         	    var repromptText = "For instructions on what you can say, please say help me.";
+        	    this.emit(':tell', speechText);
+                //res.send(response);
+            }
+    		else
+    			{
+    			console.log("error"+response+error);
+    			
+    			//res.send("error");
+    			}
+    	}.bind(this));
+    	// this.emit(':tell', "hello");
+		
+    },
+    'CarRentalIntent': function () {
+    	console.log("air");
+        // Get a random space fact from the space facts list
+    	var myJSONObject={};
+        var input=this.event.request.intent.slots.input.value;
+        var sdatetime=this.event.request.intent.slots.sdatetime.value;
+        var edatetime=this.event.request.intent.slots.edatetime.value;
+        myJSONObject={"input":input,
+        		"sdatetime":sdatetime,
+        		"edatetime":edatetime};
+        request({
+    	    url: "http://Sample-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
+    	    method: "POST",
+    	    json: true,   // <--Very important!!!
+    	    body: myJSONObject
+    	}, function (error, response, body){
+    		  console.log("res"+response);
+    		if (!error && response.statusCode == 200) {
+                //console.log("res"+JSON.parse(response));
+                console.log("place"+JSON.stringify(response));
+                // var replymsg = JSON.parse(response);
+                var carinfo = body.cars;
+                console.log("car object is"+carinfo);
+                var speechText = "";
+                speechText += carinfo;
+>>>>>>> refs/remotes/origin/Sid
+                console.log(speechText);
+             //    var speechText = "";
+        	    // speechText += "Welcome to " + SKILL_NAME + ".  ";
+        	    // speechText += "You can ask a question like, search for hotels near golden gate bridge, san fransisco.  ";
+        	    var repromptText = "For instructions on what you can say, please say help me.";
+<<<<<<< HEAD
         	    this.emit(':tell', speechOutput);
+=======
+        	    this.emit(':tell', speechText);
+>>>>>>> refs/remotes/origin/Sid
                 //res.send(response);
             }
     		else
@@ -240,9 +297,13 @@ exports.handler = (event, context) => {
     alexa.resources = languageStrings;
     alexa.registerHandlers(handlers);
     alexa.execute();
+<<<<<<< HEAD
 };
 
 
 
 
 
+=======
+};
+>>>>>>> refs/remotes/origin/Sid
