@@ -13,13 +13,9 @@
 const Alexa = require('alexa-sdk');
 const request=require('request');
 const APP_ID = "amzn1.ask.skill.06e1a5f6-c4a2-4b77-844b-8e86b0e465a2"; // TODO replace with your app ID (OPTIONAL).
-<<<<<<< HEAD
 
 var Speech=require('ssml-builder');
-const handlers = {
-    'LaunchRequest': function () {
-        this.emit('GetFact');
-=======
+
 //var flights=require('./flights');
 var Speech=require('ssml-builder');
 var moment = require('moment'); // deals with dates and date formatting, for instance converts AMAZON.DATE to timestamp
@@ -125,7 +121,7 @@ var startStateHandlers = Alexa.CreateStateHandler(states.START, {
         // reprompt text is automatically spoken after a few seconds. This is a feature of the NodeJS SDK.
         // See Unhandled for the fallback / unrecognised utteranes.
         this.emit(':ask', speechText, repromptText);
->>>>>>> refs/remotes/origin/Sid
+
     },
     // the intent text is defined in the
     // Alexa interaction model web page at developer.amazon.com/ask
@@ -215,87 +211,6 @@ var destinationStateHandlers = Alexa.CreateStateHandler(states.DESTINATION, {
         var speechText = snippets.STOP;
         this.emit(":tell", speechText);
     },
-<<<<<<< HEAD
-    'HotelSearchIntent': function () {
-    	var myJSONObject={};
-        var input=this.event.request.intent.slots.input.value;
-        var sdatetime=this.event.request.intent.slots.startdate.value;
-        var edatetime=this.event.request.intent.slots.startdate.value;
-        var speech=new Speech();
-        speech.say("The top results for hotel in "+ input+" are:");
-        speech.pause("500ms");
-        
-        myJSONObject={"input":input,
-        		"sdatetime":sdatetime,
-        		"edatetime":edatetime};
-        request({
-    	    url: "http://Sample-env.3ypbe4xuwp.us-east-1.elasticbeanstalk.com/htl",
-    	    method: "POST",
-    	    json: true,   // <--Very important!!!
-    	    body: myJSONObject
-    	}, function (error, response, body){
-    		 // console.log("res"+response);
-    		if (!error && response.statusCode == 200) {
-               // console.log("res"+JSON.parse(response));
-                console.log("place"+JSON.stringify(response));
-                // var replymsg = JSON.parse(response);
-                var hotelinform = response["body"]["hotels"];
-                console.log(hotelinform);
-                var speechText = "";
-                speechText += hotelinform;
-                speech.say(hotelinform);
-                var speechOutput = speech.ssml(true);
-                console.log(speechOutput);
-                console.log(speechText);
-                var repromptText = "For instructions on what you can say, please say help me.";
-        	    this.emit(':tell', speechOutput,repromptText);
-                //res.send(response);
-            }
-    		else
-    			{
-    			console.log("error"+response+error);
-    			
-    			//res.send("error");
-    			}
-    	}.bind(this));
-    	
-		
-    },
-    'CarRentalIntent': function () {
-    	console.log("air");
-        // Get a random space fact from the space facts list
-    	var myJSONObject={};
-        var input=this.event.request.intent.slots.input.value;
-        var sdatetime=this.event.request.intent.slots.sdatetime.value;
-        var edatetime=this.event.request.intent.slots.edatetime.value;
-        myJSONObject={"input":input,
-        		"sdatetime":sdatetime,
-        		"edatetime":edatetime};
-        request({
-    	    url: "http://Sample-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
-    	    method: "POST",
-    	    json: true,   // <--Very important!!!
-    	    body: myJSONObject
-    	}, function (error, response, body){
-    		  console.log("res"+response);
-    		if (!error && response.statusCode == 200) {
-                //console.log("res"+JSON.parse(response));
-                console.log("place"+JSON.stringify(response));
-                // var replymsg = JSON.parse(response);
-                var carinfo = body.cars;
-                console.log("car object is"+carinfo);
-                var speechText = "";
-                speechText += carinfo;
-
-                console.log(speechText);
-             //    var speechText = "";
-        	    // speechText += "Welcome to " + SKILL_NAME + ".  ";
-        	    // speechText += "You can ask a question like, search for hotels near golden gate bridge, san fransisco.  ";
-        	    var repromptText = "For instructions on what you can say, please say help me.";
-        	    this.emit(':tell', speechText);
-
-                //res.send(response);
-=======
     "AMAZON.StartOverIntent": function () {
         this.emitWithState("Start")
     },
@@ -399,7 +314,6 @@ var hotelEndDateHandler = Alexa.CreateStateHandler(states.ENDDATE, {
                 speechText = snippets.ENDDATE_INVALID_PAST;
                 repromptText = snippets.ENDDATE_INVALID_PAST; // could be improved by using alternative prompt text
                 this.emit(':ask', speechText, repromptText);
->>>>>>> refs/remotes/origin/Sid
             }
 
         } else {
