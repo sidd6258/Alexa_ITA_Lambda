@@ -1,4 +1,5 @@
 hotelDestinationIntent {destination}
+hotelDestinationIntent book a car in {destination}
 carDestinationIntent book a car in {destination_car}
 hotelStartDateIntent {startdate}
 carStartDateIntent book the car from {startdate_car}

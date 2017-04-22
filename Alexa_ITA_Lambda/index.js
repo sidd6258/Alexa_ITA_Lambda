@@ -121,12 +121,34 @@ var startStateHandlers = Alexa.CreateStateHandler(states.START, {
         this.emit(':ask', speechText, repromptText);
     },
     'startCarIntent': function () {
+    	
+    	var destination = this.event.request.intent.slots.destination_car.value;
+    	if(destination != null)
+    		{
+    		console.log("inside  startCarIntent with destination");
+    		var speechText = "",
+            repromptText = "";
+        
+                speechText = snippets.STARTDATE_CAR;
+                repromptText = snippets.STARTDATE_REPROMPT_CAR;
+                this.attributes['destination_car'] = destination;
+                console.log(JSON.stringify(this.attributes));
+               
+               
+                this.handler.state = states.STARTDATE_CAR;
+                this.emit(':ask', speechText, repromptText);
+    		}
+    	else{
+    		
+    		console.log("inside  startCarIntent without destination");
+    		
         var speechText = snippets.DESTINATION_CAR;
         var repromptText = snippets.DESTINATION_REPROMPT_CAR;
 
         // Change State to calculation
         this.handler.state = states.DESTINATION_CAR;
         this.emit(':ask', speechText, repromptText);
+    	}
     },
 
     "AMAZON.HelpIntent": function () {
