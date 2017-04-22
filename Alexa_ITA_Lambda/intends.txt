@@ -3,31 +3,88 @@
     {
       "slots": [
         {
-          "name": "pickuplocation",
+          "name": "destination",
+          "type": "AMAZON.US_CITY"
+        }
+      ],
+      "intent": "hotelDestinationIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "destination_car",
+          "type": "AMAZON.US_CITY"
+        }
+      ],
+      "intent": "carDestinationIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "startdate",
+          "type": "AMAZON.DATE"
+        }
+      ],
+      "intent": "hotelStartDateIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "startdate_car",
+          "type": "AMAZON.DATE"
+        }
+      ],
+      "intent": "carStartDateIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "enddate",
+          "type": "AMAZON.DATE"
+        }
+      ],
+      "intent": "hotelEndDateIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "enddate_car",
+          "type": "AMAZON.DATE"
+        }
+      ],
+      "intent": "carEndDateIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "guests",
+          "type": "AMAZON.NUMBER"
+        }
+      ],
+      "intent": "hotelGuestsIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "input",
           "type": "AMAZON.US_CITY"
         },
         {
-          "name": "pickupdate",
+          "name": "sdatetime",
           "type": "AMAZON.DATE"
         },
         {
-          "name": "pickuptime",
-          "type": "AMAZON.TIME"
-        },
-        {
-          "name": "days",
-          "type": "AMAZON.NUMBER"
-        },
-        {
-          "name": "dropoffdate",
+          "name": "edatetime",
           "type": "AMAZON.DATE"
-        },
-        {
-          "name": "dropofftime",
-          "type": "AMAZON.TIME"
         }
       ],
       "intent": "CarRentalIntent"
+    },
+    {
+      "intent": "startHotelIntent"
+    },
+    {
+      "intent": "startCarIntent"
     },
     {
       "intent": "AMAZON.HelpIntent"

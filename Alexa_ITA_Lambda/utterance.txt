@@ -1,3 +1,14 @@
+hotelDestinationIntent {destination}
+carDestinationIntent book a car in {destination_car}
+hotelStartDateIntent {startdate}
+carStartDateIntent book the car from {startdate_car}
+hotelEndDateIntent checkout on {enddate}
+carEndDateIntent dropoff on {enddate_car}
+hotelGuestsIntent {guests} guests
+CarRentalIntent to book a car from {input} on {sdatetime} and return on {edatetime}
+startHotelIntent book a hotel
+startCarIntent book a car
+===========================================================================================================================
 CarRentalIntent to book a car from {pickuplocation} on {pickupdate} and return on {dropoffdate}
 CarRentalIntent to rent a car from {pickuplocation} on {pickupdate} and return on {dropoffdate}
 CarRentalIntent to rent a car

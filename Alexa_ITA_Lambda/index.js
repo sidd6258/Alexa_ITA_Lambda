@@ -23,36 +23,48 @@ var moment = require('moment'); // deals with dates and date formatting, for ins
 var states = {
 	    START: '_STARTMODE',  // Prompt the user to start or restart
 	    DESTINATION: '_DESTINATION',
+	    DESTINATION_CAR: '_DESTINATION_CAR',
 	    STARTDATE: '_STARTDATE',
+	    STARTDATE_CAR: '_STARTDATE_CAR',
 	    ENDDATE: '_ENDDATE',
+	    ENDDATE_CAR: '_ENDDATE_CAR',
 	    GUESTS: '_GUESTS',
-	    ANSWER: '_ANSWER'
+	    ANSWER: '_ANSWER',
+	    ANSWER_CAR: '_ANSWER_CAR'
 	};
+
+
 
 var snippets = {
         WELCOME: "<s>Welcome to the Intelligent travel agent.</s> " +
-        "<s>You can ask to book Hotel</s>",
+        "<s>You can ask to book a Hotel or book a rental car</s>",
 
         WELCOME_REPROMPT: "You can say, " +
-        "I want to book a hotel",
+        "I want to book a hotel or I want to book a rental car",
 
-        DESTINATION: "Where do you want to book the hotel?",
+        DESTINATION: "Ok, Where do you want to book the hotel?",
+        DESTINATION_CAR: "Ok, Where do you want to book the rental car?",
 
         DESTINATION_REPROMPT: "In order to book a hotel, please tell me: the destination for the hotel?",
+        DESTINATION_REPROMPT_CAR: "In order to book a rental car, please tell me: the destination?",
 
         DESTINATION_INVALID: "Sorry I couldn't understand your travel destination?",
 
         STARTDATE: "Ok, please tell me the date you want to book the hotel from",
+        STARTDATE_CAR: "Ok, please tell me the date you want to book the car from",
 
         STARTDATE_REPROMPT: "In order to book a hotel, please tell me the travel check in date?",
+        STARTDATE_REPROMPT_CAR: "In order to book a car, please tell me the travel check in date?",
 
         STARTDATE_INVALID_PAST: "Nice, you live in the past. Do you have a time machine? Seriously, can you please say your actual desired check in date?",
 
         STARTDATE_INVALID: "Sorry, i didnt get that. can you please repeat? you can say 1st January 2017.",
         
         ENDDATE: "Ok, please tell me the date you want to leave the hotel in.",
-
+        ENDDATE_CAR: "Ok, please tell me the date you want to drop off the car",
+        
         ENDDATE_REPROMPT: "In order to book a hotel, please tell me the travel check out date?",
+        ENDDATE_REPROMPT_CAR: "In order to book a car, please tell me the drop off date date?",
 
         ENDDATE_INVALID_PAST: "you cannot leave a hotel before you check in. Say the date you want to leave the hotel in ?",
 
@@ -62,9 +74,9 @@ var snippets = {
         
         GUESTS_INVALID: "Invalid number of guests. Please say again",
 
-        STOP: "Thank you for using the ITA app.",
+        STOP: "Thank you for using the I.T.A. app.",
 
-        HELP: "You can ask things like: Book a hotel for me",
+        HELP: "You can ask things like: Book a hotel for me or Book a car for me",
 
         HELP_REPROMPT: "Simply say: I want to book a hotel.",
 
@@ -73,9 +85,6 @@ var snippets = {
 
 var newSessionHandlers = {
 
-	    // session variables stored in this.attributes
-	    // session state is stored in this.handler.state
-	    // handler.state vs Intent vs
 	    'LaunchRequest': function() {
 	        if(Object.keys(this.attributes).length === 0) { // Check if it's the first time the skill has been invoked
 	            this.attributes['destination'] = undefined;
@@ -85,16 +94,9 @@ var newSessionHandlers = {
 	        }
 	        // Initialise State
 	        this.handler.state = states.START;
-
-	        // emitWithState should be called executeStateHandler("Start").
-	        // As such this will call a handler "Start" in the startStateHandlers object.
-	        // Maybe this line and the previous line could be more coherently wrapped into a single
-	        // function:
-	        // this.stateTransition( states.START, "Start" )
 	        this.emitWithState("Start")
 	    },
 
-	    // It's unclear whether this can ever happen as it's triggered by Alexa itself.
 	    "Unhandled": function () {
 	        var speechText = "I wasn't launched yet";
 	        this.emit(":ask", speechText);
@@ -107,21 +109,9 @@ var startStateHandlers = Alexa.CreateStateHandler(states.START, {
         this.handler.state = states.START;
         var speechText = snippets.WELCOME;
         var repromptText = snippets.WELCOME_REPROMPT;
-
-        // emit is the exit point to instruct Alexa how to and what to communicate with end user.
-        // e.g. do we want further information? (:ask) / no further information, skill terminates (:tell)
-        // do we provide a voice response with or without a card on the mobile device (:ask vs :askWithCard)
-        // https://github.com/alexa/alexa-skills-kit-sdk-for-nodejs
-        // as we've said :ask we are expecting the user to provide more information.
-        // maybe this function could be called this.respond()
-        // this is going to speak the snippets.WELCOME which implicitly asks a question (hence :ask).
-        // reprompt text is automatically spoken after a few seconds. This is a feature of the NodeJS SDK.
-        // See Unhandled for the fallback / unrecognised utteranes.
         this.emit(':ask', speechText, repromptText);
     },
-    // the intent text is defined in the
-    // Alexa interaction model web page at developer.amazon.com/ask
-    // represented as sample utterances.
+
     'startHotelIntent': function () {
         var speechText = snippets.DESTINATION;
         var repromptText = snippets.DESTINATION_REPROMPT;
@@ -130,9 +120,15 @@ var startStateHandlers = Alexa.CreateStateHandler(states.START, {
         this.handler.state = states.DESTINATION;
         this.emit(':ask', speechText, repromptText);
     },
+    'startCarIntent': function () {
+        var speechText = snippets.DESTINATION_CAR;
+        var repromptText = snippets.DESTINATION_REPROMPT_CAR;
 
-    // a predefined Utterance that you don't need to define in your interaction model
-    // We are choosing to provide this help function but equally you don't need to.
+        // Change State to calculation
+        this.handler.state = states.DESTINATION_CAR;
+        this.emit(':ask', speechText, repromptText);
+    },
+
     "AMAZON.HelpIntent": function () {
         var speechText = snippets.HELP;
         var repromptText = snippets.HELP_REPROMPT;
@@ -143,15 +139,11 @@ var startStateHandlers = Alexa.CreateStateHandler(states.START, {
         this.emit(":ask", speechText);
     },
 
-    // User says stop. Stops even in the middle of a response.
     "AMAZON.StopIntent": function () {
         var speechText = snippets.STOP;
         this.emit(":tell", speechText);
     },
 
-    // unclear really what the difference is; default working practice is
-    // to do the same thing
-    // in a production system we'd probably dedupe this function.
     "AMAZON.CancelIntent": function () {
         var speechText = snippets.STOP;
         this.emit(":tell", speechText);
@@ -160,14 +152,6 @@ var startStateHandlers = Alexa.CreateStateHandler(states.START, {
         this.emitWithState("Start")
     },
 
-    // TODO determine when this is requested and what initiates it
-    // Implement handler to save state if state should be stored persistently e.g. to DynamoDB
-    // 'SessionEndedRequest': function () {
-    //     console.log('session ended!');
-    //     this.emit(':saveState', true);
-    // }
-
-    // TODO add 'AMAZON.RepeatIntent' that repeats the last question.
 
 });
 
@@ -187,6 +171,50 @@ var destinationStateHandlers = Alexa.CreateStateHandler(states.DESTINATION, {
                
                
                 this.handler.state = states.STARTDATE;
+                this.emit(':ask', speechText, repromptText);
+
+    },
+
+    "AMAZON.HelpIntent": function () {
+        var speechText = snippets.HELP;
+        var repromptText = snippets.HELP_REPROMPT;
+        this.emit(':ask', speechText, repromptText);
+    },
+    "Unhandled": function () {
+        var speechText = snippets.UNHANDLED;
+        this.emit(":ask", speechText);
+    },
+    "AMAZON.StopIntent": function () {
+        var speechText = snippets.STOP;
+        this.emit(":tell", speechText);
+    },
+    "AMAZON.CancelIntent": function () {
+        var speechText = snippets.STOP;
+        this.emit(":tell", speechText);
+    },
+    "AMAZON.StartOverIntent": function () {
+        this.emitWithState("Start")
+    },
+    'SessionEndedRequest': function () {
+        console.log('session ended!');
+        this.emit(':saveState', true);
+    }
+});
+var carDestinationStateHandlers = Alexa.CreateStateHandler(states.DESTINATION_CAR, {
+
+    'carDestinationIntent': function () {
+        var speechText = "",
+            repromptText = "";
+
+        var destination = this.event.request.intent.slots.destination_car.value;
+        
+                speechText = snippets.STARTDATE_CAR;
+                repromptText = snippets.STARTDATE_REPROMPT_CAR;
+                this.attributes['destination_car'] = destination;
+                console.log(JSON.stringify(this.attributes));
+               
+               
+                this.handler.state = states.STARTDATE_CAR;
                 this.emit(':ask', speechText, repromptText);
 
     },
@@ -236,6 +264,70 @@ var hotelStartDateHandler = Alexa.CreateStateHandler(states.STARTDATE, {
 
                 // Transition to next state
                 this.handler.state = states.ENDDATE;
+                console.log(JSON.stringify(this.attributes));
+                this.emit(':ask', speechText, repromptText);
+                
+
+            } else {
+                // dob in the future
+                speechText = snippets.STARTDATE_INVALID_PAST;
+                repromptText = snippets.STARTDATE_INVALID_PAST; // could be improved by using alternative prompt text
+                this.emit(':ask', speechText, repromptText);
+            }
+
+        } else {
+            // not a valid Date
+            speechText = snippets.STARTDATE_INVALID;
+            repromptText = snippets.STARTDATE_INVALID; // could be improved by using alternative prompt text
+            this.emit(':ask', speechText, repromptText);
+        }
+    },
+
+    "AMAZON.HelpIntent": function () {
+        var speechText = snippets.HELP;
+        var repromptText = snippets.HELP_REPROMPT;
+        this.emit(':ask', speechText, repromptText);
+    },
+    "Unhandled": function () {
+        var speechText = snippets.UNHANDLED;
+        this.emit(":ask", speechText);
+    },
+    "AMAZON.StopIntent": function () {
+        var speechText = snippets.STOP;
+        this.emit(":tell", speechText);
+    },
+    "AMAZON.CancelIntent": function () {
+        var speechText = snippets.STOP;
+        this.emit(":tell", speechText);
+    },
+    "AMAZON.StartOverIntent": function () {
+        this.emitWithState("Start")
+    },
+    'SessionEndedRequest': function () {
+        console.log('session ended!');
+        this.emit(':saveState', true);
+    }
+});
+var carStartDateHandler = Alexa.CreateStateHandler(states.STARTDATE_CAR, {
+
+    'carStartDateIntent': function () {
+        var speechText = "",
+            repromptText = "";
+        console.log("hi");
+
+        var date_string = this.event.request.intent.slots.startdate_car.value;
+        var date = moment(date_string);
+
+        if (date.isValid()) {
+
+            if (!isPastDate(date)) {
+                // ALL GOOD – dob not in the past
+                speechText = snippets.ENDDATE_CAR;
+                repromptText = snippets.ENDDATE_REPROMPT_CAR;
+                this.attributes['startdate_car'] = date;
+
+                // Transition to next state
+                this.handler.state = states.ENDDATE_CAR;
                 console.log(JSON.stringify(this.attributes));
                 this.emit(':ask', speechText, repromptText);
                 
@@ -319,6 +411,7 @@ var hotelEndDateHandler = Alexa.CreateStateHandler(states.ENDDATE, {
             this.emit(':ask', speechText, repromptText);
         }
     },
+
     "AMAZON.HelpIntent": function () {
         var speechText = snippets.HELP;
         var repromptText = snippets.HELP_REPROMPT;
@@ -345,6 +438,109 @@ var hotelEndDateHandler = Alexa.CreateStateHandler(states.ENDDATE, {
     }
 });
 
+var carEndDateHandler = Alexa.CreateStateHandler(states.ENDDATE_CAR, {
+
+
+    'carEndDateIntent': function () {
+        var speechText = "",
+            repromptText = "";
+//        console.log("hi");
+
+        var date_string = this.event.request.intent.slots.enddate_car.value;
+        var date = moment(date_string);
+        var startdate = moment(this.attributes['startdate_car']);
+
+        if (date.isValid()) {
+
+            if (isFutureDate(date,startdate)) {
+
+                this.attributes['enddate_car'] = date;
+
+                console.log("The object is "+JSON.stringify(this.attributes));
+                
+                
+                this.handler.state = states.ANSWER;
+                var myJSONObject={};
+               myJSONObject={"input":this.attributes['destination_car'],
+              		"sdatetime":"2017-4-25 16:25",
+              		"edatetime":"2017-4-27 16:25"
+              			};
+               
+               console.log("myJSONObject is "+JSON.stringify(myJSONObject));
+               console.log("Calling api ");
+                
+             request({
+       	    url: "http://Sample-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
+       	    method: "POST",
+       	    json: true,   // <--Very important!!!
+       	    body: myJSONObject
+       	}, function (error, response, body){
+       		  console.log("res"+response);
+       		if (!error && response.statusCode == 200) {
+                   //console.log("res"+JSON.parse(response));
+                   console.log("place"+JSON.stringify(response));
+                   // var replymsg = JSON.parse(response);
+                   var carinfo = body.cars;
+                   console.log("car object is"+carinfo);
+                   var speechText = "";
+                   speechText += carinfo;
+                   console.log(speechText);
+                //    var speechText = "";
+           	    // speechText += "Welcome to " + SKILL_NAME + ".  ";
+           	    // speechText += "You can ask a question like, search for hotels near golden gate bridge, san fransisco.  ";
+           	    var repromptText = "For instructions on what you can say, please say help me.";
+           	    this.emit(':tell', speechText);
+                   //res.send(response);
+               }
+       		else
+       			{
+       			console.log("error"+response+error);
+       			
+       			//res.send("error");
+       			}
+       	}.bind(this));
+
+                
+
+            } else {
+                // dob in the future
+                speechText = snippets.ENDDATE_INVALID_PAST;
+                repromptText = snippets.ENDDATE_INVALID_PAST; // could be improved by using alternative prompt text
+                this.emit(':ask', speechText, repromptText);
+            }
+
+        } else {
+            // not a valid Date
+            speechText = snippets.ENDDATE_INVALID;
+            repromptText = snippets.ENDDATE_INVALID; // could be improved by using alternative prompt text
+            this.emit(':ask', speechText, repromptText);
+        }
+    },
+    "AMAZON.HelpIntent": function () {
+        var speechText = snippets.HELP;
+        var repromptText = snippets.HELP_REPROMPT;
+        this.emit(':ask', speechText, repromptText);
+    },
+    "Unhandled": function () {
+        var speechText = snippets.UNHANDLED;
+        this.emit(":ask", speechText);
+    },
+    "AMAZON.StopIntent": function () {
+        var speechText = snippets.STOP;
+        this.emit(":tell", speechText);
+    },
+    "AMAZON.CancelIntent": function () {
+        var speechText = snippets.STOP;
+        this.emit(":tell", speechText);
+    },
+    "AMAZON.StartOverIntent": function () {
+        this.emitWithState("Start")
+    },
+    'SessionEndedRequest': function () {
+        console.log('session ended!');
+        this.emit(':saveState', true);
+    }
+});
 var hotelGuestsHandler = Alexa.CreateStateHandler(states.GUESTS, {
 
     'hotelGuestsIntent': function () {
@@ -354,7 +550,7 @@ var hotelGuestsHandler = Alexa.CreateStateHandler(states.GUESTS, {
 
         var guests = this.event.request.intent.slots.guests.value;
         this.attributes['guests'] = guests;
-        console.log(JSON.stringify(this.attributes));
+        console.log("The object is "+JSON.stringify(this.attributes));
        
        
         this.handler.state = states.ANSWER;
@@ -363,6 +559,9 @@ var hotelGuestsHandler = Alexa.CreateStateHandler(states.GUESTS, {
       		"sdatetime":"2017-4-25 16:25",
       		"edatetime":"2017-4-27 16:25"
       			};
+       
+       console.log("myJSONObject is "+JSON.stringify(myJSONObject));
+       console.log("Calling api ");
       request({
   	    url: "http://Default-Environment.iwgyjx3zzn.us-east-1.elasticbeanstalk.com/htl",
   	    method: "POST",
@@ -627,6 +826,6 @@ function isFutureDate(edate,sdate) {
 exports.handler = (event, context) => {
     const alexa = Alexa.handler(event, context);
     alexa.APP_ID = APP_ID;
-    alexa.registerHandlers(newSessionHandlers, startStateHandlers,destinationStateHandlers,hotelStartDateHandler,hotelEndDateHandler,hotelGuestsHandler);
+    alexa.registerHandlers(newSessionHandlers, startStateHandlers,destinationStateHandlers,carDestinationStateHandlers,hotelStartDateHandler,carStartDateHandler,hotelEndDateHandler,carEndDateHandler,hotelGuestsHandler);
     alexa.execute();
 };
