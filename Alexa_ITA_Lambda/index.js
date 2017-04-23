@@ -123,32 +123,65 @@ var startStateHandlers = Alexa.CreateStateHandler(states.START, {
     'startCarIntent': function () {
     	
     	var destination = this.event.request.intent.slots.destination_car.value;
+    	var startdate = this.event.request.intent.slots.startdate_car.value;
     	if(destination != null)
     		{
-    		console.log("inside  startCarIntent with destination");
-    		var speechText = "",
-            repromptText = "";
-        
-                speechText = snippets.STARTDATE_CAR;
-                repromptText = snippets.STARTDATE_REPROMPT_CAR;
-                this.attributes['destination_car'] = destination;
-                console.log(JSON.stringify(this.attributes));
-               
-               
-                this.handler.state = states.STARTDATE_CAR;
-                this.emit(':ask', speechText, repromptText);
-    		}
-    	else{
-    		
-    		console.log("inside  startCarIntent without destination");
-    		
-        var speechText = snippets.DESTINATION_CAR;
-        var repromptText = snippets.DESTINATION_REPROMPT_CAR;
-
-        // Change State to calculation
-        this.handler.state = states.DESTINATION_CAR;
-        this.emit(':ask', speechText, repromptText);
-    	}
+    		this.attributes['destination_car'] = destination;
+    			if(startdate != null)
+    				{
+    					console.log("inside  startCarIntent with destination and startdate");
+    					var speechText = "",
+    					repromptText = "";
+    					console.log("hi");    	     
+    					var date = moment(startdate);
+    					if (date.isValid()) 
+    						{
+    						if (!isPastDate(date)) 
+    							{
+    								speechText = snippets.ENDDATE_CAR;
+    								repromptText = snippets.ENDDATE_REPROMPT_CAR;
+    								this.attributes['startdate_car'] = date.format("YYYY-MM-DD HH:mm");
+    								this.handler.state = states.ENDDATE_CAR;
+    								console.log(JSON.stringify(this.attributes));
+    								this.emit(':ask', speechText, repromptText);   	                
+    							} 
+    						else 
+    							{
+    								// dob in the future
+    								speechText = snippets.STARTDATE_INVALID_PAST;
+    								repromptText = snippets.STARTDATE_INVALID_PAST; // could be improved by using alternative prompt text
+    								this.emit(':ask', speechText, repromptText);
+    							}
+    						} 
+    					else 
+    						{
+    							// not a valid Date
+    							speechText = snippets.STARTDATE_INVALID;
+    							repromptText = snippets.STARTDATE_INVALID; // could be improved by using alternative prompt text
+    							this.emit(':ask', speechText, repromptText);
+    						}
+    					}
+    			else
+    				{
+    					console.log("inside  startCarIntent with destination");
+    					var speechText = "",
+    					repromptText = "";        
+    					speechText = snippets.STARTDATE_CAR;
+    					repromptText = snippets.STARTDATE_REPROMPT_CAR;
+    					console.log(JSON.stringify(this.attributes));                              
+    					this.handler.state = states.STARTDATE_CAR;
+    					this.emit(':ask', speechText, repromptText);
+    				}
+        		}
+    		else
+    			{    		
+    				console.log("inside  startCarIntent without destination");   		
+    				var speechText = snippets.DESTINATION_CAR;
+    				var repromptText = snippets.DESTINATION_REPROMPT_CAR;
+    				// Change State to calculation
+    				this.handler.state = states.DESTINATION_CAR;
+    				this.emit(':ask', speechText, repromptText);
+    			}
     },
 
     "AMAZON.HelpIntent": function () {
@@ -346,7 +379,7 @@ var carStartDateHandler = Alexa.CreateStateHandler(states.STARTDATE_CAR, {
                 // ALL GOOD – dob not in the past
                 speechText = snippets.ENDDATE_CAR;
                 repromptText = snippets.ENDDATE_REPROMPT_CAR;
-                this.attributes['startdate_car'] = date;
+                this.attributes['startdate_car'] = date.format("YYYY-MM-DD HH:mm");
 
                 // Transition to next state
                 this.handler.state = states.ENDDATE_CAR;
@@ -470,13 +503,13 @@ var carEndDateHandler = Alexa.CreateStateHandler(states.ENDDATE_CAR, {
 
         var date_string = this.event.request.intent.slots.enddate_car.value;
         var date = moment(date_string);
-        var startdate = moment(this.attributes['startdate_car']);
+        var startdate = this.attributes['startdate_car'];
 
         if (date.isValid()) {
 
-            if (isFutureDate(date,startdate)) {
+            if (isFutureDate(date.format("YYYY-MM-DD HH:mm"),startdate)) {
 
-                this.attributes['enddate_car'] = date;
+                this.attributes['enddate_car'] = date.format("YYYY-MM-DD HH:mm");
 
                 console.log("The object is "+JSON.stringify(this.attributes));
                 
@@ -484,8 +517,8 @@ var carEndDateHandler = Alexa.CreateStateHandler(states.ENDDATE_CAR, {
                 this.handler.state = states.ANSWER;
                 var myJSONObject={};
                myJSONObject={"input":this.attributes['destination_car'],
-              		"sdatetime":"2017-4-25 16:25",
-              		"edatetime":"2017-4-27 16:25"
+              		"sdatetime":this.attributes['startdate_car'],
+              		"edatetime":this.attributes['enddate_car']
               			};
                
                console.log("myJSONObject is "+JSON.stringify(myJSONObject));
@@ -661,189 +694,6 @@ function isFutureDate(edate,sdate) {
         return false
     }
 }
-
-
-
-//const handlers = {
-//    'LaunchRequest': function () {
-//    	var speechText = snippets.WELCOME;
-//        var repromptText = snippets.WELCOME_REPROMPT;
-//        this.emit('GetFact');
-//    },
-//    'FlightIntent': function () {
-//        // Get a random space fact from the space facts list
-//    	var myJSONObject={};
-//        var origin=this.event.request.intent.slots.origin.value;
-//        var destination=this.event.request.intent.slots.destination.value;
-//        var date=this.event.request.intent.slots.date.value;
-//        var speech=new Speech();
-//            
-//        speech.say("Hello");
-//        speech.pause("500ms");
-//        speech.say("Flights from "+origin+" to "+destination+" are:");
-//       // 
-//        var textpromt="Flights from "+origin+" to "+destination+" are:";
-//        var myJSONObject={	
-//        					"src":origin,
-//			        		"input":destination,
-//			        		"sdatetime":"",
-//			        		"edatetime":"",
-//			        		"lat":"","lon":""
-//			        	};
-//        request({
-//    	    url: "http://Sample-env.3ypbe4xuwp.us-east-1.elasticbeanstalk.com/fly",
-//    	    method: "POST",
-//    	    json: true,   // <--Very important!!!
-//    	    body: myJSONObject
-//    			}, function (error, response, body){
-//								    		 console.log("res"+response);
-//								    		 if (!error && response.statusCode == 200) {
-//								              
-//								                console.log("place"+JSON.stringify(response));
-//								                
-//								                for(var i=0;i<5;i++)
-//								                	{
-//								                	speech.pause("500ms");
-//								                	speech.say("Option "+(parseInt(i,10)+1)+":");
-//								                	speech.pause("500ms");
-//								                	speech.say(response.body.fltinfo[i].airline+" airline flight number "+response.body.fltinfo[i].flightNum+".");
-//								                	speech.say("At ");
-//								                	speech.sayAs({
-//								                		"word":response.body.fltinfo[i].deptTime+":00",
-//								                		"interpret": "time",
-//								                        
-//								                	});
-//								                	speech.say("hours");
-//								                	
-//								                	speech.say("from");
-//								                	speech.spell(response.body.fltinfo[i].deptAirportCode);
-//								                	speech.say(" gate "+response.body.fltinfo[i].deptGate+".");
-//								                	speech.pause("500ms");
-//								                	speech.say("Price for the ticket is"+response.body.fltinfo[i].totalprice+" dollars.");
-//								                	/*textpromt=textpromt+response.body.fltinfo[i].airline+" flight number "+response.body.fltinfo[i].flightNum+".At ";
-//								                	textpromt=textpromt+"Option "+(i+1)+":";
-//								                	textpromt=textpromt+"At "+response.body.fltinfo[i].deptTime+" from "+response.body.fltinfo[i].deptAirportCode+" gate "+response.body.fltinfo[i].deptGate+".";
-//								                	
-//								                	textpromt=textpromt+"Price for the ticket is"+response.body.fltinfo[i].totalprice+".";
-//								                	//speech.pause('1s');*/								                	}
-//								                var speechOutput = speech.ssml(true);
-//								                console.log("textprompt"+textpromt);
-//								                this.emit(':tell',speechOutput);
-//								                //res.send(response);
-//								            }
-//								    		else
-//								    			{
-//								    			console.log("error"+response+error);
-//								    			textpromt="error";
-//								                this.emit(':tell',textpromt);
-//								
-//								    			//res.send("error");
-//								    			}
-//    	}.bind(this));
-//        
-//        
-//		
-//    },
-//    'HotelSearchIntent': function () {
-//        // Get a random space fact from the space facts list
-//    	var myJSONObject={};
-//        var input=this.event.request.intent.slots.input.value;
-//        var sdatetime=this.event.request.intent.slots.startdate.value;
-//        var edatetime=this.event.request.intent.slots.startdate.value;
-//        myJSONObject={"input":input,
-//        		"sdatetime":sdatetime,
-//        		"edatetime":edatetime};
-//        request({
-//    	    url: "http://Sample-env.3ypbe4xuwp.us-east-1.elasticbeanstalk.com/htl",
-//    	    method: "POST",
-//    	    json: true,   // <--Very important!!!
-//    	    body: myJSONObject
-//    	}, function (error, response, body){
-//    		 // console.log("res"+response);
-//    		if (!error && response.statusCode == 200) {
-//               // console.log("res"+JSON.parse(response));
-//                console.log("place"+JSON.stringify(response));
-//                // var replymsg = JSON.parse(response);
-//                var carinfo = response["body"]["hotels"];
-//                console.log(carinfo);
-//                var speechText = "The top 10 results are. ";
-//                speechText += carinfo;
-//                console.log(speechText);
-//             //    var speechText = "";
-//        	    // speechText += "Welcome to " + SKILL_NAME + ".  ";
-//        	    // speechText += "You can ask a question like, search for hotels near golden gate bridge, san fransisco.  ";
-//        	    var repromptText = "For instructions on what you can say, please say help me.";
-//        	    this.emit(':tell', speechText);
-//                //res.send(response);
-//            }
-//    		else
-//    			{
-//    			console.log("error"+response+error);
-//    			
-//    			//res.send("error");
-//    			}
-//    	}.bind(this));
-//    	// this.emit(':tell', "hello");
-//		
-//    },
-//    'CarRentalIntent': function () {
-//    	console.log("air");
-//        // Get a random space fact from the space facts list
-//    	var myJSONObject={};
-//        var input=this.event.request.intent.slots.input.value;
-//        var sdatetime=this.event.request.intent.slots.sdatetime.value;
-//        var edatetime=this.event.request.intent.slots.edatetime.value;
-//        myJSONObject={"input":input,
-//        		"sdatetime":sdatetime,
-//        		"edatetime":edatetime};
-//        request({
-//    	    url: "http://Sample-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
-//    	    method: "POST",
-//    	    json: true,   // <--Very important!!!
-//    	    body: myJSONObject
-//    	}, function (error, response, body){
-//    		  console.log("res"+response);
-//    		if (!error && response.statusCode == 200) {
-//                //console.log("res"+JSON.parse(response));
-//                console.log("place"+JSON.stringify(response));
-//                // var replymsg = JSON.parse(response);
-//                var carinfo = body.cars;
-//                console.log("car object is"+carinfo);
-//                var speechText = "";
-//                speechText += carinfo;
-//                console.log(speechText);
-//             //    var speechText = "";
-//        	    // speechText += "Welcome to " + SKILL_NAME + ".  ";
-//        	    // speechText += "You can ask a question like, search for hotels near golden gate bridge, san fransisco.  ";
-//        	    var repromptText = "For instructions on what you can say, please say help me.";
-//        	    this.emit(':tell', speechText);
-//                //res.send(response);
-//            }
-//    		else
-//    			{
-//    			console.log("error"+response+error);
-//    			
-//    			//res.send("error");
-//    			}
-//    	}.bind(this));
-//    	// this.emit(':tell', "hello");
-//		
-//    },
-//    'AMAZON.HelpIntent': function () {
-//        const speechOutput = this.t('HELP_MESSAGE');
-//        const reprompt = this.t('HELP_MESSAGE');
-//        this.emit(':ask', speechOutput, reprompt);
-//    },
-//    'AMAZON.CancelIntent': function () {
-//        this.emit(':tell', this.t('STOP_MESSAGE'));
-//    },
-//    'AMAZON.StopIntent': function () {
-//        this.emit(':tell', this.t('STOP_MESSAGE'));
-//    },
-//    'SessionEndedRequest': function () {
-//        this.emit(':tell', this.t('STOP_MESSAGE'));
-//    },
-//};
 
 exports.handler = (event, context) => {
     const alexa = Alexa.handler(event, context);
