@@ -124,11 +124,82 @@ var startStateHandlers = Alexa.CreateStateHandler(states.START, {
     	
     	var destination = this.event.request.intent.slots.destination_car.value;
     	var startdate = this.event.request.intent.slots.startdate_car.value;
+    	var enddate = this.event.request.intent.slots.enddate_car.value;
     	if(destination != null)
     		{
     		this.attributes['destination_car'] = destination;
     			if(startdate != null)
     				{
+    					this.attributes['startdate_car'] = moment(startdate).format("YYYY-MM-DD HH:mm");
+    					if(enddate != null)
+    						{
+    							console.log("inside  startCarIntent with destination, startdate and enddate");
+    					        var speechText = "",
+    				            repromptText = "";
+    					        var date = moment(enddate);
+    					        var start_date = moment(startdate);
+    					        if (date.isValid() && start_date.isValid()) 
+    					        	{
+    					        		if (!isPastDate(start_date)) 
+    					        			{
+    					        				if (isFutureDate(date.format("YYYY-MM-DD HH:mm"),startdate)) {
+    					        					this.attributes['enddate_car'] = date.format("YYYY-MM-DD HH:mm");
+    					        					console.log("The object is "+JSON.stringify(this.attributes));       				                   				                
+    					        					this.handler.state = states.ANSWER;
+    					        					var myJSONObject={};
+    					        					myJSONObject={"input":this.attributes['destination_car'],
+    					        					"sdatetime":this.attributes['startdate_car'],
+    					        					"edatetime":this.attributes['enddate_car']
+        				              			};        				               
+    					        				console.log("myJSONObject is "+JSON.stringify(myJSONObject));
+    					        				console.log("Calling api ");      				                
+    					        				request({
+    					        					url: "http://Sample-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
+    					        					method: "POST",
+    					        					json: true,   // <--Very important!!!
+    					        					body: myJSONObject
+    					        				}, function (error, response, body){
+    					        						console.log("res"+response);
+    					        						if (!error && response.statusCode == 200) {
+    					        							console.log("place"+JSON.stringify(response));
+    					        							var carinfo = body.cars;
+    					        							console.log("car object is"+carinfo);
+    					        							var speechText = "";
+    					        							speechText += carinfo;
+    					        							console.log(speechText);
+    					        							var repromptText = "For instructions on what you can say, please say help me.";
+    					        							this.emit(':tell', speechText);
+    					        						}
+    					        						else
+    					        							{
+    					        							console.log("error"+response+error);
+    					        							}
+    					        				}.bind(this));        				                
+    					        			} 
+    					        			else {
+    					        				// dob in the future
+    					        				speechText = snippets.ENDDATE_INVALID_PAST;
+    					        				repromptText = snippets.ENDDATE_INVALID_PAST; // could be improved by using alternative prompt text
+    					        				this.emit(':ask', speechText, repromptText);
+    					        			}
+    					        		} 
+    					        	else 
+    					        		{
+    					        		// dob in the future
+    					        		speechText = snippets.STARTDATE_INVALID_PAST;
+    					        		repromptText = snippets.STARTDATE_INVALID_PAST; // could be improved by using alternative prompt text
+    					        		this.emit(':ask', speechText, repromptText);
+    					        		}
+    					        	} 
+    					        else {
+    					        	// not a valid Date
+    					        	speechText = snippets.ENDDATE_INVALID;
+    					        	repromptText = snippets.ENDDATE_INVALID; // could be improved by using alternative prompt text
+    					        	this.emit(':ask', speechText, repromptText);
+    					        }
+    						}
+    					else
+    						{
     					console.log("inside  startCarIntent with destination and startdate");
     					var speechText = "",
     					repromptText = "";
@@ -139,8 +210,7 @@ var startStateHandlers = Alexa.CreateStateHandler(states.START, {
     						if (!isPastDate(date)) 
     							{
     								speechText = snippets.ENDDATE_CAR;
-    								repromptText = snippets.ENDDATE_REPROMPT_CAR;
-    								this.attributes['startdate_car'] = date.format("YYYY-MM-DD HH:mm");
+    								repromptText = snippets.ENDDATE_REPROMPT_CAR;    								
     								this.handler.state = states.ENDDATE_CAR;
     								console.log(JSON.stringify(this.attributes));
     								this.emit(':ask', speechText, repromptText);   	                
@@ -161,6 +231,7 @@ var startStateHandlers = Alexa.CreateStateHandler(states.START, {
     							this.emit(':ask', speechText, repromptText);
     						}
     					}
+    				}
     			else
     				{
     					console.log("inside  startCarIntent with destination");
