@@ -84,6 +84,20 @@
       "intent": "startHotelIntent"
     },
     {
+      "slots": [
+        {
+          "name": "destination_car",
+          "type": "AMAZON.US_CITY"
+        },
+        {
+          "name": "startdate_car",
+          "type": "AMAZON.DATE"
+        },
+        {
+          "name": "enddate_car",
+          "type": "AMAZON.DATE"
+        }
+      ],
       "intent": "startCarIntent"
     },
     {
