@@ -1,7 +1,12 @@
 carDestinationIntent book a car in {destination_car}
 carEndDateIntent dropoff on {enddate_car}
+carEndDateIntent leave the car on {enddate_car}
+carEndDateIntent book it till {enddate_car}
 CarRentalIntent to book a car from {input} on {sdatetime} and return on {edatetime}
 carStartDateIntent book the car from {startdate_car}
+carStartDateIntent start the booking from {startdate_car}
+carStartDateIntent checkin date for car is {startdate_car}
+carStartDateIntent start car booking from {startdate_car}
 hotelEndDateIntent checkout on {enddate}
 hotelGuestsIntent {guests} guests
 RentalCarBetaIntent I want a car in {input} from {sdatetime} till {edatetime} 
@@ -11,10 +16,17 @@ RentalCarBetaIntent I want a car from {sdatetime}
 RentalCarBetaIntent I want a car till {edatetime} 
 startCarIntent book a car
 startCarIntent rent a car in {destination_car}
+startCarIntent book the car in {destination_car}
 startCarIntent rent a car in {destination_car} till {enddate_car}
+startCarIntent book a car in {destination_car} till {enddate_car}
 startCarIntent rent a car in {destination_car} from {startdate_car}
+startCarIntent book a car in {destination_car} from {startdate_car}
 startCarIntent rent a car in {destination_car} from {startdate_car} till {enddate_car}
+startCarIntent book a car in {destination_car} from {startdate_car} till {enddate_car}
 startCarIntent rent a car from {startdate_car}
+startCarIntent book a car from {startdate_car}
 startCarIntent rent a car till {enddate_car}
+startCarIntent book a car till {enddate_car}
 startCarIntent rent a car from {startdate_car} till {enddate_car}
+startCarIntent book a car from {startdate_car} till {enddate_car}
 startHotelIntent book a hotel
