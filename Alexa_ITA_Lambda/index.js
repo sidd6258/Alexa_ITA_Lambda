@@ -113,7 +113,42 @@ var startStateHandlers = Alexa.CreateStateHandler(states.START, {
         var repromptText = snippets.WELCOME_REPROMPT;
         this.emit(':ask', speechText, repromptText);
     },
-
+    'RentalCarBetaIntent': function () {
+        // Get a random space fact from the space facts list
+    	var filledSlots = delegateSlotCollection.call(this);
+    	
+    	var myJSONObject={};
+        var input=this.event.request.intent.slots.input.value;
+        var sdatetime=this.event.request.intent.slots.startdate.value;
+        var edatetime=this.event.request.intent.slots.startdate.value;
+        myJSONObject={"input":input,
+        		"sdatetime":sdatetime,
+        		"edatetime":edatetime};
+        request({
+    	    url: "http://Sample-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
+    	    method: "POST",
+    	    json: true,   // <--Very important!!!
+    	    body: myJSONObject
+    	}, function (error, response, body){
+			console.log("res"+response);
+			if (!error && response.statusCode == 200) {
+				console.log("place"+JSON.stringify(response));
+				var carinfo = body.cars;
+				console.log("car object is"+carinfo);
+				var speechText = "";
+				speechText += carinfo;
+				console.log(speechText);
+				var repromptText = "For instructions on what you can say, please say help me.";
+				this.emit(':tell', speechText);
+			}
+			else
+				{
+				console.log("error"+response+error);
+				}
+	}.bind(this));  
+    	// this.emit(':tell', "hello");
+		
+    },
     'startHotelIntent': function () {
         var speechText = snippets.DESTINATION;
         var repromptText = snippets.DESTINATION_REPROMPT;
@@ -131,6 +166,10 @@ var startStateHandlers = Alexa.CreateStateHandler(states.START, {
     	if(destination != null)
     		{
     		this.attributes['destination_car'] = destination;
+    		if(enddate != null)
+    			{
+    			this.attributes['enddate_car'] = moment(enddate).format("YYYY-MM-DD HH:mm");
+    			}
     			if(startdate != null)
     				{
     					this.attributes['startdate_car'] = moment(startdate).format("YYYY-MM-DD HH:mm");
@@ -249,10 +288,17 @@ var startStateHandlers = Alexa.CreateStateHandler(states.START, {
         		}
     		else
     			{   
-    			if(startdate != null && enddate != null)
+    			if(startdate != null )
     				{
     				this.attributes['startdate_car'] = moment(startdate).format("YYYY-MM-DD HH:mm");
-    				this.attributes['enddate_car'] = moment(enddate).format("YYYY-MM-DD HH:mm");
+    				if(enddate != null)
+    					{
+    						this.attributes['enddate_car'] = moment(enddate).format("YYYY-MM-DD HH:mm");
+    					}  				
+    				}
+    			if(enddate != null)
+    				{
+    					this.attributes['enddate_car'] = moment(enddate).format("YYYY-MM-DD HH:mm");
     				}
     				console.log("inside  startCarIntent without destination");  
     				var speechText = snippets.DESTINATION_CAR;
@@ -956,6 +1002,68 @@ var hotelGuestsHandler = Alexa.CreateStateHandler(states.GUESTS, {
     }
 });
 
+const handlers = {
+	    'LaunchRequest': function () {
+	        this.emit('GetFact');
+	    },
+	    'HotelSearchIntent': function () {
+	        // Get a random space fact from the space facts list
+	    	var myJSONObject={};
+	        var input=this.event.request.intent.slots.input.value;
+	        var sdatetime=this.event.request.intent.slots.startdate.value;
+	        var edatetime=this.event.request.intent.slots.startdate.value;
+	        myJSONObject={"input":input,
+	        		"sdatetime":sdatetime,
+	        		"edatetime":edatetime};
+	        request({
+	    	    url: "http://Sample-env.3ypbe4xuwp.us-east-1.elasticbeanstalk.com/htl",
+	    	    method: "POST",
+	    	    json: true,   // <--Very important!!!
+	    	    body: myJSONObject
+	    	}, function (error, response, body){
+	    		 // console.log("res"+response);
+	    		if (!error && response.statusCode == 200) {
+	               // console.log("res"+JSON.parse(response));
+	                console.log("place"+JSON.stringify(response));
+	                // var replymsg = JSON.parse(response);
+	                var hotelinform = response["body"]["hotels"];
+	                console.log(hotelinform);
+	                var speechText = "The top 10 results are. ";
+	                speechText += hotelinform;
+	                console.log(speechText);
+	             //    var speechText = "";
+	        	    // speechText += "Welcome to " + SKILL_NAME + ".  ";
+	        	    // speechText += "You can ask a question like, search for hotels near golden gate bridge, san fransisco.  ";
+	        	    var repromptText = "For instructions on what you can say, please say help me.";
+	        	    this.emit(':tell', speechText);
+	                //res.send(response);
+	            }
+	    		else
+	    			{
+	    			console.log("error"+response+error);
+	    			
+	    			//res.send("error");
+	    			}
+	    	}.bind(this));
+	    	// this.emit(':tell', "hello");
+			
+	    },
+	    'AMAZON.HelpIntent': function () {
+	        const speechOutput = this.t('HELP_MESSAGE');
+	        const reprompt = this.t('HELP_MESSAGE');
+	        this.emit(':ask', speechOutput, reprompt);
+	    },
+	    'AMAZON.CancelIntent': function () {
+	        this.emit(':tell', this.t('STOP_MESSAGE'));
+	    },
+	    'AMAZON.StopIntent': function () {
+	        this.emit(':tell', this.t('STOP_MESSAGE'));
+	    },
+	    'SessionEndedRequest': function () {
+	        this.emit(':tell', this.t('STOP_MESSAGE'));
+	    },
+	};
+
 function isPastDate(sdate) {
     var today = moment();
 
@@ -974,6 +1082,29 @@ function isFutureDate(edate,sdate) {
         return false
     }
 }
+function delegateSlotCollection(){
+	  console.log("in delegateSlotCollection");
+	  console.log("current dialogState: "+this.event.request.dialogState);
+	    if (this.event.request.dialogState === "STARTED") {
+	      console.log("in Beginning");
+	      var updatedIntent=this.event.request.intent;
+	      //optionally pre-fill slots: update the intent object with slot values for which
+	      //you have defaults, then return Dialog.Delegate with this updated intent
+	      // in the updatedIntent property
+	      this.emit(":delegate", updatedIntent);
+	    } else if (this.event.request.dialogState !== "COMPLETED") {
+	      console.log("in not completed");
+	      // return a Dialog.Delegate directive with no updatedIntent property.
+	      this.emit(":delegate");
+	    } else {
+	      console.log("in completed");
+	      console.log("returning: "+ JSON.stringify(this.event.request.intent));
+	      // Dialog is now complete and all required slots should be filled,
+	      // so call your normal intent handler.
+	      return this.event.request.intent;
+	    }
+	}
+
 
 exports.handler = (event, context) => {
     const alexa = Alexa.handler(event, context);

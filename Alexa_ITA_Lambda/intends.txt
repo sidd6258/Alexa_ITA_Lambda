@@ -1,13 +1,13 @@
 {
   "intents": [
     {
-      "slots": [
-        {
-          "name": "destination",
-          "type": "AMAZON.US_CITY"
-        }
-      ],
-      "intent": "hotelDestinationIntent"
+      "intent": "AMAZON.CancelIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
     },
     {
       "slots": [
@@ -21,11 +21,28 @@
     {
       "slots": [
         {
-          "name": "startdate",
+          "name": "enddate_car",
           "type": "AMAZON.DATE"
         }
       ],
-      "intent": "hotelStartDateIntent"
+      "intent": "carEndDateIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "input",
+          "type": "AMAZON.US_CITY"
+        },
+        {
+          "name": "sdatetime",
+          "type": "AMAZON.DATE"
+        },
+        {
+          "name": "edatetime",
+          "type": "AMAZON.DATE"
+        }
+      ],
+      "intent": "CarRentalIntent"
     },
     {
       "slots": [
@@ -44,15 +61,6 @@
         }
       ],
       "intent": "hotelEndDateIntent"
-    },
-    {
-      "slots": [
-        {
-          "name": "enddate_car",
-          "type": "AMAZON.DATE"
-        }
-      ],
-      "intent": "carEndDateIntent"
     },
     {
       "slots": [
@@ -78,10 +86,7 @@
           "type": "AMAZON.DATE"
         }
       ],
-      "intent": "CarRentalIntent"
-    },
-    {
-      "intent": "startHotelIntent"
+      "intent": "RentalCarBetaIntent"
     },
     {
       "slots": [
@@ -101,13 +106,7 @@
       "intent": "startCarIntent"
     },
     {
-      "intent": "AMAZON.HelpIntent"
-    },
-    {
-      "intent": "AMAZON.StopIntent"
-    },
-    {
-      "intent": "AMAZON.CancelIntent"
+      "intent": "startHotelIntent"
     }
   ]
 }
