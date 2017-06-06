@@ -16,9 +16,6 @@ const APP_ID = "amzn1.ask.skill.06e1a5f6-c4a2-4b77-844b-8e86b0e465a2"; // TODO r
 //var flights=require('./flights');
 var Speech=require('ssml-builder');
 var moment = require('moment'); // deals with dates and date formatting, for instance converts AMAZON.DATE to timestamp
-var destination = null;
-var startdate = null;
-var enddate = null;
 
 
 
@@ -159,9 +156,13 @@ var startStateHandlers = Alexa.CreateStateHandler(states.START, {
     },
     'startCarIntent': function () {
     	
-    	 destination = this.event.request.intent.slots.destination_car.value;
-    	 startdate = this.event.request.intent.slots.startdate_car.value;
-    	 enddate = this.event.request.intent.slots.enddate_car.value;
+    	 var destination = this.event.request.intent.slots.destination_car.value;
+    	 var startdate = this.event.request.intent.slots.startdate_car.value;
+    	 var enddate = this.event.request.intent.slots.enddate_car.value;
+    	 
+    	 console.log("destination "+destination);
+    	 console.log("start date "+startdate);
+    	 console.log("end date "+enddate);
     	
     	if(destination != null)
     		{
@@ -387,8 +388,123 @@ var carDestinationStateHandlers = Alexa.CreateStateHandler(states.DESTINATION_CA
             repromptText = "";
 
         var destination = this.event.request.intent.slots.destination_car.value;
+        var startdate = this.event.request.intent.slots.startdate_car.value;
+   	    var enddate = this.event.request.intent.slots.enddate_car.value;
         this.attributes['destination_car'] = destination;
-        if(this.attributes['startdate_car'] !=null)
+        
+        if(startdate != null && enddate == null){
+			console.log("inside  startCarIntent with destination and startdate");
+			var speechText = "",
+			repromptText = "";
+			console.log("hi");    	     
+			var date = moment(startdate);
+			if (date.isValid()) 
+				{
+				if (!isPastDate(date)) 
+					{
+						this.attributes['startdate_car'] = startdate;
+						speechText = snippets.ENDDATE_CAR;
+						repromptText = snippets.ENDDATE_REPROMPT_CAR;    								
+						this.handler.state = states.ENDDATE_CAR;
+						console.log(JSON.stringify(this.attributes));
+						this.emit(':ask', speechText, repromptText);   	                
+					} 
+				else 
+					{
+						// dob in the future
+						speechText = snippets.STARTDATE_INVALID_PAST;
+						repromptText = snippets.STARTDATE_INVALID_PAST; // could be improved by using alternative prompt text
+						this.emit(':ask', speechText, repromptText);
+					}
+				} 
+			else 
+				{
+					// not a valid Date
+					speechText = snippets.STARTDATE_INVALID;
+					repromptText = snippets.STARTDATE_INVALID; // could be improved by using alternative prompt text
+					this.emit(':ask', speechText, repromptText);
+				}
+        	
+        }
+        
+        else if(startdate != null && enddate!=null){
+        	this.attributes['startdate_car'] = startdate;
+        	this.attributes['enddate_car'] = enddate;
+			console.log("inside  carStartDateIntent with destination, startdate and enddate");
+			console.log("Destination is "+this.attributes['destination_car']);
+			console.log("startdate is "+this.attributes['startdate_car']);
+			console.log("enddate is "+this.attributes['enddate_car']);
+	        var speechText = "",
+            repromptText = "";
+	        var date = moment(this.attributes['enddate_car']);
+	        var start_date = moment(this.attributes['startdate_car']);
+	        if (date.isValid() && start_date.isValid()) 
+	        	{
+        		if (!isPastDate(start_date)) 
+    			{
+    				if (isFutureDate(date.format("YYYY-MM-DD HH:mm"),start_date.format("YYYY-MM-DD HH:mm"))) {
+    					this.attributes['enddate_car'] = date.format("YYYY-MM-DD HH:mm");
+    					console.log("The object is "+JSON.stringify(this.attributes));
+    					console.log("this.handler.state = states.ANSWER brfore");
+    					this.handler.state = states.ANSWER;
+    					console.log("this.handler.state = states.ANSWER after");
+    					var myJSONObject={};
+    					myJSONObject={"input":this.attributes['destination_car'],
+    					"sdatetime":this.attributes['startdate_car'],
+    					"edatetime":this.attributes['enddate_car']
+          			};        				               
+    				console.log("myJSONObject is "+JSON.stringify(myJSONObject));
+    				console.log("Calling api inside carStartDateIntent");      				                
+    				request({
+    		       	    url: "http://Sample-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
+    		       	    method: "POST",
+    		       	    json: true,   // <--Very important!!!
+    		       	    body: myJSONObject
+    		       	}, function (error, response, body){
+    		       		  console.log("res"+response);
+    		       		if (!error && response.statusCode == 200) {
+    		                   //console.log("res"+JSON.parse(response));
+    		                   console.log("place"+JSON.stringify(response));
+    		                   // var replymsg = JSON.parse(response);
+    		                   var carinfo = body.cars;
+    		                   console.log("car object is"+carinfo);
+    		                   var speechText = "";
+    		                   speechText += carinfo;
+    		                   console.log(speechText);
+    		                //    var speechText = "";
+    		           	    // speechText += "Welcome to " + SKILL_NAME + ".  ";
+    		           	    // speechText += "You can ask a question like, search for hotels near golden gate bridge, san fransisco.  ";
+    		           	    var repromptText = "For instructions on what you can say, please say help me.";
+    		           	    this.emit(':tell', speechText);
+    		                   //res.send(response);
+    		               }
+    		       		else
+    		       			{
+    		       			console.log("error"+response+error);
+    		       			
+    		       			//res.send("error");
+    		       			}
+    		       	}.bind(this));     				                
+    			} 
+    			else {
+    				// dob in the future
+    				speechText = snippets.ENDDATE_INVALID_PAST;
+    				repromptText = snippets.ENDDATE_INVALID_PAST; // could be improved by using alternative prompt text
+    				this.emit(':ask', speechText, repromptText);
+    			}
+    		} 
+	        	else 
+	        		{
+	        		// dob in the future
+	        		speechText = snippets.STARTDATE_INVALID_PAST;
+	        		repromptText = snippets.STARTDATE_INVALID_PAST; // could be improved by using alternative prompt text
+	        		this.emit(':ask', speechText, repromptText);
+	        		}
+	        	} 
+        	
+        }
+        
+        else if(this.attributes['startdate_car'] !=null)
         	{
         	var date = moment(this.attributes['startdate_car']);
 
@@ -622,6 +738,7 @@ var carStartDateHandler = Alexa.CreateStateHandler(states.STARTDATE_CAR, {
         console.log("hi");
 
         var date_string = this.event.request.intent.slots.startdate_car.value;
+        var enddate = this.event.request.intent.slots.enddate_car.value;
         var date = moment(date_string);
         
         if (date.isValid()) {
@@ -631,8 +748,11 @@ var carStartDateHandler = Alexa.CreateStateHandler(states.STARTDATE_CAR, {
                 speechText = snippets.ENDDATE_CAR;
                 repromptText = snippets.ENDDATE_REPROMPT_CAR;
                 this.attributes['startdate_car'] = date.format("YYYY-MM-DD HH:mm");
-                if(enddate != null)
+                if(enddate != null || this.attributes['enddate_car'] != null)
                 	{
+                	if(this.attributes['enddate_car'] != null){
+                		enddate=this.attributes['enddate_car'];
+                	}
 					console.log("inside  carStartDateIntent with destination, startdate and enddate");
 					console.log("Destination is "+this.attributes['destination_car']);
 					console.log("startdate is "+this.attributes['startdate_car']);
