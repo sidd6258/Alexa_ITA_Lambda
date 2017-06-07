@@ -61,14 +61,13 @@ var repromptText = "";
 
 
 
-// 2. Skill Code
-// =======================================================================================================
+//========================================================Skill Code=================================
 
 'use strict';
 
 const Alexa = require('alexa-sdk');
 const request=require('request');
-// const APP_ID = "amzn1.ask.skill.06e1a5f6-c4a2-4b77-844b-8e86b0e465a2";
+//const APP_ID = "amzn1.ask.skill.06e1a5f6-c4a2-4b77-844b-8e86b0e465a2";
 var Speech=require('ssml-builder');
 var moment = require('moment');
 
@@ -84,108 +83,134 @@ var handlers = {
 				this.attributes['hotelDestination'] = undefined;
 				this.attributes['hotelStartDate'] = undefined;
 				this.attributes['hotelEndDate'] = undefined;
-//				this.attributes['hotelGuests'] = undefined;
+				this.attributes['hotelGuests'] = undefined;
 			}
+
+//			============================================ store slots locally==================
+			
 			hotelDestination = this.event.request.intent.slots.hotelDestination.value;
 			start_date_string = this.event.request.intent.slots.hotelStartDate.value;
 			end_date_string = this.event.request.intent.slots.hotelEndDate.value;
+			hotelGuests = this.event.request.intent.slots.hotelGuests.value;
 
-			if(hotelDestination != null){
-	            this.attributes['hotelDestination'] = hotelDestination;
-	            console.log(this.attributes);
-	            }
+//			============================================ store slots in attributes ==================
 			
+			if(hotelDestination != null){
+				this.attributes['hotelDestination'] = hotelDestination;
+				console.log(this.attributes);
+			}
+
 			if(start_date_string != null){
 				var hotelStartDate = moment(start_date_string);
-	            this.attributes['hotelStartDate'] = hotelStartDate;
-	            console.log(this.attributes);
-	            }
-			
+				this.attributes['hotelStartDate'] = hotelStartDate;
+				console.log(this.attributes);
+			}
+
 			if(end_date_string != null){
 				var hotelEndDate = moment(end_date_string);
-	            this.attributes['hotelEndDate'] = hotelEndDate;
-	            console.log(this.attributes);
-	            }
+				this.attributes['hotelEndDate'] = hotelEndDate;
+				console.log(this.attributes);
+			}
+			
+			if(hotelGuests != null){
+				this.attributes['hotelGuests'] = hotelGuests;
+				console.log(this.attributes);
+			}
+
+//			============================================= ask for missing slots ======================
+			
 			if(this.attributes['hotelDestination'] == undefined){
-				
-					 speechText = snippets.DESTINATION;
-			         repromptText = snippets.DESTINATION_REPROMPT;
-						this.emit(':ask', speechText, repromptText);
 
-			        
-				
+				speechText = snippets.DESTINATION;
+				repromptText = snippets.DESTINATION_REPROMPT;
+				this.emit(':ask', speechText, repromptText);
+
+
+
 			}
-			
+
 			if(this.attributes['hotelStartDate'] == undefined){
-				
-				
-					 speechText = snippets.STARTDATE;
-			         repromptText = snippets.STARTDATE_REPROMPT;
-						this.emit(':ask', speechText, repromptText);
 
-			        
-				
+
+				speechText = snippets.STARTDATE;
+				repromptText = snippets.STARTDATE_REPROMPT;
+				this.emit(':ask', speechText, repromptText);
+
+
+
 			}
-			
+
 			if(this.attributes['hotelEndDate'] == undefined){
-				
-				
-					 speechText = snippets.ENDDATE;
-			         repromptText = snippets.ENDDATE_REPROMPT;
-						this.emit(':ask', speechText, repromptText);
 
-				
+
+				speechText = snippets.ENDDATE;
+				repromptText = snippets.ENDDATE_REPROMPT;
+				this.emit(':ask', speechText, repromptText);
 			}
+
 			
+			if(this.attributes['hotelDestination'] == undefined){
 
+				speechText = snippets.GUESTS;
+				repromptText = snippets.GUESTS_REPROMPT;
+				this.emit(':ask', speechText, repromptText);
+
+			}
+
+
+//			========================================slots confirmation =====================
+
+
+//			============================================================= api call ===============
+			
 			if(this.attributes['hotelDestination'] != undefined && this.attributes['hotelStartDate'] != undefined && this.attributes['hotelEndDate'] != undefined){
-			var myJSONObject={};
-			myJSONObject={"input":hotelDestination,
-					"sdatetime":"2017-6-07 16:25",
-					"edatetime":"2017-6-09 16:25"
-			};
-			console.log(myJSONObject);
-			request({
-				url: "http://sample-env.3ypbe4xuwp.us-east-1.elasticbeanstalk.com/htl",
-				method: "POST",
-				json: true,   // <--Very important!!!
-				body: myJSONObject
-			}, function (error, response, body){
-				// console.log("res"+response);
-				if (!error && response.statusCode == 200) {
-					// console.log("res"+JSON.parse(response));
-					console.log("place"+JSON.stringify(response));
-					// var replymsg =
-					// JSON.parse(response);
-					var carinfo = response["body"]["hotels"];
-					console.log(carinfo);
-					 speechText = "The top results are. ";
-					speechText += carinfo;
-					console.log(speechText);
+				var myJSONObject={};
+				myJSONObject={"input":hotelDestination,
+						"sdatetime":"2017-6-07 16:25",
+						"edatetime":"2017-6-09 16:25"
+				};
+				console.log(myJSONObject);
+				request({
+					url: "http://sample-env.3ypbe4xuwp.us-east-1.elasticbeanstalk.com/htl",
+					method: "POST",
+					json: true,   // <--Very important!!!
+					body: myJSONObject
+				}, function (error, response, body){
+					// console.log("res"+response);
+					if (!error && response.statusCode == 200) {
+						// console.log("res"+JSON.parse(response));
+						console.log("place"+JSON.stringify(response));
+						// var replymsg =
+						// JSON.parse(response);
+						var carinfo = response["body"]["hotels"];
+						console.log(carinfo);
+						speechText = "The top results are. ";
+						speechText += carinfo;
+						console.log(speechText);
 
-					 repromptText = "For instructions on what you can say, please say help me.";
-					// res.send(response);
+						repromptText = "For instructions on what you can say, please say help me.";
+						// res.send(response);
 						this.emit(':ask', speechText, repromptText);
 
-				}
-				else
-				{
-					speechText = snippets.ERROR;
-					repromptText = snippets.ERROR; // could
-					// be
-					// improved
-					// by
-					// using
-					// alternative
-					// prompt
-					// text
-					this.emit(':ask', speechText, repromptText);
+					}
+					else
+					{
+						speechText = snippets.ERROR;
+						repromptText = snippets.ERROR; // could
+						// be
+						// improved
+						// by
+						// using
+						// alternative
+						// prompt
+						// text
+						this.emit(':ask', speechText, repromptText);
 
 
-				}
-			}.bind(this));
+					}
+				}.bind(this));
 
-		}
+			}
 
 		},
 		'AMAZON.HelpIntent': function () {
