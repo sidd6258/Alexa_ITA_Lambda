@@ -87,38 +87,38 @@ var handlers = {
 			}
 
 //			============================================ store slots locally==================
-			
+
 			hotelDestination = this.event.request.intent.slots.hotelDestination.value;
 			start_date_string = this.event.request.intent.slots.hotelStartDate.value;
 			end_date_string = this.event.request.intent.slots.hotelEndDate.value;
 			hotelGuests = this.event.request.intent.slots.hotelGuests.value;
 
 //			============================================ store slots in attributes ==================
-			
+
 			if(hotelDestination != null){
 				this.attributes['hotelDestination'] = hotelDestination;
 				console.log(this.attributes);
 			}
 
 			if(start_date_string != null){
-				var hotelStartDate = moment(start_date_string);
+				var hotelStartDate = moment(start_date_string).format("YYYY-MM-DD HH:mm");
 				this.attributes['hotelStartDate'] = hotelStartDate;
 				console.log(this.attributes);
 			}
 
 			if(end_date_string != null){
-				var hotelEndDate = moment(end_date_string);
+				var hotelEndDate = moment(end_date_string).format("YYYY-MM-DD HH:mm");
 				this.attributes['hotelEndDate'] = hotelEndDate;
 				console.log(this.attributes);
 			}
-			
+
 			if(hotelGuests != null){
 				this.attributes['hotelGuests'] = hotelGuests;
 				console.log(this.attributes);
 			}
 
 //			============================================= ask for missing slots ======================
-			
+
 			if(this.attributes['hotelDestination'] == undefined){
 
 				speechText = snippets.DESTINATION;
@@ -148,8 +148,8 @@ var handlers = {
 				this.emit(':ask', speechText, repromptText);
 			}
 
-			
-			if(this.attributes['hotelDestination'] == undefined){
+
+			if(this.attributes['hotelGuests'] == undefined){
 
 				speechText = snippets.GUESTS;
 				repromptText = snippets.GUESTS_REPROMPT;
@@ -159,10 +159,13 @@ var handlers = {
 
 
 //			========================================slots confirmation =====================
-
+			if(this.attributes['hotelDestination'] != undefined && this.attributes['hotelStartDate'] != undefined && this.attributes['hotelEndDate'] != undefined && this.attributes['hotelGuests'] != undefined){
+				speechText = "say book the hotel if you want to book the hotel in "+this.attributes['hotelDestination']+" on "+this.attributes['hotelStartDate']+" till "+ this.attributes['hotelEndDate']+" for "+this.attributes['hotelGuests']+".";
+				repromptText = "please say book the hotel if you want to book the hotel in "+this.attributes['hotelDestination']+" on "+this.attributes['hotelStartDate']+" till "+ this.attributes['hotelEndDate']+" for "+this.attributes['hotelGuests']+".";
+			}
 
 //			============================================================= api call ===============
-			
+
 			if(this.attributes['hotelDestination'] != undefined && this.attributes['hotelStartDate'] != undefined && this.attributes['hotelEndDate'] != undefined){
 				var myJSONObject={};
 				myJSONObject={"input":hotelDestination,
@@ -245,12 +248,7 @@ exports.handler = (event, context) => {
 
 
 
-function randomPhrase(array) {
-	// the argument is an array [] of words or phrases
-	var i = 0;
-	i = Math.floor(Math.random() * array.length);
-	return(array[i]);
-}
+
 function isSlotValid(request, slotName){
 	var slot = request.intent.slots[slotName];
 	// console.log("request = "+JSON.stringify(request)); //uncomment if you
@@ -265,5 +263,22 @@ function isSlotValid(request, slotName){
 	} else {
 		// we didn't get a value in the slot.
 		return false;
+	}
+}
+function isPastDate(sdate) {
+	var today = moment();
+
+	if (sdate < today) {
+		return true
+	} else {
+		return false
+	}
+}
+function isFutureDate(edate,sdate) {
+
+	if (sdate < edate) {
+		return true
+	} else {
+		return false
 	}
 }

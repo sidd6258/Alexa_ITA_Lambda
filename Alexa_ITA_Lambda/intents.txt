@@ -1,0 +1,155 @@
+{
+  "intents": [
+    {
+      "name": "AMAZON.CancelIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.HelpIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.StopIntent",
+      "samples": []
+    },
+    {
+      "name": "hotelDestinationIntent",
+      "samples": [
+        "in {destination} ",
+        "in {destination} on {startDate} till {endDate}  for {guests} people",
+        "in {destination} on {startDate} till {endDate} ",
+        "in {destination} on {startDate}",
+        "to {destination} on {startDate} till {endDate}  for {guests} people",
+        "to {destination} on {startDate} till {endDate}",
+        "to {destination} on {startDate}",
+        "to {destination}"
+      ],
+      "slots": [
+        {
+          "name": "destination",
+          "type": "AMAZON.US_CITY",
+          "samples": []
+        },
+        {
+          "name": "startDate",
+          "type": "AMAZON.DATE",
+          "samples": []
+        },
+        {
+          "name": "endDate",
+          "type": "AMAZON.DATE",
+          "samples": []
+        },
+        {
+          "name": "guests",
+          "type": "AMAZON.NUMBER",
+          "samples": []
+        }
+      ]
+    },
+    {
+      "name": "hotelEndDateIntent",
+      "samples": [
+        "till {endDate} ",
+        "till {endDate} for {guests}",
+        "checkout on {endDate} for {guests}",
+        "checkout on {endDate}"
+      ],
+      "slots": [
+        {
+          "name": "endDate",
+          "type": "AMAZON.DATE",
+          "samples": []
+        },
+        {
+          "name": "guests",
+          "type": "AMAZON.NUMBER",
+          "samples": []
+        }
+      ]
+    },
+    {
+      "name": "hotelGuestsIntent",
+      "samples": [
+        "for {guests} ",
+        "for {guests} people",
+        "{guests} people",
+        "total {guests} people",
+        "total {guests} guests",
+        "for {guests} guests",
+        "{guests} guests"
+      ],
+      "slots": [
+        {
+          "name": "guests",
+          "type": "AMAZON.NUMBER",
+          "samples": []
+        }
+      ]
+    },
+    {
+      "name": "hotelStartDateIntent",
+      "samples": [
+        "on {startDate} ",
+        "on {startDate} till {endDate}",
+        "on {startDate} till {endDate} for {guests}",
+        "check in on {startDate} till {endDate} for {guests}",
+        "check in on {startDate} till {endDate}",
+        "check in on {startDate}"
+      ],
+      "slots": [
+        {
+          "name": "startDate",
+          "type": "AMAZON.DATE",
+          "samples": []
+        },
+        {
+          "name": "endDate",
+          "type": "AMAZON.DATE",
+          "samples": []
+        },
+        {
+          "name": "guests",
+          "type": "AMAZON.NUMBER",
+          "samples": []
+        }
+      ]
+    },
+    {
+      "name": "startHotelIntent",
+      "samples": [
+        "book a hotel",
+        "book a hotel in {destination} on {startDate} till {endDate}  for {guests} people",
+        "book a hotel in {destination} on {startDate} till {endDate} ",
+        "book a hotel in {destination} on {startDate}",
+        "book a hotel in {destination}",
+        "book a room in {destination} on {startDate} till {endDate}  for {guests} people",
+        "book a room in {destination} on {startDate} till {endDate} ",
+        "book a room in {destination} on {startDate}",
+        "book a room in {destination}"
+      ],
+      "slots": [
+        {
+          "name": "destination",
+          "type": "AMAZON.US_CITY",
+          "samples": []
+        },
+        {
+          "name": "startDate",
+          "type": "AMAZON.DATE",
+          "samples": []
+        },
+        {
+          "name": "endDate",
+          "type": "AMAZON.DATE",
+          "samples": []
+        },
+        {
+          "name": "guests",
+          "type": "AMAZON.NUMBER",
+          "samples": []
+        }
+      ]
+    }
+  ]
+}
