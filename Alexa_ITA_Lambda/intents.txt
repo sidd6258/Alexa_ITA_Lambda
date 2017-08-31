@@ -28,3 +28,18 @@
     }
   ]
 }
+
+----------------------------------------------------------------------
+
+hotelIntent book a hotel in {hotelDestination} on {hotelStartDate} till {hotelEndDate}
+hotelIntent book a hotel
+hotelIntent in {hotelDestination}
+hotelIntent on {hotelStartDate}
+hotelIntent till {hotelEndDate}
+hotelIntent book a hotel in {hotelDestination} on {hotelStartDate}
+hotelIntent book a hotel in {hotelDestination}
+hotelIntent in {hotelDestination} on {hotelStartDate} till {hotelEndDate}
+hotelIntent in {hotelDestination} on {hotelStartDate}
+hotelIntent on {hotelStartDate} till {hotelEndDate}
+hotelIntent book a room
+hotelIntent book a hotel in {hotelDestination}  till {hotelEndDate}
