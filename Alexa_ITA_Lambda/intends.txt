@@ -20,11 +20,48 @@
           "type": "AMAZON.DATE"
         },
         {
+          "name": "carSelection",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "carConfirmation",
+          "type": "CONFIRM_STRING"
+        },
+        {
           "name": "enddate_car",
           "type": "AMAZON.DATE"
         }
       ],
       "intent": "carIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "hotelDestination",
+          "type": "AMAZON.US_CITY"
+        },
+        {
+          "name": "hotelStartDate",
+          "type": "AMAZON.DATE"
+        },
+        {
+          "name": "hotelGuests",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "hotelSelection",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "hotelConfirmation",
+          "type": "CONFIRM_STRING"
+        },
+        {
+          "name": "hotelEndDate",
+          "type": "AMAZON.DATE"
+        }
+      ],
+      "intent": "hotelIntent"
     }
   ]
 }

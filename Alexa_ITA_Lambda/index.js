@@ -22,22 +22,23 @@ var snippets = {
 
         DESTINATION_REPROMPT: "In order to book a hotel, please tell me: the destination for the hotel?",
         DESTINATION_REPROMPT_CAR: "In order to book a rental car, please tell me: the destination?",
-
+        DESTINATION_HOTEL: "Where do you want to book the hotel?",
+        DESTINATION_REPROMPT_HOTEL: "In order to book a hotel, please tell me: the destination for the hotel?",
         DESTINATION_INVALID: "Sorry I couldn't understand your travel destination?",
 
         STARTDATE: "Ok, please tell me the date you want to book the hotel from",
         STARTDATE_CAR: "Ok, please tell me the date you want to book the car from",
-
+        STARTDATE_HOTEL: "Ok, please tell me the date you want to book the hotel from",
         STARTDATE_REPROMPT: "In order to book a hotel, please tell me the travel check in date?",
         STARTDATE_REPROMPT_CAR: "In order to book a car, please tell me the travel check in date?",
-
+        STARTDATE_REPROMPT_HOTEL: "In order to book a hotel, please tell me the travel check in date?",
         STARTDATE_INVALID_PAST: "Nice, you live in the past. Do you have a time machine? Seriously, can you please say your actual desired check in date?",
-
         STARTDATE_INVALID: "Sorry, i didnt get that. can you please repeat? you can say 1st January 2017.",
         
         ENDDATE: "Ok, please tell me the date you want to leave the hotel in.",
         ENDDATE_CAR: "Ok, please tell me the date you want to drop off the car",
-        
+        ENDDATE_HOTEL: "Ok, please tell me the date you want to leave the hotel in.",
+        ENDDATE_REPROMPT_HOTEL: "In order to book a hotel, please tell me the travel check out date?",
         ENDDATE_REPROMPT: "In order to book a hotel, please tell me the travel check out date?",
         ENDDATE_REPROMPT_CAR: "In order to book a car, please tell me the drop off date date?",
 
@@ -45,7 +46,7 @@ var snippets = {
 
         ENDDATE_INVALID: "Sorry, i didnt get that. can you please repeat? you can say 1st January 2017.",
         
-        GUESTS: "Now please tell me the number of guests to book the hotel for",
+        GUESTS_HOTEL: "Now please tell me the number of guests to book the hotel for",
         
         GUESTS_INVALID: "Invalid number of guests. Please say again",
 
@@ -60,10 +61,18 @@ var snippets = {
         ERROR: "Error occurred while getting information from car api"
 };
 var carDestination = null;
+var hotelDestination = null;
+var hotelGuests = null;
+var hotelSelection = null;
+var hotelConfirmation = null;
+var carSelection = null;
+var carConfirmation = null;
 var start_date_string = null;
 var end_date_string = null;
 var speechText = "";
 var repromptText = "";
+var hotelOptions = null;
+var carOptions = null;
 
 
 
@@ -90,6 +99,8 @@ var handlers = {
 				this.attributes['destination_car'] = undefined;
 				this.attributes['startdate_car'] = undefined;
 				this.attributes['enddate_car'] = undefined;
+				this.attributes['carSelection'] = undefined;
+				this.attributes['carConfirmation'] = undefined;
 			}
 
 //			============================================ store slots locally==================
@@ -97,6 +108,8 @@ var handlers = {
 			carDestination = this.event.request.intent.slots.destination_car.value;
 			start_date_string = this.event.request.intent.slots.startdate_car.value;
 			end_date_string = this.event.request.intent.slots.enddate_car.value;
+			carSelection = this.event.request.intent.slots.carSelection.value;
+			carConfirmation = this.event.request.intent.slots.carConfirmation.value;
 
 //			============================================ store slots in attributes ==================
 			
@@ -115,6 +128,23 @@ var handlers = {
 				var carEndDate = moment(end_date_string);
 				this.attributes['enddate_car'] = carEndDate;
 				console.log(this.attributes);
+			}
+			
+			if(carSelection != null){
+				this.attributes['carSelection'] = carSelection;				
+				speechText = "You are about to book " + this.attributes['carOptions'][carSelection] + " " + "Please Confirm.";
+				repromptText ="You are about to book" + this.attributes['carOptions'][carSelection] + " " + "Please Confirm.";
+				console.log(this.attributes);
+				this.emit(':ask', speechText, repromptText);
+			}
+			
+			if(carConfirmation != null && carConfirmation=="yes"){
+				this.attributes['carConfirmation'] = carConfirmation;	
+				carSelection = this.attributes['carSelection'];
+				speechText = "You booked " + this.attributes['carOptions'][carSelection] + " " + " Thank You for using ITA";
+				repromptText ="You booked " + this.attributes['carOptions'][carSelection] + " " + " Thank You for using ITA";
+				console.log(this.attributes);
+				this.emit(':ask', speechText, repromptText);
 			}
 
 //			============================================= ask for missing slots ======================
@@ -160,31 +190,204 @@ var handlers = {
 						"edatetime":this.attributes['enddate_car']
 				};
 				console.log(myJSONObject);
-				request({
-					url: "http://Sample-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
-					method: "POST",
-					json: true,   // <--Very important!!!
-					body: myJSONObject
-				}, function (error, response, body){
-						console.log("res"+response);
-						if (!error && response.statusCode == 200) {
-							console.log("place"+JSON.stringify(response));
-							var carinfo = body.cars;
-							console.log("car object is"+carinfo);
-							var speechText = "";
-							speechText += carinfo;
-							console.log(speechText);
-							var repromptText = "For instructions on what you can say, please say help me.";
-							this.emit(':tell', speechText);
-						}
-					else
-					{
-						speechText = snippets.ERROR;
-						repromptText = snippets.ERROR; 
-						this.emit(':ask', speechText, repromptText);
-					}
-				}.bind(this));
+//				request({
+//					url: "http://Sample-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
+//					method: "POST",
+//					json: true,   // <--Very important!!!
+//					body: myJSONObject
+//				}, function (error, response, body){
+//						console.log("res"+response);
+//						if (!error && response.statusCode == 200) {
+//							console.log("place"+JSON.stringify(response));
+//							var carinfo = body.cars;
+//							console.log("car object is"+carinfo);
+//							var speechText = "";
+//							speechText += carinfo;
+//							console.log(speechText);
+//							var repromptText = "For instructions on what you can say, please say help me.";
+//							this.emit(':tell', speechText);
+//						}
+//					else
+//					{
+//						speechText = snippets.ERROR;
+//						repromptText = snippets.ERROR; 
+//						this.emit(':ask', speechText, repromptText);
+//					}
+//				}.bind(this));
+				carOptions = {      1:"Option A",
+					      2:"Option B",
+					      3:"Option C",
+					      4:"Option D",
+					      5:"Option E"}
+				speechText = "Five Cars available 1 2 3 4 5, choose one option";
+				repromptText = "Five Cars available 1 2 3 4 5, choose one option";
+				this.attributes['carOptions']=carOptions;
+				this.emit(':ask', speechText, repromptText);
+			}
 
+		},
+		'hotelIntent': function () {
+			if(Object.keys(this.attributes).length === 0) { // Check if it's the
+				// first time the
+				// skill has been
+				// invoked
+				this.attributes['hotelDestination'] = undefined;
+				this.attributes['hotelStartDate'] = undefined;
+				this.attributes['hotelEndDate'] = undefined;
+				this.attributes['hotelGuests'] = undefined;
+				this.attributes['hotelSelection'] = undefined;
+				this.attributes['hotelConfirmation'] = undefined;
+			}
+
+//			============================================ store slots locally==================
+			
+			hotelDestination = this.event.request.intent.slots.hotelDestination.value;
+			start_date_string = this.event.request.intent.slots.hotelStartDate.value;
+			end_date_string = this.event.request.intent.slots.hotelEndDate.value;
+			hotelGuests = this.event.request.intent.slots.hotelGuests.value;
+			hotelSelection = this.event.request.intent.slots.hotelSelection.value;
+			hotelConfirmation = this.event.request.intent.slots.hotelConfirmation.value;
+
+//			============================================ store slots in attributes ==================
+			
+			if(hotelDestination != null){
+				this.attributes['hotelDestination'] = hotelDestination;
+				console.log(this.attributes);
+			}
+			
+			
+			if(start_date_string != null){
+				var hotelStartDate = moment(start_date_string);
+				this.attributes['hotelStartDate'] = hotelStartDate;
+				console.log(this.attributes);
+			}
+
+			if(end_date_string != null){
+				var hotelEndDate = moment(end_date_string);
+				this.attributes['hotelEndDate'] = hotelEndDate;
+				console.log(this.attributes);
+			}
+			
+			if(hotelGuests != null){
+				this.attributes['hotelGuests'] = hotelGuests;
+				console.log(this.attributes);
+			}
+			
+			if(hotelSelection != null){
+				this.attributes['hotelSelection'] = hotelSelection;				
+				speechText = "You are about to book " + this.attributes['hotelOptions'][hotelSelection] + " " + "Please Confirm.";
+				repromptText ="You are about to book" + this.attributes['hotelOptions'][hotelSelection] + " " + "Please Confirm.";
+				console.log(this.attributes);
+				this.emit(':ask', speechText, repromptText);
+			}
+			
+			if(hotelConfirmation != null && hotelConfirmation=="yes"){
+				this.attributes['hotelConfirmation'] = hotelConfirmation;	
+				hotelSelection = this.attributes['hotelSelection'];
+				speechText = "You booked " + this.attributes['hotelOptions'][hotelSelection] + " " + " Do you want to book rental car, If yes then please say rent a car";
+				repromptText ="You booked " + this.attributes['hotelOptions'][hotelSelection] + " " + " Do you want to book rental car, If yes then please say rent a car";
+				console.log(this.attributes);
+				this.emit(':ask', speechText, repromptText);
+			}
+
+//			============================================= ask for missing slots ======================
+			
+			if(this.attributes['hotelDestination'] == undefined){
+
+				speechText = snippets.DESTINATION_HOTEL;
+				repromptText = snippets.DESTINATION_REPROMPT_HOTEL;
+				this.emit(':ask', speechText, repromptText);
+			}
+
+			if(this.attributes['hotelStartDate'] == undefined){
+
+
+				speechText = snippets.STARTDATE_HOTEL;
+				repromptText = snippets.STARTDATE_REPROMPT_HOTEL;
+				this.emit(':ask', speechText, repromptText);
+
+
+
+			}
+
+			if(this.attributes['hotelEndDate'] == undefined){
+
+
+				speechText = snippets.ENDDATE_HOTEL;
+				repromptText = snippets.ENDDATE_REPROMPT_HOTEL;
+				this.emit(':ask', speechText, repromptText);
+			}
+
+			
+			if(this.attributes['hotelDestination'] == undefined){
+
+				speechText = snippets.GUESTS_HOTEL;
+				repromptText = snippets.GUESTS_REPROMPT_HOTEL;
+				this.emit(':ask', speechText, repromptText);
+
+			}
+
+
+//			========================================slots confirmation =====================
+
+
+//			============================================================= api call ===============
+			
+			if(this.attributes['hotelDestination'] != undefined && this.attributes['hotelStartDate'] != undefined && this.attributes['hotelEndDate'] != undefined && this.attributes['hotelSelection'] == undefined ){
+				var myJSONObject={};
+				myJSONObject={"input":hotelDestination,
+						"sdatetime":"2017-6-07 16:25",
+						"edatetime":"2017-6-09 16:25"
+				};
+				console.log(myJSONObject);
+//				request({
+//					url: "http://sample-env.3ypbe4xuwp.us-east-1.elasticbeanstalk.com/htl",
+//					method: "POST",
+//					json: true,   // <--Very important!!!
+//					body: myJSONObject
+//				}, function (error, response, body){
+//					// console.log("res"+response);
+//					if (!error && response.statusCode == 200) {
+//						// console.log("res"+JSON.parse(response));
+//						console.log("place"+JSON.stringify(response));
+//						// var replymsg =
+//						// JSON.parse(response);
+//						var carinfo = response["body"]["hotels"];
+//						console.log(carinfo);
+//						speechText = "The top results are. ";
+//						speechText += carinfo;
+//						console.log(speechText);
+//
+//						repromptText = "For instructions on what you can say, please say help me.";
+//						// res.send(response);
+//						this.emit(':ask', speechText, repromptText);
+//
+//					}
+//					else
+//					{
+//						speechText = snippets.ERROR;
+//						repromptText = snippets.ERROR; // could
+//						// be
+//						// improved
+//						// by
+//						// using
+//						// alternative
+//						// prompt
+//						// text
+//						this.emit(':ask', speechText, repromptText);
+//
+//
+//					}
+//				}.bind(this));
+				hotelOptions = {      1:"Option A",
+								      2:"Option B",
+								      3:"Option C",
+								      4:"Option D",
+								      5:"Option E"}
+				speechText = "Five hotels available 1 2 3 4 5, choose one option";
+				repromptText = "Five hotels available 1 2 3 4 5, choose one option";
+				this.attributes['hotelOptions']=hotelOptions;
+				this.emit(':ask', speechText, repromptText);
 			}
 
 		},
