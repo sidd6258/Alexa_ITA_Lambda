@@ -30,6 +30,8 @@ superIntent book a {module} from {startdate} till {enddate}
 superIntent option {selection}
 superIntent {confirmation}
 superIntent for {guests} people
+superIntent {guests} people
+superIntent {guests} guests
 superIntent in {destination} till {enddate}
 superIntent from {startdate}
 superIntent till {enddate}

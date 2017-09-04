@@ -104,338 +104,351 @@
                 }
 
                 if(this.attributes['module'] == 'car'){
+	
+	                if(Object.keys(this.attributes).length === 0) { // Check if it's the
+	                    // first time the
+	                    // skill has been
+	                    // invoked
+	                    this.attributes['destination_car'] = undefined;
+	                    this.attributes['startdate_car'] = undefined;
+	                    this.attributes['enddate_car'] = undefined;
+	                    this.attributes['carSelection'] = undefined;
+	                    this.attributes['carConfirmation'] = undefined;
+	                }
+	
+	    //          ============================================ store slots locally==================
+	                
+	                carDestination = this.event.request.intent.slots.destination.value;
+	                start_date_string = this.event.request.intent.slots.startdate.value;
+	                end_date_string = this.event.request.intent.slots.enddate.value;
+	                carSelection = this.event.request.intent.slots.selection.value;
+	                carConfirmation = this.event.request.intent.slots.confirmation.value;
+	
+	    //          =========================================================
+	
+	                if(carDestination == null && this.attributes['state'] == "hotel_confirmation"){
+	                    this.attributes['state'] = "car_destination";
+	                    speechText = "do you want to book the car in "+this.attributes['hotelDestination'];
+	                    repromptText = "do you want to book the car in "+this.attributes['hotelDestination'];
+	                    this.emit(':ask', speechText, repromptText);
+	                }
+	                if (this.attributes['state']== "car_destination" && carConfirmation == "yes"){
+	                    this.attributes['destination_car'] = this.attributes['hotelDestination'];   
+	                }
+	
+	                // if(start_date_string == null && this.attributes['state'] == "car_destination"){
+	                //     this.attributes['state'] = "car_startdate";
+	                //     speechText = "do you want to book the car from "+this.attributes['hotel_startdate'];
+	                //     repromptText = "do you want to book the car from "+this.attributes['hotel_startdate'];
+	                //     this.emit(':ask', speechText, repromptText);
+	                // }
+	                // if (this.attributes['state']== "car_startdate" && carConfirmation == "yes"){
+	                //     this.attributes['startdate_car'] = this.attributes['hotel_startdate'];   
+	                // }                
+	
+	
+	
+	    //          ============================================ store slots in attributes ==================
+	                
+	                if(carDestination != null){
+	                    this.attributes['destination_car'] = carDestination;
+	                    console.log(this.attributes);
+	                }
+	
+	                if(start_date_string != null){
+	                    var carStartDate = moment(start_date_string);
+	                    this.attributes['startdate_car'] = carStartDate;
+	                    console.log(this.attributes);
+	                }
+	
+	                if(end_date_string != null){
+	                    var carEndDate = moment(end_date_string);
+	                    this.attributes['enddate_car'] = carEndDate;
+	                    console.log(this.attributes);
+	                }
+	                
+	                if(carSelection != null){
+	                    this.attributes['state'] = 'car_selection';
+	                    this.attributes['carSelection'] = carSelection;             
+	                    speechText = "You are about to book " + this.attributes['carOptions'][carSelection] + " " + "Please Confirm.";
+	                    repromptText ="You are about to book" + this.attributes['carOptions'][carSelection] + " " + "Please Confirm.";
+	                    console.log(this.attributes);
+	                    this.emit(':ask', speechText, repromptText);
+	                }
+	                
+	                if(carConfirmation != null && carConfirmation=="yes" && this.attributes['state'] =="car_selection"){
+	                    this.attributes['state'] = 'car_confirmation';
+	                    this.attributes['carConfirmation'] = carConfirmation;   
+	                    carSelection = this.attributes['carSelection'];
+	                    speechText = "You booked " + this.attributes['carOptions'][carSelection] + " " + " Thank You for using I.T.A.";
+	                    repromptText ="You booked " + this.attributes['carOptions'][carSelection] + " " + " Thank You for using ITA";
+	                    console.log(this.attributes);
+	                    this.emit(':ask', speechText, repromptText);
+	                }
+	
+	    //          ============================================= ask for missing slots ======================
+	                
+	                if(this.attributes['destination_car'] == undefined){
+	
+	                    this.attributes['state'] = 'car_destination';
+	                    speechText = snippets.DESTINATION_CAR;
+	                    repromptText = snippets.DESTINATION_REPROMPT_CAR;
+	                    this.emit(':ask', speechText, repromptText);
+	
+	
+	
+	                }
+	
+	                if(this.attributes['startdate_car'] == undefined){
+	
+	                    this.attributes['state'] = 'car_startdate';
+	                    speechText = snippets.STARTDATE_CAR;
+	                    repromptText = snippets.STARTDATE_REPROMPT_CAR;
+	                    this.emit(':ask', speechText, repromptText);
+	
+	
+	
+	                }
+	
+	                if(this.attributes['enddate_car'] == undefined){
+	
+	                    this.attributes['state'] = 'car_enddate';
+	                    speechText = snippets.ENDDATE_CAR;
+	                    repromptText = snippets.ENDDATE_REPROMPT_CAR;
+	                    this.emit(':ask', speechText, repromptText);
+	                }
+	
+	    //          ========================================slots confirmation =====================
+	
+	
+	    //          ============================================================= api call ===============
+	                
+	                if(this.attributes['destination_car'] != undefined && this.attributes['startdate_car'] != undefined && this.attributes['enddate_car'] != undefined){
+	                    this.attributes['state'] = 'car_results'
+	                    var myJSONObject={};
+	                    myJSONObject={"input":this.attributes['destination_car'],
+	                            "sdatetime": this.attributes['startdate_car'],
+	                            "edatetime":this.attributes['enddate_car']
+	                    };
+	                    console.log(myJSONObject);
+	    //              request({
+	    //                  url: "http://Sample-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
+	    //                  method: "POST",
+	    //                  json: true,   // <--Very important!!!
+	    //                  body: myJSONObject
+	    //              }, function (error, response, body){
+	    //                      console.log("res"+response);
+	    //                      if (!error && response.statusCode == 200) {
+	    //                          console.log("place"+JSON.stringify(response));
+	    //                          var carinfo = body.cars;
+	    //                          console.log("car object is"+carinfo);
+	    //                          var speechText = "";
+	    //                          speechText += carinfo;
+	    //                          console.log(speechText);
+	    //                          var repromptText = "For instructions on what you can say, please say help me.";
+	    //                          this.emit(':tell', speechText);
+	    //                      }
+	    //                  else
+	    //                  {
+	    //                      speechText = snippets.ERROR;
+	    //                      repromptText = snippets.ERROR; 
+	    //                      this.emit(':ask', speechText, repromptText);
+	    //                  }
+	    //              }.bind(this));
+	                    carOptions = {      1:"Option A",
+	                              2:"Option B",
+	                              3:"Option C",
+	                              4:"Option D",
+	                              5:"Option E"}
+	                    speechText = "Five Cars available 1 2 3 4 5, choose one option";
+	                    repromptText = "Five Cars available 1 2 3 4 5, choose one option";
+	                    this.attributes['carOptions']=carOptions;
+	                    this.emit(':ask', speechText, repromptText);
+	                }
 
-                if(Object.keys(this.attributes).length === 0) { // Check if it's the
-                    // first time the
-                    // skill has been
-                    // invoked
-                    this.attributes['destination_car'] = undefined;
-                    this.attributes['startdate_car'] = undefined;
-                    this.attributes['enddate_car'] = undefined;
-                    this.attributes['carSelection'] = undefined;
-                    this.attributes['carConfirmation'] = undefined;
                 }
-
-    //          ============================================ store slots locally==================
-                
-                carDestination = this.event.request.intent.slots.destination.value;
-                start_date_string = this.event.request.intent.slots.startdate.value;
-                end_date_string = this.event.request.intent.slots.enddate.value;
-                carSelection = this.event.request.intent.slots.selection.value;
-                carConfirmation = this.event.request.intent.slots.confirmation.value;
-
-    //          =========================================================
-
-                if(carDestination == null && this.attributes['state'] == "hotel_confirmation"){
-                    this.attributes['state'] = "car_destination";
-                    speechText = "do you want to book the car in "+this.attributes['hotelDestination'];
-                    repromptText = "do you want to book the car in "+this.attributes['hotelDestination'];
-                    this.emit(':ask', speechText, repromptText);
-                }
-                if (this.attributes['state']== "car_destination" && carConfirmation == "yes"){
-                    this.attributes['destination_car'] = this.attributes['hotelDestination'];   
-                }
-
-                // if(start_date_string == null && this.attributes['state'] == "car_destination"){
-                //     this.attributes['state'] = "car_startdate";
-                //     speechText = "do you want to book the car from "+this.attributes['hotel_startdate'];
-                //     repromptText = "do you want to book the car from "+this.attributes['hotel_startdate'];
-                //     this.emit(':ask', speechText, repromptText);
-                // }
-                // if (this.attributes['state']== "car_startdate" && carConfirmation == "yes"){
-                //     this.attributes['startdate_car'] = this.attributes['hotel_startdate'];   
-                // }                
-
-
-
-    //          ============================================ store slots in attributes ==================
-                
-                if(carDestination != null){
-                    this.attributes['destination_car'] = carDestination;
-                    console.log(this.attributes);
-                }
-
-                if(start_date_string != null){
-                    var carStartDate = moment(start_date_string);
-                    this.attributes['startdate_car'] = carStartDate;
-                    console.log(this.attributes);
-                }
-
-                if(end_date_string != null){
-                    var carEndDate = moment(end_date_string);
-                    this.attributes['enddate_car'] = carEndDate;
-                    console.log(this.attributes);
-                }
-                
-                if(carSelection != null){
-                    this.attributes['state'] = 'car_selection';
-                    this.attributes['carSelection'] = carSelection;             
-                    speechText = "You are about to book " + this.attributes['carOptions'][carSelection] + " " + "Please Confirm.";
-                    repromptText ="You are about to book" + this.attributes['carOptions'][carSelection] + " " + "Please Confirm.";
-                    console.log(this.attributes);
-                    this.emit(':ask', speechText, repromptText);
-                }
-                
-                if(carConfirmation != null && carConfirmation=="yes" && this.attributes['state'] =="car_selection"){
-                    this.attributes['state'] = 'car_confirmation';
-                    this.attributes['carConfirmation'] = carConfirmation;   
-                    carSelection = this.attributes['carSelection'];
-                    speechText = "You booked " + this.attributes['carOptions'][carSelection] + " " + " Thank You for using I.T.A.";
-                    repromptText ="You booked " + this.attributes['carOptions'][carSelection] + " " + " Thank You for using ITA";
-                    console.log(this.attributes);
-                    this.emit(':ask', speechText, repromptText);
-                }
-
-    //          ============================================= ask for missing slots ======================
-                
-                if(this.attributes['destination_car'] == undefined){
-
-                    this.attributes['state'] = 'car_destination';
-                    speechText = snippets.DESTINATION_CAR;
-                    repromptText = snippets.DESTINATION_REPROMPT_CAR;
-                    this.emit(':ask', speechText, repromptText);
-
-
-
-                }
-
-                if(this.attributes['startdate_car'] == undefined){
-
-                    this.attributes['state'] = 'car_startdate';
-                    speechText = snippets.STARTDATE_CAR;
-                    repromptText = snippets.STARTDATE_REPROMPT_CAR;
-                    this.emit(':ask', speechText, repromptText);
-
-
-
-                }
-
-                if(this.attributes['enddate_car'] == undefined){
-
-                    this.attributes['state'] = 'car_enddate';
-                    speechText = snippets.ENDDATE_CAR;
-                    repromptText = snippets.ENDDATE_REPROMPT_CAR;
-                    this.emit(':ask', speechText, repromptText);
-                }
-
-    //          ========================================slots confirmation =====================
-
-
-    //          ============================================================= api call ===============
-                
-                if(this.attributes['destination_car'] != undefined && this.attributes['startdate_car'] != undefined && this.attributes['enddate_car'] != undefined){
-                    this.attributes['state'] = 'car_results'
-                    var myJSONObject={};
-                    myJSONObject={"input":this.attributes['destination_car'],
-                            "sdatetime": this.attributes['startdate_car'],
-                            "edatetime":this.attributes['enddate_car']
-                    };
-                    console.log(myJSONObject);
-    //              request({
-    //                  url: "http://Sample-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
-    //                  method: "POST",
-    //                  json: true,   // <--Very important!!!
-    //                  body: myJSONObject
-    //              }, function (error, response, body){
-    //                      console.log("res"+response);
-    //                      if (!error && response.statusCode == 200) {
-    //                          console.log("place"+JSON.stringify(response));
-    //                          var carinfo = body.cars;
-    //                          console.log("car object is"+carinfo);
-    //                          var speechText = "";
-    //                          speechText += carinfo;
-    //                          console.log(speechText);
-    //                          var repromptText = "For instructions on what you can say, please say help me.";
-    //                          this.emit(':tell', speechText);
-    //                      }
-    //                  else
-    //                  {
-    //                      speechText = snippets.ERROR;
-    //                      repromptText = snippets.ERROR; 
-    //                      this.emit(':ask', speechText, repromptText);
-    //                  }
-    //              }.bind(this));
-                    carOptions = {      1:"Option A",
-                              2:"Option B",
-                              3:"Option C",
-                              4:"Option D",
-                              5:"Option E"}
-                    speechText = "Five Cars available 1 2 3 4 5, choose one option";
-                    repromptText = "Five Cars available 1 2 3 4 5, choose one option";
-                    this.attributes['carOptions']=carOptions;
-                    this.emit(':ask', speechText, repromptText);
-                }
-
-            }
             
-            if(this.attributes['module'] == 'hotel') {
-                if(Object.keys(this.attributes).length === 0) { // Check if it's the
-                    // first time the
-                    // skill has been
-                    // invoked
-                    this.attributes['hotelDestination'] = undefined;
-                    this.attributes['hotelStartDate'] = undefined;
-                    this.attributes['hotelEndDate'] = undefined;
-                    this.attributes['hotelGuests'] = undefined;
-                    this.attributes['hotelSelection'] = undefined;
-                    this.attributes['hotelConfirmation'] = undefined;
-                }
-
-    //          ============================================ store slots locally==================
-                
-                hotelDestination = this.event.request.intent.slots.destination.value;
-                start_date_string = this.event.request.intent.slots.startdate.value;
-                end_date_string = this.event.request.intent.slots.enddate.value;
-                hotelGuests = this.event.request.intent.slots.guests.value;
-                hotelSelection = this.event.request.intent.slots.selection.value;
-                hotelConfirmation = this.event.request.intent.slots.confirmation.value;
-
-    //          ============================================ store slots in attributes ==================
-                
-                if(hotelDestination != null){
-                    this.attributes['hotelDestination'] = hotelDestination;
-                    console.log(this.attributes);
-                }
-                
-                
-                if(start_date_string != null){
-                    var hotelStartDate = moment(start_date_string);
-                    this.attributes['hotelStartDate'] = hotelStartDate;
-                    console.log(this.attributes);
-                }
-
-                if(end_date_string != null){
-                    var hotelEndDate = moment(end_date_string);
-                    this.attributes['hotelEndDate'] = hotelEndDate;
-                    console.log(this.attributes);
-                }
-                
-                if(hotelGuests != null){
-                    this.attributes['hotelGuests'] = hotelGuests;
-                    console.log(this.attributes);
-                }
-                
-                if(hotelSelection != null){
-                    this.attributes['state'] = 'hotel_selection';
-                    this.attributes['hotelSelection'] = hotelSelection;             
-                    speechText = "You are about to book " + this.attributes['hotelOptions'][hotelSelection] + " " + "Please Confirm.";
-                    repromptText ="You are about to book" + this.attributes['hotelOptions'][hotelSelection] + " " + "Please Confirm.";
-                    console.log(this.attributes);
-                    this.emit(':ask', speechText, repromptText);
-                }
-                
-                if(hotelConfirmation != null && hotelConfirmation=="yes" && this.attributes['state'] =="hotel_selection"){
-                    this.attributes['state'] = 'hotel_confirmation';
-                    this.attributes['hotelConfirmation'] = hotelConfirmation;   
-                    hotelSelection = this.attributes['hotelSelection'];
-                    speechText = "You booked " + this.attributes['hotelOptions'][hotelSelection] + " " + " Do you want to book rental car, If yes then please say rent a car";
-                    repromptText ="You booked " + this.attributes['hotelOptions'][hotelSelection] + " " + " Do you want to book rental car, If yes then please say rent a car";
-                    console.log(this.attributes);
-                    this.emit(':ask', speechText, repromptText);
-                }
-
-    //          ============================================= ask for missing slots ======================
-                
-                if(this.attributes['hotelDestination'] == undefined){
-
-                    this.attributes['state'] = 'hotel_destination';
-                    speechText = snippets.DESTINATION_HOTEL;
-                    repromptText = snippets.DESTINATION_REPROMPT_HOTEL;
-                    this.emit(':ask', speechText, repromptText);
-                }
-
-                if(this.attributes['hotelStartDate'] == undefined){
-
-                    this.attributes['state'] = 'hotel_startdate';
-                    speechText = snippets.STARTDATE_HOTEL;
-                    repromptText = snippets.STARTDATE_REPROMPT_HOTEL;
-                    this.emit(':ask', speechText, repromptText);
-
-                }
-
-                if(this.attributes['hotelEndDate'] == undefined){
-
-                    this.attributes['state'] = 'hotel_enddate';
-                    speechText = snippets.ENDDATE_HOTEL;
-                    repromptText = snippets.ENDDATE_REPROMPT_HOTEL;
-                    this.emit(':ask', speechText, repromptText);
-                }
-
-                
-                if(this.attributes['hotelGuests'] == undefined){
-
-                    this.attributes['state'] = 'hotel_guests';
-                    speechText = snippets.GUESTS_HOTEL;
-                    repromptText = snippets.GUESTS_REPROMPT_HOTEL;
-                    this.emit(':ask', speechText, repromptText);
-
-                }
-
-
-    //          ========================================slots confirmation =====================
-
-
-    //          ============================================================= api call ===============
-                
-                if(this.attributes['hotelDestination'] != undefined && this.attributes['hotelStartDate'] != undefined && this.attributes['hotelEndDate'] != undefined && this.attributes['hotelSelection'] == undefined ){
-                    this.attributes['state'] = 'hotel_results';
-                    var myJSONObject={};
-                    myJSONObject={"input":hotelDestination,
-                            "sdatetime":"2017-6-07 16:25",
-                            "edatetime":"2017-6-09 16:25"
-                    };
-                    console.log(myJSONObject);
-    //              request({
-    //                  url: "http://sample-env.3ypbe4xuwp.us-east-1.elasticbeanstalk.com/htl",
-    //                  method: "POST",
-    //                  json: true,   // <--Very important!!!
-    //                  body: myJSONObject
-    //              }, function (error, response, body){
-    //                  // console.log("res"+response);
-    //                  if (!error && response.statusCode == 200) {
-    //                      // console.log("res"+JSON.parse(response));
-    //                      console.log("place"+JSON.stringify(response));
-    //                      // var replymsg =
-    //                      // JSON.parse(response);
-    //                      var carinfo = response["body"]["hotels"];
-    //                      console.log(carinfo);
-    //                      speechText = "The top results are. ";
-    //                      speechText += carinfo;
-    //                      console.log(speechText);
-    //
-    //                      repromptText = "For instructions on what you can say, please say help me.";
-    //                      // res.send(response);
-    //                      this.emit(':ask', speechText, repromptText);
-    //
-    //                  }
-    //                  else
-    //                  {
-    //                      speechText = snippets.ERROR;
-    //                      repromptText = snippets.ERROR; // could
-    //                      // be
-    //                      // improved
-    //                      // by
-    //                      // using
-    //                      // alternative
-    //                      // prompt
-    //                      // text
-    //                      this.emit(':ask', speechText, repromptText);
-    //
-    //
-    //                  }
-    //              }.bind(this));
-                    hotelOptions = {      1:"Option A",
-                                          2:"Option B",
-                                          3:"Option C",
-                                          4:"Option D",
-                                          5:"Option E"}
-                    speechText = "Five hotels available 1 2 3 4 5, choose one option";
-                    repromptText = "Five hotels available 1 2 3 4 5, choose one option";
-                    this.attributes['hotelOptions']=hotelOptions;
-                    this.emit(':ask', speechText, repromptText);
-                }
-            }
-
+	            if(this.attributes['module'] == 'hotel') {
+	                if(Object.keys(this.attributes).length === 0) { // Check if it's the
+	                    // first time the
+	                    // skill has been
+	                    // invoked
+	                    this.attributes['hotelDestination'] = undefined;
+	                    this.attributes['hotelStartDate'] = undefined;
+	                    this.attributes['hotelEndDate'] = undefined;
+	                    this.attributes['hotelGuests'] = undefined;
+	                    this.attributes['hotelSelection'] = undefined;
+	                    this.attributes['hotelConfirmation'] = undefined;
+	                }
+	
+	    //          ============================================ store slots locally==================
+	                
+	                hotelDestination = this.event.request.intent.slots.destination.value;
+	                start_date_string = this.event.request.intent.slots.startdate.value;
+	                end_date_string = this.event.request.intent.slots.enddate.value;
+	                hotelGuests = this.event.request.intent.slots.guests.value;
+	                hotelSelection = this.event.request.intent.slots.selection.value;
+	                hotelConfirmation = this.event.request.intent.slots.confirmation.value;
+	
+	    //          ============================================ store slots in attributes ==================
+	                
+	                if(hotelDestination != null){
+	                    this.attributes['hotelDestination'] = hotelDestination;
+	                    console.log(this.attributes);
+	                }
+	                
+	                
+	                if(start_date_string != null){
+	                    var hotelStartDate = moment(start_date_string);
+	                    this.attributes['hotelStartDate'] = hotelStartDate;
+	                    console.log(this.attributes);
+	                }
+	
+	                if(end_date_string != null){
+	                    var hotelEndDate = moment(end_date_string);
+	                    this.attributes['hotelEndDate'] = hotelEndDate;
+	                    console.log(this.attributes);
+	                }
+	                
+	                if(hotelGuests != null){
+	                    this.attributes['hotelGuests'] = hotelGuests;
+	                    console.log(this.attributes);
+	                }
+	                
+	                if(hotelSelection != null){
+	                    this.attributes['state'] = 'hotel_selection';
+	                    this.attributes['hotelSelection'] = hotelSelection;             
+	                    speechText = "You are about to book " + this.attributes['hotelOptions'][hotelSelection] + " " + "Please Confirm.";
+	                    repromptText ="You are about to book" + this.attributes['hotelOptions'][hotelSelection] + " " + "Please Confirm.";
+	                    console.log(this.attributes);
+	                    this.emit(':ask', speechText, repromptText);
+	                }
+	                
+	                if(hotelConfirmation != null && hotelConfirmation=="yes" && this.attributes['state'] =="hotel_selection"){
+	                    this.attributes['state'] = 'hotel_confirmation';
+	                    this.attributes['hotelConfirmation'] = hotelConfirmation;   
+	                    hotelSelection = this.attributes['hotelSelection'];
+	                    speechText = "You booked " + this.attributes['hotelOptions'][hotelSelection] + " " + " Do you want to book rental car, If yes then please say rent a car";
+	                    repromptText ="You booked " + this.attributes['hotelOptions'][hotelSelection] + " " + " Do you want to book rental car, If yes then please say rent a car";
+	                    console.log(this.attributes);
+	                    this.emit(':ask', speechText, repromptText);
+	                }
+	
+	    //          ============================================= ask for missing slots ======================
+	                
+	                if(this.attributes['hotelDestination'] == undefined){
+	
+	                    this.attributes['state'] = 'hotel_destination';
+	                    speechText = snippets.DESTINATION_HOTEL;
+	                    repromptText = snippets.DESTINATION_REPROMPT_HOTEL;
+	                    this.emit(':ask', speechText, repromptText);
+	                }
+	
+	                if(this.attributes['hotelStartDate'] == undefined){
+	
+	                    this.attributes['state'] = 'hotel_startdate';
+	                    speechText = snippets.STARTDATE_HOTEL;
+	                    repromptText = snippets.STARTDATE_REPROMPT_HOTEL;
+	                    this.emit(':ask', speechText, repromptText);
+	
+	                }
+	
+	                if(this.attributes['hotelEndDate'] == undefined){
+	
+	                    this.attributes['state'] = 'hotel_enddate';
+	                    speechText = snippets.ENDDATE_HOTEL;
+	                    repromptText = snippets.ENDDATE_REPROMPT_HOTEL;
+	                    this.emit(':ask', speechText, repromptText);
+	                }
+	
+	                
+	                if(this.attributes['hotelGuests'] == undefined){
+	
+	                    this.attributes['state'] = 'hotel_guests';
+	                    speechText = snippets.GUESTS_HOTEL;
+	                    repromptText = snippets.GUESTS_REPROMPT_HOTEL;
+	                    this.emit(':ask', speechText, repromptText);
+	
+	                }
+	
+	
+	    //          ========================================slots confirmation =====================
+	
+	
+	    //          ============================================================= api call ===============
+	                
+	                if(this.attributes['hotelDestination'] != undefined && this.attributes['hotelStartDate'] != undefined && this.attributes['hotelEndDate'] != undefined && this.attributes['hotelSelection'] == undefined ){
+	                	
+	                	if(isPastDate(moment(this.attributes['hotelStartDate']))){
+	                		speechText = snippets.STARTDATE_INVALID_PAST;
+	                        repromptText = snippets.STARTDATE_INVALID_PAST; // could be improved by using alternative prompt text
+	                        this.emit(':ask', speechText, repromptText);
+	                	}
+	                	
+	                	if(!isFutureDate(moment(this.attributes['hotelEndDate']),moment(this.attributes['hotelStartDate']))){
+	                        // dob in the future
+	                        speechText = snippets.ENDDATE_INVALID_PAST;
+	                        repromptText = snippets.ENDDATE_INVALID_PAST; // could be improved by using alternative prompt text
+	                        this.emit(':ask', speechText, repromptText);
+	                    }
+	                	
+	                	this.attributes['state'] = 'hotel_results';
+	                    var myJSONObject={};
+	                    myJSONObject={"input":hotelDestination,
+	                            "sdatetime":"2017-6-07 16:25",
+	                            "edatetime":"2017-6-09 16:25"
+	                    };
+	                    console.log(myJSONObject);
+	    //              request({
+	    //                  url: "http://sample-env.3ypbe4xuwp.us-east-1.elasticbeanstalk.com/htl",
+	    //                  method: "POST",
+	    //                  json: true,   // <--Very important!!!
+	    //                  body: myJSONObject
+	    //              }, function (error, response, body){
+	    //                  // console.log("res"+response);
+	    //                  if (!error && response.statusCode == 200) {
+	    //                      // console.log("res"+JSON.parse(response));
+	    //                      console.log("place"+JSON.stringify(response));
+	    //                      // var replymsg =
+	    //                      // JSON.parse(response);
+	    //                      var carinfo = response["body"]["hotels"];
+	    //                      console.log(carinfo);
+	    //                      speechText = "The top results are. ";
+	    //                      speechText += carinfo;
+	    //                      console.log(speechText);
+	    //
+	    //                      repromptText = "For instructions on what you can say, please say help me.";
+	    //                      // res.send(response);
+	    //                      this.emit(':ask', speechText, repromptText);
+	    //
+	    //                  }
+	    //                  else
+	    //                  {
+	    //                      speechText = snippets.ERROR;
+	    //                      repromptText = snippets.ERROR; // could
+	    //                      // be
+	    //                      // improved
+	    //                      // by
+	    //                      // using
+	    //                      // alternative
+	    //                      // prompt
+	    //                      // text
+	    //                      this.emit(':ask', speechText, repromptText);
+	    //
+	    //
+	    //                  }
+	    //              }.bind(this));
+	                    hotelOptions = {      1:"Option A",
+	                                          2:"Option B",
+	                                          3:"Option C",
+	                                          4:"Option D",
+	                                          5:"Option E"}
+	                    speechText = "Five hotels available 1 2 3 4 5, choose one option";
+	                    repromptText = "Five hotels available 1 2 3 4 5, choose one option";
+	                    this.attributes['hotelOptions']=hotelOptions;
+	                    this.emit(':ask', speechText, repromptText);
+	                }
+	            }
             },
             'AMAZON.HelpIntent': function () {
                 speechOutput = "";
@@ -459,7 +472,24 @@
                 this.emit(':tell', speechOutput);
             },
     };
+    function isPastDate(sdate) {
+        var today = moment();
 
+        if (sdate < today) {
+            return true
+        } else {
+            return false
+        }
+    }
+    function isFutureDate(edate,sdate) {
+//        var today = moment();
+    	
+        if (sdate < edate) {
+            return true
+        } else {
+            return false
+        }
+    }
     exports.handler = (event, context) => {
         var alexa = Alexa.handler(event, context);
         alexa.APP_ID = APP_ID;
