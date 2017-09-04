@@ -12,34 +12,73 @@
     {
       "slots": [
         {
-          "name": "hotelDestination",
+          "name": "destination",
           "type": "AMAZON.US_CITY"
         },
         {
-          "name": "hotelStartDate",
+          "name": "startdate",
           "type": "AMAZON.DATE"
         },
         {
-          "name": "hotelEndDate",
+          "name": "selection",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "guests",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "confirmation",
+          "type": "CONFIRM_STRING"
+        },
+        {
+          "name": "module",
+          "type": "MODULE_STRING"
+        },
+        {
+          "name": "enddate",
           "type": "AMAZON.DATE"
         }
       ],
-      "intent": "hotelIntent"
+      "intent": "superIntent"
     }
   ]
 }
 
 ----------------------------------------------------------------------
 
-hotelIntent book a hotel in {hotelDestination} on {hotelStartDate} till {hotelEndDate}
-hotelIntent book a hotel
-hotelIntent in {hotelDestination}
-hotelIntent on {hotelStartDate}
-hotelIntent till {hotelEndDate}
-hotelIntent book a hotel in {hotelDestination} on {hotelStartDate}
-hotelIntent book a hotel in {hotelDestination}
-hotelIntent in {hotelDestination} on {hotelStartDate} till {hotelEndDate}
-hotelIntent in {hotelDestination} on {hotelStartDate}
-hotelIntent on {hotelStartDate} till {hotelEndDate}
-hotelIntent book a room
-hotelIntent book a hotel in {hotelDestination}  till {hotelEndDate}
+superIntent book a {module} in {destination}
+superIntent book a {module} in {destination} on {startdate} till {enddate}
+superIntent dropoff on {enddate}
+superIntent leave the {module} on {enddate}
+superIntent book it till {enddate}
+superIntent book the {module} from {startdate}
+superIntent start the booking from {startdate}
+superIntent checkin date for {module} is {startdate}
+superIntent start {module} booking from {startdate}
+superIntent book the {module} from {startdate} till {enddate}
+superIntent start the booking from {startdate} till {enddate}
+superIntent checkin date for {module} is {startdate} till {enddate}
+superIntent start {module} booking from {startdate} till {enddate}
+superIntent book a {module}
+superIntent rent a {module} in {destination}
+superIntent book the {module} in {destination}
+superIntent rent a {module} in {destination} till {enddate}
+superIntent book a {module} in {destination} till {enddate}
+superIntent rent a {module} in {destination} from {startdate}
+superIntent book a {module} in {destination} from {startdate}
+superIntent rent a {module} in {destination} on {startdate} till {enddate}
+superIntent book a {module} in {destination} from {startdate} till {enddate}
+superIntent rent a {module} in {destination} till {enddate} from {startdate}
+superIntent rent a {module} from {startdate}
+superIntent book a {module} from {startdate}
+superIntent rent a {module} till {enddate}
+superIntent book a {module} till {enddate}
+superIntent rent a {module} from {startdate} till {enddate}
+superIntent book a {module} from {startdate} till {enddate}
+superIntent option {selection}
+superIntent {confirmation}
+superIntent for {guests} people
+superIntent in {destination} till {enddate}
+superIntent from {startdate}
+superIntent till {enddate}
