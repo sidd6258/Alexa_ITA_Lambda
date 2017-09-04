@@ -43,7 +43,7 @@
             ENDDATE_REPROMPT: "In order to book a hotel, please tell me the travel check out date?",
             ENDDATE_REPROMPT_CAR: "In order to book a car, please tell me the drop off date date?",
 
-            ENDDATE_INVALID_PAST: "you cannot leave a hotel before you check in. Say the date you want to leave the hotel in ?",
+            ENDDATE_INVALID_PAST: "Checkout date cannot be before start date",
 
             ENDDATE_INVALID: "Sorry, i didnt get that. can you please repeat? you can say 1st January 2017.",
             
@@ -224,7 +224,21 @@
 	    //          ============================================================= api call ===============
 	                
 	                if(this.attributes['destination_car'] != undefined && this.attributes['startdate_car'] != undefined && this.attributes['enddate_car'] != undefined){
-	                    this.attributes['state'] = 'car_results'
+	                    
+	                	if(isPastDate(moment(this.attributes['startdate_car']))){
+	                		speechText = snippets.STARTDATE_INVALID_PAST;
+	                        repromptText = snippets.STARTDATE_INVALID_PAST; // could be improved by using alternative prompt text
+	                        this.emit(':ask', speechText, repromptText);
+	                	}
+	                	
+	                	if(!isFutureDate(moment(this.attributes['enddate_car']),moment(this.attributes['startdate_car']))){
+	                        // dob in the future
+	                        speechText = snippets.ENDDATE_INVALID_PAST;
+	                        repromptText = snippets.ENDDATE_INVALID_PAST; // could be improved by using alternative prompt text
+	                        this.emit(':ask', speechText, repromptText);
+	                    }
+	                	
+	                	this.attributes['state'] = 'car_results'
 	                    var myJSONObject={};
 	                    myJSONObject={"input":this.attributes['destination_car'],
 	                            "sdatetime": this.attributes['startdate_car'],
