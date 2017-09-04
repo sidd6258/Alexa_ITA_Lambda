@@ -1,45 +1,35 @@
-carIntent book a car in {destination_car}
-carIntent book a car in {destination_car} on {startdate_car} till {enddate_car}
-carIntent dropoff on {enddate_car}
-carIntent leave the car on {enddate_car}
-carIntent book it till {enddate_car}
-carIntent book the car from {startdate_car}
-carIntent start the booking from {startdate_car}
-carIntent checkin date for car is {startdate_car}
-carIntent start car booking from {startdate_car}
-carIntent book the car from {startdate_car} till {enddate_car}
-carIntent start the booking from {startdate_car} till {enddate_car}
-carIntent checkin date for car is {startdate_car} till {enddate_car}
-carIntent start car booking from {startdate_car} till {enddate_car}
-carIntent book a car
-carIntent rent a car in {destination_car}
-carIntent book the car in {destination_car}
-carIntent rent a car in {destination_car} till {enddate_car}
-carIntent book a car in {destination_car} till {enddate_car}
-carIntent rent a car in {destination_car} from {startdate_car}
-carIntent book a car in {destination_car} from {startdate_car}
-carIntent rent a car in {destination_car} on {startdate_car} till {enddate_car}
-carIntent book a car in {destination_car} from {startdate_car} till {enddate_car}
-carIntent rent a car in {destination_car} till {enddate_car} from {startdate_car}
-carIntent rent a car from {startdate_car}
-carIntent book a car from {startdate_car}
-carIntent rent a car till {enddate_car}
-carIntent book a car till {enddate_car}
-carIntent rent a car from {startdate_car} till {enddate_car}
-carIntent book a car from {startdate_car} till {enddate_car}
-hotelIntent book a hotel in {hotelDestination} on {hotelStartDate} till {hotelEndDate}
-hotelIntent book a hotel
-hotelIntent in {hotelDestination}
-hotelIntent on {hotelStartDate}
-hotelIntent till {hotelEndDate}
-hotelIntent book a hotel in {hotelDestination} on {hotelStartDate}
-hotelIntent book a hotel in {hotelDestination}
-hotelIntent in {hotelDestination} on {hotelStartDate} till {hotelEndDate}
-hotelIntent in {hotelDestination} on {hotelStartDate}
-hotelIntent on {hotelStartDate} till {hotelEndDate}
-hotelIntent book a room
-hotelIntent book a hotel in {hotelDestination}  till {hotelEndDate}
-hotelIntent option {hotelSelection}
-carIntent car option {carSelection}
-carIntent {carConfirmation} confirmation
-hotelIntent {hotelConfirmation} I confirm
+superIntent book a {module} in {destination}
+superIntent book a {module} in {destination} on {startdate} till {enddate}
+superIntent dropoff on {enddate}
+superIntent leave the {module} on {enddate}
+superIntent book it till {enddate}
+superIntent book the {module} from {startdate}
+superIntent start the booking from {startdate}
+superIntent checkin date for {module} is {startdate}
+superIntent start {module} booking from {startdate}
+superIntent book the {module} from {startdate} till {enddate}
+superIntent start the booking from {startdate} till {enddate}
+superIntent checkin date for {module} is {startdate} till {enddate}
+superIntent start {module} booking from {startdate} till {enddate}
+superIntent book a {module}
+superIntent rent a {module} in {destination}
+superIntent book the {module} in {destination}
+superIntent rent a {module} in {destination} till {enddate}
+superIntent book a {module} in {destination} till {enddate}
+superIntent rent a {module} in {destination} from {startdate}
+superIntent book a {module} in {destination} from {startdate}
+superIntent rent a {module} in {destination} on {startdate} till {enddate}
+superIntent book a {module} in {destination} from {startdate} till {enddate}
+superIntent rent a {module} in {destination} till {enddate} from {startdate}
+superIntent rent a {module} from {startdate}
+superIntent book a {module} from {startdate}
+superIntent rent a {module} till {enddate}
+superIntent book a {module} till {enddate}
+superIntent rent a {module} from {startdate} till {enddate}
+superIntent book a {module} from {startdate} till {enddate}
+superIntent option {selection}
+superIntent {confirmation}
+superIntent for {guests} people
+superIntent in {destination} till {enddate}
+superIntent from {startdate}
+superIntent till {enddate}

@@ -12,56 +12,35 @@
     {
       "slots": [
         {
-          "name": "destination_car",
+          "name": "destination",
           "type": "AMAZON.US_CITY"
         },
         {
-          "name": "startdate_car",
+          "name": "startdate",
           "type": "AMAZON.DATE"
         },
         {
-          "name": "carSelection",
+          "name": "selection",
           "type": "AMAZON.NUMBER"
         },
         {
-          "name": "carConfirmation",
+          "name": "guests",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "confirmation",
           "type": "CONFIRM_STRING"
         },
         {
-          "name": "enddate_car",
+          "name": "module",
+          "type": "MODULE_STRING"
+        },
+        {
+          "name": "enddate",
           "type": "AMAZON.DATE"
         }
       ],
-      "intent": "carIntent"
-    },
-    {
-      "slots": [
-        {
-          "name": "hotelDestination",
-          "type": "AMAZON.US_CITY"
-        },
-        {
-          "name": "hotelStartDate",
-          "type": "AMAZON.DATE"
-        },
-        {
-          "name": "hotelGuests",
-          "type": "AMAZON.NUMBER"
-        },
-        {
-          "name": "hotelSelection",
-          "type": "AMAZON.NUMBER"
-        },
-        {
-          "name": "hotelConfirmation",
-          "type": "CONFIRM_STRING"
-        },
-        {
-          "name": "hotelEndDate",
-          "type": "AMAZON.DATE"
-        }
-      ],
-      "intent": "hotelIntent"
+      "intent": "superIntent"
     }
   ]
 }
