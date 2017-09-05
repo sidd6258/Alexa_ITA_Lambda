@@ -1,11 +1,104 @@
+
+    var speechOutput;
+    var reprompt;
+    var welcomeOutput = "<s>Welcome to the Intelligent travel agent.</s> " +
+    "<s>You can ask to book a Hotel or book a rental car</s>";
+    var welcomeReprompt = "You can say, " +
+    "I want to book a hotel or I want to book a rental car";
+    var tripIntro = [
+        "This sounds like a cool trip. ",
+        "This will be fun. ",
+        "Oh, I like this trip. "
+        ];
+
+    var snippets = {
+            WELCOME: "<s>Welcome to the Intelligent travel agent.</s> " +
+            "<s>You can ask to book a Hotel or book a rental car</s>",
+
+            WELCOME_REPROMPT: "You can say, " +
+            "I want to book a hotel or I want to book a rental car",
+
+            DESTINATION: "Ok, Where do you want to book the hotel?",
+            DESTINATION_CAR: "Ok, Where do you want to book the rental car?",
+            DESTINATION_F: "Ok, Where do you want to book the flight?",
+
+            DESTINATION_REPROMPT: "In order to book a hotel, please tell me: the destination for the hotel?",
+            DESTINATION_REPROMPT_CAR: "In order to book a rental car, please tell me: the destination?",
+            DESTINATION_HOTEL: "Where do you want to book the hotel?",
+            DESTINATION_REPROMPT_HOTEL: "In order to book a hotel, please tell me: the destination for the hotel?",
+            DESTINATION_REPROMPT_F: "In order to book a flight, please tell me: the destination?",
+            DESTINATION_INVALID: "Sorry I couldn't understand your travel destination?",
+
+            ORIGIN_F:"OK, from where do you want to book the flight",
+
+            ORIGIN_REPROMT_F:"In order to book a flight,please tell me: the origin",
+            
+            STARTDATE: "Ok, please tell me the date you want to book the hotel from",
+            STARTDATE_CAR: "Ok, please tell me the date you want to book the car from",
+            STARTDATE_HOTEL: "Ok, please tell me the date you want to book the hotel from",
+            STARTDATE_F: "Ok, please tell me the date you want to book the flight from",
+            STARTDATE_REPROMPT: "In order to book a hotel, please tell me the travel check in date?",
+            STARTDATE_REPROMPT_CAR: "In order to book a car, please tell me the travel check in date?",
+            STARTDATE_REPROMPT_HOTEL: "In order to book a hotel, please tell me the travel check in date?",
+            STARTDATE_REPROMPT_F: "In order to book a flight, please tell me the travel check in date?",
+            STARTDATE_INVALID_PAST: "Nice, you live in the past. Do you have a time machine? Seriously, can you please say your actual desired check in date?",
+            STARTDATE_INVALID: "Sorry, i didnt get that. can you please repeat? you can say 1st January 2017.",
+            
+            ENDDATE: "Ok, please tell me the date you want to leave the hotel in.",
+            ENDDATE_CAR: "Ok, please tell me the date you want to drop off the car",
+            ENDDATE_HOTEL: "Ok, please tell me the date you want to leave the hotel in.",
+            ENDDATE_REPROMPT_HOTEL: "In order to book a hotel, please tell me the travel check out date?",
+            ENDDATE_REPROMPT: "In order to book a hotel, please tell me the travel check out date?",
+            ENDDATE_REPROMPT_CAR: "In order to book a car, please tell me the drop off date date?",
+
+            ENDDATE_INVALID_PAST: "Checkout date cannot be before start date",
+
+            ENDDATE_INVALID: "Sorry, i didnt get that. can you please repeat? you can say 1st January 2017.",
+            
+            GUESTS_HOTEL: "Now please tell me the number of guests to book the hotel for",
+            GUESTS_F: "Now please tell me the number of guests to book the flight for",
+
+            GUESTS_INVALID: "Invalid number of guests. Please say again",
+
+            STOP: "Thank you for using the I.T.A. app.",
+
+            HELP: "You can ask things like: Book a hotel for me or Book a car for me",
+
+            HELP_REPROMPT: "Simply say: I want to book a hotel.",
+
+            UNHANDLED: "I'm sorry I couldn't understand what you meant. Can you please say it again?",
+            
+            ERROR: "Error occurred while getting information from car api"
+    };
+    var carDestination = null;
+    var hotelDestination = null;
+    var flightDestination = null;
+    var hotelGuests = null;
+    var flightGuests = null;
+    var hotelSelection = null;
+    var hotelConfirmation = null;
+    var carSelection = null;
+    var carConfirmation = null;
+    var flightSelection = null;
+    var flightConfirmation = null;
+    var start_date_string = null;
+    var end_date_string = null;
+    var speechText = "";
+    var repromptText = "";
+    var hotelOptions = null;
+    var carOptions = null;
+    var flightOptions=null;
+    var module = null;
+    var state = null;
+//---------------------------------------------skill code------------------------------------
 /* eslint-disable  func-names */
 /* eslint quote-props: ["error", "consistent"]*/
 /**
- * This sample demonstrates a simple skill built with the Amazon Alexa Skills
+ * This  demonstrates a  skill built with the Amazon Alexa Skills
  * nodejs skill development kit.
- * This sample supports multiple lauguages. (en-US, en-GB, de-DE).
+ * This  supports multiple lauguages. (en-US, en-GB, de-DE).
  * The Intent Schema, Custom Slots and Sample Utterances for this skill, as well
- * as testing instructions are located at https://github.com/alexa/skill-sample-nodejs-fact
+ * as testing instructions are located at https://github.com/sidd6258/Alexa_ITA_Lambda
  **/
 
 'use strict';
@@ -15,223 +108,212 @@ const request=require('request');
 const APP_ID = "amzn1.ask.skill.06e1a5f6-c4a2-4b77-844b-8e86b0e465a2"; // TODO replace with your app ID (OPTIONAL).
 var flights=require('./flights');
 var Speech=require('ssml-builder');
-const languageStrings = {
-	    'en-GB': {
-	        translation: {
-	            FACTS: [
-	                'A year on Mercury is just 88 days long.',
-	                'Despite being farther from the Sun, Venus experiences higher temperatures than Mercury.',
-	                'Venus rotates anti-clockwise, possibly because of a collision in the past with an asteroid.',
-	                'On Mars, the Sun appears about half the size as it does on Earth.',
-	                'Earth is the only planet not named after a god.',
-	                'Jupiter has the shortest day of all the planets.',
-	                'The Milky Way galaxy will collide with the Andromeda Galaxy in about 5 billion years.',
-	                'The Sun contains 99.86% of the mass in the Solar System.',
-	                'The Sun is an almost perfect sphere.',
-	                'A total solar eclipse can happen once every 1 to 2 years. This makes them a rare event.',
-	                'Saturn radiates two and a half times more energy into space than it receives from the sun.',
-	                'The temperature inside the Sun can reach 15 million degrees Celsius.',
-	                'The Moon is moving approximately 3.8 cm away from our planet every year.',
-	            ],
-	            SKILL_NAME: 'British Space Facts',
-	            GET_FACT_MESSAGE: "Here's your fact: ",
-	            HELP_MESSAGE: 'You can say tell me a space fact, or, you can say exit... What can I help you with?',
-	            HELP_REPROMPT: 'What can I help you with?',
-	            STOP_MESSAGE: 'Goodbye!',
-	        },
-	    },
-	    'en-US': {
-	        translation: {
-	            FACTS: [
-	                'A year on Mercury is just 88 days long.',
-	                'Despite being farther from the Sun, Venus experiences higher temperatures than Mercury.',
-	                'Venus rotates counter-clockwise, possibly because of a collision in the past with an asteroid.',
-	                'On Mars, the Sun appears about half the size as it does on Earth.',
-	                'Earth is the only planet not named after a god.',
-	                'Jupiter has the shortest day of all the planets.',
-	                'The Milky Way galaxy will collide with the Andromeda Galaxy in about 5 billion years.',
-	                'The Sun contains 99.86% of the mass in the Solar System.',
-	                'The Sun is an almost perfect sphere.',
-	                'A total solar eclipse can happen once every 1 to 2 years. This makes them a rare event.',
-	                'Saturn radiates two and a half times more energy into space than it receives from the sun.',
-	                'The temperature inside the Sun can reach 15 million degrees Celsius.',
-	                'The Moon is moving approximately 3.8 cm away from our planet every year.',
-	            ],
-	            SKILL_NAME: 'American Space Facts',
-	            GET_FACT_MESSAGE: "Here's your fact: ",
-	            HELP_MESSAGE: 'You can say tell me a space fact, or, you can say exit... What can I help you with?',
-	            HELP_REPROMPT: 'What can I help you with?',
-	            STOP_MESSAGE: 'Goodbye!',
-	        },
-	    },
-	    'de-DE': {	
-	        translation: {
-	            FACTS: [
-	                'Ein Jahr dauert auf dem Merkur nur 88 Tage.',
-	                'Die Venus ist zwar weiter von der Sonne entfernt, hat aber höhere Temperaturen als Merkur.',
-	                'Venus dreht sich entgegen dem Uhrzeigersinn, möglicherweise aufgrund eines früheren Zusammenstoßes mit einem Asteroiden.',
-	                'Auf dem Mars erscheint die Sonne nur halb so groß wie auf der Erde.',
-	                'Die Erde ist der einzige Planet, der nicht nach einem Gott benannt ist.',
-	                'Jupiter hat den kürzesten Tag aller Planeten.',
-	                'Die Milchstraßengalaxis wird in etwa 5 Milliarden Jahren mit der Andromeda-Galaxis zusammenstoßen.',
-	                'Die Sonne macht rund 99,86 % der Masse im Sonnensystem aus.',
-	                'Die Sonne ist eine fast perfekte Kugel.',
-	                'Eine Sonnenfinsternis kann alle ein bis zwei Jahre eintreten. Sie ist daher ein seltenes Ereignis.',
-	                'Der Saturn strahlt zweieinhalb mal mehr Energie in den Weltraum aus als er von der Sonne erhält.',
-	                'Die Temperatur in der Sonne kann 15 Millionen Grad Celsius erreichen.',
-	                'Der Mond entfernt sich von unserem Planeten etwa 3,8 cm pro Jahr.',
-	            ],
-	            SKILL_NAME: 'Weltraumwissen auf Deutsch',
-	            GET_FACT_MESSAGE: 'Hier sind deine Fakten: ',
-	            HELP_MESSAGE: 'Du kannst sagen, „Nenne mir einen Fakt über den Weltraum“, oder du kannst „Beenden“ sagen... Wie kann ich dir helfen?',
-	            HELP_REPROMPT: 'Wie kann ich dir helfen?',
-	            STOP_MESSAGE: 'Auf Wiedersehen!',
-	        },
-	    },
+var moment = require('moment'); // deals with dates and date formatting, for instance converts AMAZON.DATE to timestamp
+
+
+
+
+var states = {
+	    START: '_STARTMODE',  // Prompt the user to start or restart
+	    DESTINATION: '_DESTINATION',
+	    DESTINATION_CAR: '_DESTINATION_CAR',
+	    DESTINATION_F: 'DESTINATION_F',
+	    ORIGIN_F:'ORIGIN_F',
+	    STARTDATE: '_STARTDATE',
+	    STARTDATE_CAR: '_STARTDATE_CAR',
+	    STARTDATE_F: '_STARTDATE_F',
+	    ENDDATE: '_ENDDATE',
+	    ENDDATE_CAR: '_ENDDATE_CAR',
+	    GUESTS: '_GUESTS',
+	    GUESTS_F: '_GUESTS_F',
+	    ANSWER: '_ANSWER',
+	    ANSWER_CAR: '_ANSWER_CAR',
+	    ANSWER_F: '_ANSWER_F'
 	};
 
-const handlers = {
-    'LaunchRequest': function () {
-        this.emit('GetFact');
-    },
-    'FlightIntent': function () {
-        // Get a random space fact from the space facts list
-    	var myJSONObject={};
-        var origin=this.event.request.intent.slots.origin.value;
-        var destination=this.event.request.intent.slots.destination.value;
-        var date=this.event.request.intent.slots.date.value;
-        var speech=new Speech();
-            
-        speech.say("Hello");
-        speech.pause("500ms");
-        speech.say("Flights from "+origin+" to "+destination+" are:");
-       // 
-        var textpromt="Flights from "+origin+" to "+destination+" are:";
-        var myJSONObject={	
-        					"src":origin,
-			        		"input":destination,
-			        		"sdatetime":"",
-			        		"edatetime":"",
-			        		"lat":"","lon":""
-			        	};
-        request({
-    	    url: "http://Sample-env.3ypbe4xuwp.us-east-1.elasticbeanstalk.com/fly",
-    	    method: "POST",
-    	    json: true,   // <--Very important!!!
-    	    body: myJSONObject
-    			}, function (error, response, body){
-								    		 console.log("res"+response);
-								    		 if (!error && response.statusCode == 200) {
-								              
-								                console.log("place"+JSON.stringify(response));
-								                
-								                for(var i=0;i<5;i++)
-								                	{
-								                	speech.pause("500ms");
-								                	speech.say("Option "+(parseInt(i,10)+1)+":");
-								                	speech.pause("500ms");
-								                	speech.say(response.body.fltinfo[i].airline+" airline flight number "+response.body.fltinfo[i].flightNum+".");
-								                	speech.say("At ");
-								                	speech.sayAs({
-								                		"word":response.body.fltinfo[i].deptTime+":00",
-								                		"interpret": "time",
-								                        
-								                	});
-								                	speech.say("hours");
-								                	
-								                	speech.say("from");
-								                	speech.spell(response.body.fltinfo[i].deptAirportCode);
-								                	speech.say(" gate "+response.body.fltinfo[i].deptGate+".");
-								                	speech.pause("500ms");
-								                	speech.say("Price for the ticket is"+response.body.fltinfo[i].totalprice+" dollars.");
-								                	/*textpromt=textpromt+response.body.fltinfo[i].airline+" flight number "+response.body.fltinfo[i].flightNum+".At ";
-								                	textpromt=textpromt+"Option "+(i+1)+":";
-								                	textpromt=textpromt+"At "+response.body.fltinfo[i].deptTime+" from "+response.body.fltinfo[i].deptAirportCode+" gate "+response.body.fltinfo[i].deptGate+".";
-								                	
-								                	textpromt=textpromt+"Price for the ticket is"+response.body.fltinfo[i].totalprice+".";
-								                	//speech.pause('1s');*/								                	}
-								                var speechOutput = speech.ssml(true);
-								                console.log("textprompt"+textpromt);
-								                this.emit(':tell',speechOutput);
-								                //res.send(response);
-								            }
-								    		else
-								    			{
-								    			console.log("error"+response+error);
-								    			textpromt="error";
-								                this.emit(':tell',textpromt);
-								
-								    			//res.send("error");
-								    			}
-    	}.bind(this));
-        
-        
-		
-    },
-    'HotelSearchIntent': function () {
-        // Get a random space fact from the space facts list
-    	var myJSONObject={};
-        var input=this.event.request.intent.slots.input.value;
-        var sdatetime=this.event.request.intent.slots.startdate.value;
-        var edatetime=this.event.request.intent.slots.startdate.value;
-        myJSONObject={"input":input,
-        		"sdatetime":sdatetime,
-        		"edatetime":edatetime};
-        request({
-    	    url: "http://Sample-env.3ypbe4xuwp.us-east-1.elasticbeanstalk.com/htl",
-    	    method: "POST",
-    	    json: true,   // <--Very important!!!
-    	    body: myJSONObject
-    	}, function (error, response, body){
-    		 // console.log("res"+response);
-    		if (!error && response.statusCode == 200) {
-               // console.log("res"+JSON.parse(response));
-                console.log("place"+JSON.stringify(response));
-                // var replymsg = JSON.parse(response);
-                var hotelinform = response["body"]["hotels"];
-                console.log(hotelinform);
-                var speechText = "The top 10 results are. ";
-                speechText += hotelinform;
-                console.log(speechText);
-             //    var speechText = "";
-        	    // speechText += "Welcome to " + SKILL_NAME + ".  ";
-        	    // speechText += "You can ask a question like, search for hotels near golden gate bridge, san fransisco.  ";
-        	    var repromptText = "For instructions on what you can say, please say help me.";
-        	    this.emit(':tell', speechText);
-                //res.send(response);
+
+var newSessionHandlers = {
+
+		'LaunchRequest': function () {
+            this.emit(':ask', welcomeOutput, welcomeReprompt);
+            this.attributes['state'] = 'welcome';
+        },
+
+        'superIntent': function () {
+
+            module = this.event.request.intent.slots.module.value;
+            if (module != undefined){
+                this.attributes['module'] = module;
+                console.log(this.attributes);
             }
-    		else
-    			{
-    			console.log("error"+response+error);
-    			
-    			//res.send("error");
-    			}
-    	}.bind(this));
-    	// this.emit(':tell', "hello");
-		
-    },
-    'AMAZON.HelpIntent': function () {
-        const speechOutput = this.t('HELP_MESSAGE');
-        const reprompt = this.t('HELP_MESSAGE');
-        this.emit(':ask', speechOutput, reprompt);
-    },
-    'AMAZON.CancelIntent': function () {
-        this.emit(':tell', this.t('STOP_MESSAGE'));
-    },
-    'AMAZON.StopIntent': function () {
-        this.emit(':tell', this.t('STOP_MESSAGE'));
-    },
-    'SessionEndedRequest': function () {
-        this.emit(':tell', this.t('STOP_MESSAGE'));
-    },
+
+            if(this.attributes['module'] == 'flight'){
+            	
+            	  if(Object.keys(this.attributes).length === 0) { // Check if it's the
+	                    // first time the
+	                    // skill has been
+	                    // invoked
+	                    this.attributes['destination_f'] = undefined;
+	                    this.attributes['startdate_f'] = undefined;
+	                    this.attributes['flightSelection'] = undefined;
+	                    this.attributes['flightConfirmation'] = undefined;
+	                }
+            	  
+//=========================================== store slots locally===========================
+	                
+	                flightDestination = this.event.request.intent.slots.destination.value;
+	                start_date_string = this.event.request.intent.slots.startdate.value;
+	                //end_date_string = this.event.request.intent.slots.enddate.value;
+	                flightSelection = this.event.request.intent.slots.selection.value;
+	                flightConfirmation = this.event.request.intent.slots.confirmation.value;
+	                flightGuests=this.event.request.intent.slots.guests.value;
+	                if(flightDestination != null){
+	                    this.attributes['flightDestination'] = flightDestination;
+	                    console.log(this.attributes);
+	                }
+	                
+	                
+	                if(start_date_string != null){
+	                    var flightStartDate = moment(start_date_string);
+	                    this.attributes['flightStartDate'] = flightStartDate;
+	                    console.log(this.attributes);
+	                }
+	                
+	                if(flightGuests != null){
+	                    this.attributes['flightGuests'] = flightGuests;
+	                    console.log(this.attributes);
+	                }
+	                
+	                if(flightSelection != null){
+	                    this.attributes['state'] = 'flight_selection';
+	                    this.attributes['flightSelection'] = flightSelection;             
+	                    speechText = "You are about to book " + this.attributes['flightOptions'][flightSelection] + " " + "Please Confirm.";
+	                    repromptText ="You are about to book" + this.attributes['flightOptions'][flightSelection] + " " + "Please Confirm.";
+	                    console.log(this.attributes);
+	                    this.emit(':ask', speechText, repromptText);
+	                }
+	                
+	                if(flightConfirmation != null && flightConfirmation=="yes" && this.attributes['state'] =="flight_selection"){
+	                    this.attributes['state'] = 'flight_confirmation';
+	                    this.attributes['flightConfirmation'] = flightConfirmation;   
+	                    flightSelection = this.attributes['flightSelection'];
+	                    speechText = "You booked " + this.attributes['flightOptions'][flightSelection] + " " + " Do you want to book rental car, If yes then please say rent a car";
+	                    repromptText ="You booked " + this.attributes['flightOptions'][flightSelection] + " " + " Do you want to book rental car, If yes then please say rent a car";
+	                    console.log(this.attributes);
+	                    this.emit(':ask', speechText, repromptText);
+	                }
+	                
+ //          ============================================= ask for missing slots ======================
+	                
+	                if(this.attributes['flightDestination'] == undefined){
+	
+	                    this.attributes['state'] = 'flight_destination';
+	                    speechText = snippets.DESTINATION_F;
+	                    repromptText = snippets.DESTINATION_REPROMPT_F;
+	                    this.emit(':ask', speechText, repromptText);
+	                }
+	
+	                if(this.attributes['flightStartDate'] == undefined){
+	
+	                    this.attributes['state'] = 'flight_startdate';
+	                    speechText = snippets.STARTDATE_F;
+	                    repromptText = snippets.STARTDATE_REPROMPT_F;
+	                    this.emit(':ask', speechText, repromptText);
+	
+	                }
+	                
+	                if(this.attributes['flightGuests'] == undefined){
+	                	console.log("in");
+	                    this.attributes['state'] = 'flight_guests';
+	                    speechText = snippets.GUESTS_F;
+	                    repromptText = snippets.GUESTS_REPROMPT_F;
+	                    this.emit(':ask', speechText, repromptText);
+	
+	                }
+	               
+ //============================================================= api call ===============
+	                
+	                if(this.attributes['flightDestination'] != undefined && this.attributes['flightStartDate'] != undefined && this.attributes['flightSelection'] == undefined ){
+	                	
+	                	if(isPastDate(moment(this.attributes['flightStartDate']))){
+	                		speechText = snippets.STARTDATE_INVALID_PAST;
+	                        repromptText = snippets.STARTDATE_INVALID_PAST; // could be improved by using alternative prompt text
+	                        this.emit(':ask', speechText, repromptText);
+	                	}
+	                	
+	                	
+	                	this.attributes['state'] = 'flight_results';
+	                    var myJSONObject={};
+	                    myJSONObject={"input":flightDestination,
+	                            "sdatetime":"2017-6-07 16:25",
+	                            "edatetime":"2017-6-09 16:25"
+	                    };
+	                    console.log("ajay ajay");
+	                    console.log(myJSONObject);
+	                    
+	                    flightOptions = {      1:"Option A",
+                                2:"Option B",
+                                3:"Option C",
+                                4:"Option D",
+                                5:"Option E"}
+			          speechText = "Five flights available 1 2 3 4 5, choose one option";
+			          repromptText = "Five flights available 1 2 3 4 5, choose one option";
+			          this.attributes['flightOptions']=flightOptions;
+			          this.emit(':ask', speechText, repromptText);
+			          console.log("ajay ajay out");
+	                }
+            	}
+			},
+			'AMAZON.HelpIntent': function () {
+			    speechOutput = "";
+			    reprompt = "";
+			    this.emit(':ask', speechOutput, reprompt);
+			},
+			'Unhandled': function () {
+			    HelpMessage =snippets.HELP; 
+			    this.emit(':ask', HelpMessage, HelpMessage);
+			},
+			'AMAZON.CancelIntent': function () {
+			    speechOutput = "";
+			    this.emit(':tell', speechOutput);
+			},
+			'AMAZON.StopIntent': function () {
+			    speechOutput = "";
+			    this.emit(':tell', speechOutput);
+			},
+			'SessionEndedRequest': function () {
+			    var speechOutput = "";
+			    this.emit(':tell', speechOutput);
+			},
 };
+function isPastDate(sdate) {
+    var today = moment();
+
+    if (sdate < today) {
+        return true
+    } else {
+        return false
+    }
+}
+function isFutureDate(edate,sdate) {
+//    var today = moment();
+	
+    if (sdate < edate) {
+        return true
+    } else {
+        return false
+    }
+}
+
+
+
 
 exports.handler = (event, context) => {
     const alexa = Alexa.handler(event, context);
     alexa.APP_ID = APP_ID;
     // To enable string internationalization (i18n) features, set a resources object.
-    alexa.resources = languageStrings;
-    alexa.registerHandlers(handlers);
+    //alexa.resources = languageStrings;
+    alexa.registerHandlers(newSessionHandlers);
     alexa.execute();
 };
 
