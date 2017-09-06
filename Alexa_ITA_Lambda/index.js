@@ -10,7 +10,7 @@
         "This will be fun. ",
         "Oh, I like this trip. "
         ];
-
+//---------------
     var snippets = {
             WELCOME: "<s>Welcome to the Intelligent travel agent.</s> " +
             "<s>You can ask to book a flight, book a Hotel or book a rental car</s>",
