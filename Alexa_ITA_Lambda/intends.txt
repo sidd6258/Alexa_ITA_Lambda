@@ -16,6 +16,10 @@
           "type": "AMAZON.US_CITY"
         },
         {
+          "name": "origin",
+          "type": "AMAZON.US_CITY"
+        },
+        {
           "name": "startdate",
           "type": "AMAZON.DATE"
         },

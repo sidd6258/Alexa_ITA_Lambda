@@ -30,8 +30,26 @@ superIntent book a {module} from {startdate} till {enddate}
 superIntent option {selection}
 superIntent {confirmation}
 superIntent for {guests} people
-superIntent {guests} people
-superIntent {guests} guests
 superIntent in {destination} till {enddate}
 superIntent from {startdate}
 superIntent till {enddate}
+superIntent  book a {module} to {destination} from {origin} on {startdate} with {guests} guests
+superIntent  book a {module} to {destination} from {origin}
+superIntent  book a {module} to {destination}
+superIntent  book a {module} to {destination} from {origin} on {startdate}
+superIntent  book a {module} from {origin} on {startdate} with {guests} guests
+superIntent  book a {module} from {origin} on {startdate}
+superIntent  book a {module} from {origin}
+superIntent  book a {module} on {startdate} with {guests} guests
+superIntent  to {destination}
+superIntent  to {destination} from {origin}
+superIntent  to {destination} from {origin} on {startdate} with {guests} guests
+superIntent  to {destination} from {origin} on {startdate}
+superIntent  to {destination} on {startdate} with {guests} guests
+superIntent  to {destination} on {startdate}
+superIntent  to {destination} with {guests} guests
+superIntent  from {origin}
+superIntent  from {origin} on {startdate} with {guests} guests
+superIntent  from {origin} on {startdate}
+superIntent  from {origin} with {guests} guests
+superIntent  {guests} guests
