@@ -1,33 +1,7 @@
 {
   "intents": [
     {
-      "slots": [
-        {
-          "name": "pickuplocation",
-          "type": "AMAZON.US_CITY"
-        },
-        {
-          "name": "pickupdate",
-          "type": "AMAZON.DATE"
-        },
-        {
-          "name": "pickuptime",
-          "type": "AMAZON.TIME"
-        },
-        {
-          "name": "days",
-          "type": "AMAZON.NUMBER"
-        },
-        {
-          "name": "dropoffdate",
-          "type": "AMAZON.DATE"
-        },
-        {
-          "name": "dropofftime",
-          "type": "AMAZON.TIME"
-        }
-      ],
-      "intent": "CarRentalIntent"
+      "intent": "AMAZON.CancelIntent"
     },
     {
       "intent": "AMAZON.HelpIntent"
@@ -36,7 +10,41 @@
       "intent": "AMAZON.StopIntent"
     },
     {
-      "intent": "AMAZON.CancelIntent"
+      "slots": [
+        {
+          "name": "destination",
+          "type": "AMAZON.US_CITY"
+        },
+        {
+          "name": "origin",
+          "type": "AMAZON.US_CITY"
+        },
+        {
+          "name": "startdate",
+          "type": "AMAZON.DATE"
+        },
+        {
+          "name": "selection",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "guests",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "confirmation",
+          "type": "CONFIRM_STRING"
+        },
+        {
+          "name": "module",
+          "type": "MODULE_STRING"
+        },
+        {
+          "name": "enddate",
+          "type": "AMAZON.DATE"
+        }
+      ],
+      "intent": "superIntent"
     }
   ]
 }
