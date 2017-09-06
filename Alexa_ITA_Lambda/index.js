@@ -90,7 +90,6 @@
     var flightOptions=null;
     var module = null;
     var state = null;
-    var flightOrigin = null;
 //---------------------------------------------skill code------------------------------------
 /* eslint-disable  func-names */
 /* eslint quote-props: ["error", "consistent"]*/
@@ -245,8 +244,7 @@ var newSessionHandlers = {
 	                	
 	                	this.attributes['state'] = 'flight_results';
 	                    var myJSONObject={};
-	                    myJSONObject={"origin":fli
-	                    		"destination":flightDestination,
+	                    myJSONObject={"input":flightDestination,
 	                            "sdatetime":"2017-6-07 16:25",
 	                            "edatetime":"2017-6-09 16:25"
 	                    };
@@ -258,8 +256,8 @@ var newSessionHandlers = {
                                 3:"Option C",
                                 4:"Option D",
                                 5:"Option E"}
-			          speechText = "Five flights available 1 2 3 4 5, choose one option";
-			          repromptText = "Five flights available 1 2 3 4 5, choose one option";
+			          speechText = "Five hotels available 1 2 3 4 5, choose one option";
+			          repromptText = "Five hotels available 1 2 3 4 5, choose one option";
 			          this.attributes['flightOptions']=flightOptions;
 			          this.emit(':ask', speechText, repromptText);
 			          console.log("ajay ajay out");
