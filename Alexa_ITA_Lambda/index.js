@@ -106,9 +106,33 @@
 
     var handlers = {
             'LaunchRequest': function () {
-            	console.log(this.event.session.user.userId);
+            	if (this.event.session.user.accessToken == undefined) {
+
+            	      this.emit(':tellWithLinkAccountCard','to start using this skill, please use the companion app to authenticate on Amazon');
+
+            	            return;
+
+            	        }
+            	var amznProfileURL = 'https://api.amazon.com/user/profile?access_token=';
+
+                amznProfileURL += this.event.session.user.accessToken;
                 this.attributes['state'] = 'welcome';
-                this.emit(':ask', welcomeOutput, welcomeReprompt);                                
+                    
+                request(amznProfileURL, function(error, response, body) {
+                    if (response.statusCode == 200) {
+
+                        var profile = JSON.parse(body);
+                        console.log(profile.name);
+                        this.emit(':ask', "Hello, " + profile.name +"." + welcomeOutput, welcomeReprompt);  
+
+                    } else {
+
+                        this.emit(':tell', "Hello, I can't connect to Amazon Profile Service right now, try again later");
+
+                    }
+
+                }.bind(this));
+                                          
             },
             'superIntent': function () {
 
