@@ -1,0 +1,328 @@
+superIntent book a {module}
+superIntent rent a {module}
+
+superIntent book a {module} in {destination} on {startdate} till {enddate}
+superIntent rent a {module} in {destination} on {startdate} till {enddate}
+superIntent book a {module} in {destination} from {startdate} till {enddate}
+superIntent rent a {module} in {destination} from {startdate} till {enddate}
+
+superIntent book a {module} on {startdate} in {destination} till {enddate}
+superIntent rent a {module} on {startdate} in {destination} till {enddate}
+superIntent book a {module} from {startdate} in {destination} till {enddate}
+superIntent rent a {module}  from {startdate} in {destination}till {enddate}
+
+superIntent book a {module} on {startdate} till {enddate} in {destination}
+superIntent rent a {module} on {startdate} till {enddate} in {destination}
+superIntent book a {module} from {startdate} till {enddate} in {destination}
+superIntent rent a {module} from {startdate} till {enddate} in {destination}
+
+superIntent book a {module} in {destination} till {enddate} on {startdate}
+superIntent rent a {module} in {destination} till {enddate} on {startdate}
+superIntent book a {module} in {destination} till {enddate} from {startdate}
+superIntent rent a {module} in {destination} till {enddate} from {startdate}
+
+superIntent book a {module} on {startdate} till {enddate}
+superIntent rent a {module} on {startdate} till {enddate}
+superIntent book a {module} from {startdate} till {enddate}
+superIntent rent a {module} from {startdate} till {enddate}
+
+superIntent book a {module} in {destination} till {enddate}
+superIntent rent a {module} in {destination} till {enddate}
+
+superIntent book a {module} till {enddate} in {destination}
+superIntent rent a {module} till {enddate} in {destination}
+
+superIntent book a {module} till {enddate} on {startdate}
+superIntent rent a {module} till {enddate} on {startdate}
+superIntent book a {module} till {enddate} from {startdate}
+superIntent rent a {module} till {enddate} from {startdate}
+
+superIntent book a {module} till {enddate}
+superIntent rent a {module}till {enddate}
+
+superIntent book a {module} in {destination}
+superIntent rent a {module} in {destination}
+
+superIntent in {destination} on {startdate}
+superIntent in {destination} from {startdate}
+
+superIntent on {startdate} in {destination} till {enddate}
+superIntent from {startdate} in {destination} till {enddate}
+
+superIntent on {startdate} till {enddate} in {destination}
+superIntent from {startdate} till {enddate} in {destination}
+
+superIntent in {destination} till {enddate} on {startdate}
+superIntent in {destination} till {enddate} from {startdate}
+
+superIntent on {startdate} till {enddate}
+superIntent from {startdate} till {enddate}
+
+superIntent in {destination} till {enddate}
+superIntent in {destination} till {enddate}
+
+superIntent till {enddate} in {destination}
+superIntent till {enddate} on {startdate}
+superIntent till {enddate} from {startdate}
+
+superIntent in {destination} till {enddate}
+
+superIntent on {startdate} in {destination}
+superIntent from {startdate} in {destination}
+
+superIntent in {destination} on {startdate}
+superIntent in {destination} from {startdate}
+
+superIntent on {startdate}
+superIntent from {startdate}
+
+superIntent in {destination}
+
+superIntent till {enddate}
+
+superIntent book a {module} in {destination} on {startdate} and drop off on {enddate}
+superIntent rent a {module} in {destination} on {startdate} and drop off on {enddate}
+superIntent book a {module} in {destination} from {startdate} and drop off on {enddate}
+superIntent rent a {module} in {destination} from {startdate} and drop off on {enddate}
+
+superIntent book a {module} on {startdate} in {destination} and drop off on {enddate}
+superIntent rent a {module} on {startdate} in {destination} and drop off on {enddate}
+superIntent book a {module} from {startdate} in {destination} and drop off on {enddate}
+superIntent rent a {module}  from {startdate} in {destination}and drop off on {enddate}
+
+superIntent book a {module} on {startdate} and drop off on {enddate} in {destination}
+superIntent rent a {module} on {startdate} and drop off on {enddate} in {destination}
+superIntent book a {module} from {startdate} and drop off on {enddate} in {destination}
+superIntent rent a {module} from {startdate} and drop off on {enddate} in {destination}
+
+superIntent book a {module} in {destination} and drop off on {enddate} on {startdate}
+superIntent rent a {module} in {destination} and drop off on {enddate} on {startdate}
+superIntent book a {module} in {destination} and drop off on {enddate} from {startdate}
+superIntent rent a {module} in {destination} and drop off on {enddate} from {startdate}
+
+superIntent in {destination} on {startdate} and drop off on {enddate}
+superIntent in {destination} from {startdate} and drop off on {enddate}
+
+superIntent on {startdate} in {destination} and drop off on {enddate}
+superIntent from {startdate} in {destination} and drop off on {enddate}
+
+superIntent on {startdate} and drop off on {enddate} in {destination}
+superIntent from {startdate} and drop off on {enddate} in {destination}
+
+superIntent in {destination} and drop off on {enddate} on {startdate}
+superIntent in {destination} and drop off on {enddate} from {startdate}
+
+superIntent on {startdate} and drop off on {enddate}
+superIntent from {startdate} and drop off on {enddate}
+
+superIntent in {destination} and drop off on {enddate}
+superIntent in {destination} and drop off on {enddate}
+
+superIntent drop off on {enddate} in {destination}
+superIntent drop off on {enddate} on {startdate}
+superIntent drop off on {enddate} from {startdate}
+
+superIntent in {destination} and drop off on {enddate}
+
+superIntent on {startdate} in {destination}
+superIntent from {startdate} in {destination}
+
+superIntent in {destination} on {startdate}
+superIntent in {destination} from {startdate}
+
+superIntent on {startdate}
+superIntent from {startdate}
+
+superIntent in {destination}
+
+superIntent book a {module} in {destination} checkin on {startdate} and drop off on {enddate}
+superIntent rent a {module} in {destination} checkin on {startdate} and drop off on {enddate}
+superIntent book a {module} in {destination} from {startdate} and drop off on {enddate}
+superIntent rent a {module} in {destination} from {startdate} and drop off on {enddate}
+
+superIntent book a {module} checkin on {startdate} in {destination} and drop off on {enddate}
+superIntent rent a {module} checkin on {startdate} in {destination} and drop off on {enddate}
+superIntent book a {module} from {startdate} in {destination} and drop off on {enddate}
+superIntent rent a {module}  from {startdate} in {destination}and drop off on {enddate}
+
+superIntent book a {module} checkin on {startdate} and drop off on {enddate} in {destination}
+superIntent rent a {module} checkin on {startdate} and drop off on {enddate} in {destination}
+superIntent book a {module} from {startdate} and drop off on {enddate} in {destination}
+superIntent rent a {module} from {startdate} and drop off on {enddate} in {destination}
+
+superIntent book a {module} in {destination} and drop off on {enddate} checkin on {startdate}
+superIntent rent a {module} in {destination} and drop off on {enddate} checkin on {startdate}
+superIntent book a {module} in {destination} and drop off on {enddate} from {startdate}
+superIntent rent a {module} in {destination} and drop off on {enddate} from {startdate}
+
+superIntent in {destination} checkin on {startdate} and drop off on {enddate}
+superIntent in {destination} from {startdate} and drop off on {enddate}
+
+superIntent checkin on {startdate} in {destination} and drop off on {enddate}
+superIntent from {startdate} in {destination} and drop off on {enddate}
+
+superIntent checkin on {startdate} and drop off on {enddate} in {destination}
+superIntent from {startdate} and drop off on {enddate} in {destination}
+
+superIntent in {destination} and drop off on {enddate} checkin on {startdate}
+superIntent in {destination} and drop off on {enddate} from {startdate}
+
+superIntent checkin on {startdate} and drop off on {enddate}
+superIntent from {startdate} and drop off on {enddate}
+
+superIntent in {destination} and drop off on {enddate}
+superIntent in {destination} and drop off on {enddate}
+
+superIntent drop off on {enddate} in {destination}
+superIntent drop off on {enddate} checkin on {startdate}
+superIntent drop off on {enddate} from {startdate}
+
+superIntent in {destination} and drop off on {enddate}
+
+superIntent checkin on {startdate} in {destination}
+superIntent from {startdate} in {destination}
+
+superIntent in {destination} checkin on {startdate}
+superIntent in {destination} from {startdate}
+
+superIntent checkin on {startdate}
+superIntent from {startdate}
+
+superIntent in {destination}
+
+superIntent drop off on {enddate}
+
+superIntent leave the {module} on {enddate}
+superIntent book it till {enddate}
+
+superIntent book a {module} in {destination} checkin on {startdate} till {enddate}
+superIntent rent a {module} in {destination} checkin on {startdate} till {enddate}
+superIntent book a {module} in {destination} from {startdate} till {enddate}
+superIntent rent a {module} in {destination} from {startdate} till {enddate}
+
+superIntent book a {module} checkin on {startdate} in {destination} till {enddate}
+superIntent rent a {module} checkin on {startdate} in {destination} till {enddate}
+superIntent book a {module} from {startdate} in {destination} till {enddate}
+superIntent rent a {module}  from {startdate} in {destination}till {enddate}
+
+superIntent book a {module} checkin on {startdate} till {enddate} in {destination}
+superIntent rent a {module} checkin on {startdate} till {enddate} in {destination}
+superIntent book a {module} from {startdate} till {enddate} in {destination}
+superIntent rent a {module} from {startdate} till {enddate} in {destination}
+
+superIntent book a {module} in {destination} till {enddate} checkin on {startdate}
+superIntent rent a {module} in {destination} till {enddate} checkin on {startdate}
+superIntent book a {module} in {destination} till {enddate} from {startdate}
+superIntent rent a {module} in {destination} till {enddate} from {startdate}
+
+superIntent book a {module} checkin on {startdate} till {enddate}
+superIntent rent a {module} checkin on {startdate} till {enddate}
+superIntent book a {module} from {startdate} till {enddate}
+superIntent rent a {module} from {startdate} till {enddate}
+
+superIntent book a {module} in {destination} till {enddate}
+superIntent rent a {module} in {destination} till {enddate}
+
+superIntent book a {module} till {enddate} in {destination}
+superIntent rent a {module} till {enddate} in {destination}
+
+superIntent book a {module} till {enddate} checkin on {startdate}
+superIntent rent a {module} till {enddate} checkin on {startdate}
+superIntent book a {module} till {enddate} from {startdate}
+superIntent rent a {module} till {enddate} from {startdate}
+
+superIntent book a {module} till {enddate}
+superIntent rent a {module}till {enddate}
+
+superIntent book a {module} in {destination}
+superIntent rent a {module} in {destination}
+
+superIntent in {destination} checkin on {startdate}
+superIntent in {destination} from {startdate}
+
+superIntent checkin on {startdate} in {destination} till {enddate}
+superIntent from {startdate} in {destination} till {enddate}
+
+superIntent checkin on {startdate} till {enddate} in {destination}
+superIntent from {startdate} till {enddate} in {destination}
+
+superIntent in {destination} till {enddate} checkin on {startdate}
+superIntent in {destination} till {enddate} from {startdate}
+
+superIntent checkin on {startdate} till {enddate}
+superIntent from {startdate} till {enddate}
+
+superIntent in {destination} till {enddate}
+superIntent in {destination} till {enddate}
+
+superIntent till {enddate} in {destination}
+superIntent till {enddate} checkin on {startdate}
+superIntent till {enddate} from {startdate}
+
+superIntent in {destination} till {enddate}
+
+superIntent checkin on {startdate} in {destination}
+superIntent from {startdate} in {destination}
+
+superIntent in {destination} checkin on {startdate}
+superIntent in {destination} from {startdate}
+
+superIntent checkin on {startdate}
+
+superIntent start {module} booking from {startdate} till {enddate}
+
+superIntent book a {module} in {destination}
+superIntent dropoff on {enddate}
+superIntent leave the {module} on {enddate}
+superIntent book it till {enddate}
+superIntent book the {module} from {startdate}
+superIntent start the booking from {startdate}
+superIntent checkin date for {module} is {startdate}
+superIntent start {module} booking from {startdate}
+superIntent book the {module} from {startdate} till {enddate}
+superIntent start the booking from {startdate} till {enddate}
+superIntent checkin date for {module} is {startdate} till {enddate}
+superIntent rent a {module} in {destination}
+superIntent book the {module} in {destination}
+superIntent rent a {module} in {destination} till {enddate}
+superIntent book a {module} in {destination} till {enddate}
+superIntent rent a {module} in {destination} from {startdate}
+superIntent book a {module} in {destination} from {startdate}
+
+superIntent rent a {module} from {startdate}
+superIntent book a {module} from {startdate}
+superIntent rent a {module} till {enddate}
+superIntent book a {module} till {enddate}
+superIntent rent a {module} from {startdate} till {enddate}
+superIntent book a {module} from {startdate} till {enddate}
+superIntent option {selection}
+superIntent {confirmation}
+superIntent for {guests} people
+superIntent in {destination} till {enddate}
+superIntent from {startdate}
+superIntent till {enddate}
+
+superIntent  book a {module} to {destination} from {origin} on {startdate} with {guests} guests
+superIntent  book a {module} to {destination} from {origin}
+superIntent  book a {module} to {destination}
+superIntent  book a {module} to {destination} from {origin} on {startdate}
+superIntent  book a {module} from {origin} on {startdate} with {guests} guests
+superIntent  book a {module} from {origin} on {startdate}
+superIntent  book a {module} from {origin}
+superIntent  book a {module} on {startdate} with {guests} guests
+superIntent  book a {module} on {startdate}
+superIntent  book a {module} with {guests} guests
+superIntent  to {destination}
+superIntent  to {destination} from {origin}
+superIntent  to {destination} from {origin} on {startdate} with {guests} guests
+superIntent  to {destination} from {origin} on {startdate}
+superIntent  to {destination} on {startdate} with {guests} guests
+superIntent  to {destination} on {startdate}
+superIntent  to {destination} with {guests} guests
+superIntent  from {origin}
+superIntent  from {origin} on {startdate} with {guests} guests
+superIntent  from {origin} on {startdate}
+superIntent  from {origin} with {guests} guests
+superIntent  on {startdate}
+superIntent  on {startdate} with {guests} guests
+superIntent  {guests} guests
