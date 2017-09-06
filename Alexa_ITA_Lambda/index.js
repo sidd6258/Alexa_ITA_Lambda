@@ -90,6 +90,7 @@
     var flightOptions=null;
     var module = null;
     var state = null;
+    var flightOrigin = null;
 //---------------------------------------------skill code------------------------------------
 /* eslint-disable  func-names */
 /* eslint quote-props: ["error", "consistent"]*/
@@ -244,7 +245,8 @@ var newSessionHandlers = {
 	                	
 	                	this.attributes['state'] = 'flight_results';
 	                    var myJSONObject={};
-	                    myJSONObject={"input":flightDestination,
+	                    myJSONObject={"origin":fli
+	                    		"destination":flightDestination,
 	                            "sdatetime":"2017-6-07 16:25",
 	                            "edatetime":"2017-6-09 16:25"
 	                    };
