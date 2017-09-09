@@ -37,6 +37,7 @@
  var carOptions = null;
  var car_selection = null;
  var car_confirmation = null;
+ var updatedIntent=null;
 
 
  // 2. Skill Code =======================================================================================================
@@ -194,7 +195,7 @@ const handlers = {
           console.log(this.attributes);
         //say the results    
           this.attributes['state']='car_selection';
-          this.emit(':ask', speechText, repromptText);
+          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
     },
     'AMAZON.HelpIntent': function () {
         speechOutput = "";
@@ -240,7 +241,7 @@ function delegateSlotCollection(){
   console.log("current dialogState: "+this.event.request.dialogState);
     if (this.event.request.dialogState === "STARTED") {
       console.log("in Beginning");
-      var updatedIntent=this.event.request.intent;
+      updatedIntent=this.event.request.intent;
       //optionally pre-fill slots: update the intent object with slot values for which
       //you have defaults, then return Dialog.Delegate with this updated intent
       // in the updatedIntent property
@@ -249,7 +250,12 @@ function delegateSlotCollection(){
     } else if (this.event.request.dialogState !== "COMPLETED") {
       console.log("in not completed");
       console.log("request inprogress: "+ JSON.stringify(this.event.request));
-      // return a Dialog.Delegate directive with no updatedIntent property.
+      if(this.event.request.intent.slots.destination_car.value!=undefined 
+    		  && this.event.request.intent.slots.startdate_car.value!=undefined
+    		  && this.event.request.intent.slots.enddate_car.value!=undefined
+    		  && this.event.request.intent.slots.guests_car.value!=undefined){
+    	  return this.event.request.intent;
+      }
       this.emit(":delegate");
     } else {
       console.log("in completed");

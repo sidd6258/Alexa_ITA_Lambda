@@ -62,7 +62,9 @@
         {
           "name": "selection",
           "type": "AMAZON.NUMBER",
-          "samples": []
+          "samples": [
+            "{selection}"
+          ]
         },
         {
           "name": "confirmation",
@@ -384,6 +386,17 @@
       ]
     },
     {
+      "id": "Elicit.Intent-carIntent.IntentSlot-selection",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "choose an option"
+        }
+      ]
+    },
+    {
       "id": "Elicit.Intent-PlanMyTrip.IntentSlot-guests_hotel",
       "promptVersion": "1.0",
       "definitionVersion": "1.0",
@@ -475,9 +488,11 @@
           {
             "name": "selection",
             "type": "AMAZON.NUMBER",
-            "elicitationRequired": false,
+            "elicitationRequired": true,
             "confirmationRequired": false,
-            "prompts": {}
+            "prompts": {
+              "elicit": "Elicit.Intent-carIntent.IntentSlot-selection"
+            }
           },
           {
             "name": "confirmation",
