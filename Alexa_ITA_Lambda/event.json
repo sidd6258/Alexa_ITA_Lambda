@@ -1,0 +1,53 @@
+{
+    "session": {
+        "new": false,
+        "sessionId": "amzn1.echo-api.session.9be4ef74-53ba-487c-8753-3988687b0a8f",
+        "application": {
+            "applicationId": "amzn1.ask.skill.37118132-2457-4a2e-809e-b976b1c66e33"
+        },
+        "attributes": {
+            "state": "launch"
+        },
+        "user": {
+            "userId": "amzn1.ask.account.AFNHH5CKJQ4FTBI2UIFVZD4ZGVPG5PKGCNVU4DNE2LFOZF2GKUMWNSH6AKFVSTGX4YZY7IULLTUP5FDVLCUTJWOJ5AJDVLZMLZ3A6FDOT4352TS3J5AZNUMS3LFLKMJCPQTXK67FF5HY4FP56IMTPORJZ2FCM3IGQQWZIVDOV7PVR5G64YL7B2CQZGQLQJLMMAS5YRGCS4BO2ZY",
+            "accessToken": "Atza|IwEBIOvhWQfk8Xu3OxUyljqor5g_RZtzKb-eJK7Tu9uPNTKHkABDUZkA0wNYqQ88Yt860TTrN97lYbpy5bePitJNrNgLdRnOMASBpS8z3Sld06_viJbvmbFS-Jt60yN-zGueL0VWp0rGshFmQ0H4XmFaqm_5pdXw_glsL2JuwojYIXYWIjxjk89cjS630IFsVyW2DeuxhjJ08WcxATF66xD0xSnp3SE0XNCYWnFe93dei7_Y2NPHCPhd9vQdVF65BbonkHVRRKDJIWRwtF7jbyJmi_an_4QyjVZAUS6prg7RGhPaF-mNJ0Iv8ELCENVA9E6zRaIeAZgVoqqam7I5-x6zpZ6T55RftAn6Bxfnar_q0RREJ-tpAaz1HXF3dm7bmPaiTK6Kyo130QgDGUnJ9L2k9-ecjPZoY-fTY9Zfx1yxJ2ldOV6Jr8_fG3PAQES_Vj5yKDykXOdwsZI-qrrWSXWF3BEVgqi2olS5ZZAbA2XMbfyluNU4DsL3fBrlPIVn4GdPYl6OqfzPsdbgfkCPxNZKULj4"
+        }
+    },
+    "request": {
+        "type": "IntentRequest",
+        "requestId": "amzn1.echo-api.request.8f68790c-8390-49c0-8fe8-7e236b418b9c",
+        "timestamp": "2017-09-16T22:18:58Z",
+        "locale": "en-US",
+        "intent": {
+            "name": "carIntent",
+            "confirmationStatus": "NONE",
+            "slots": {
+                "selection": {
+                    "name": "selection",
+                    "confirmationStatus": "NONE"
+                },
+                "destination_car": {
+                    "name": "destination_car",
+                    "confirmationStatus": "NONE"
+                },
+                "guests_car": {
+                    "name": "guests_car",
+                    "confirmationStatus": "NONE"
+                },
+                "enddate_car": {
+                    "name": "enddate_car",
+                    "confirmationStatus": "NONE"
+                },
+                "confirmation": {
+                    "name": "confirmation",
+                    "confirmationStatus": "NONE"
+                },
+                "startdate_car": {
+                    "name": "startdate_car",
+                    "confirmationStatus": "NONE"
+                }
+            }
+        },
+        "dialogState": "STARTED"
+    }
+}
