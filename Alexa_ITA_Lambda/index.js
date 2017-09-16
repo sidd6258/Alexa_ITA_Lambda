@@ -245,7 +245,7 @@ function delegateSlotCollection(){
       //optionally pre-fill slots: update the intent object with slot values for which
       //you have defaults, then return Dialog.Delegate with this updated intent
       // in the updatedIntent property
-      console.log("request started: "+ JSON.stringify(this.event.request));
+      console.log("event started: "+ JSON.stringify(this.event));
       this.emit(":delegate", updatedIntent);
     } else if (this.event.request.dialogState !== "COMPLETED") {
       console.log("in not completed");
