@@ -183,11 +183,11 @@ const handlers = {
             }
         	
         	console.log("option request : "+ JSON.stringify(this.event.request));
-        	carOptions = {      1:"Option A",
-                    2:"Option B",
-                    3:"Option C",
-                    4:"Option D",
-                    5:"Option E"}
+        	carOptions = {      1:"Option A jenkins",
+                    2:"Option B jenkins",
+                    3:"Option C jenkins",
+                    4:"Option D jenkins",
+                    5:"Option E jenkins"}
           speechText = "Five Cars available 1, 2, 3, 4, 5, choose one option";
           repromptText = "Five Cars available 1, 2, 3, 4, 5, choose one option";
           this.attributes['carOptions']=carOptions;
