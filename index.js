@@ -183,7 +183,7 @@ const handlers = {
             }
         	
         	console.log("option request : "+ JSON.stringify(this.event.request));
-        	carOptions = {      1:"Option A jenkins",
+        	carOptions = {      1:"Option A jenkins 1",
                     2:"Option B jenkins",
                     3:"Option C jenkins",
                     4:"Option D jenkins",
