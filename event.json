@@ -48,6 +48,6 @@
                 }
             }
         },
-        "dialogState": "STARTED"
+         "dialogState": "STARTED"
     }
 }
