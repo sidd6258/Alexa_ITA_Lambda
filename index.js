@@ -261,7 +261,7 @@
 	        //Now let's recap the trip
 	        if(this.attributes['state']=="car_selection"){
 	        	car_selection = this.event.request.intent.slots.selection.value;
-	        	this.attributes['car_selection'] = car_selection;
+	        	this.attributes['car_selection_state'] = car_selection;
 	        }
 	        
 	        car_confirmation = this.event.request.intent.slots.confirmation.value;
