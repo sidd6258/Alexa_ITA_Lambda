@@ -266,7 +266,7 @@
 	        
 	        car_confirmation = this.event.request.intent.slots.confirmation.value;
 	        // module=this.event.request.intent.slots.module.value;       	
-	        this.attributes['car_confirmation_state'] = car_confirmation;
+	        this.attributes['car_confirmation'] = car_confirmation;
 	        	
 	        	
 	        	if(car_selection != null && this.attributes['state']=="car_selection"){               
