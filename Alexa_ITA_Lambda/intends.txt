@@ -36,8 +36,72 @@
           "type": "MODULE_STRING"
         },
         {
+          "name": "preferences",
+          "type": "PREFERENCES_STRING"
+        },
+        {
+          "name": "preferences_action",
+          "type": "PREFERENCES_ACTION_STRING"
+        },
+        {
           "name": "enddate",
           "type": "AMAZON.DATE"
+        },
+        {
+          "name": "airline_name",
+          "type": "AMAZON.Airline"
+        },
+        {
+          "name": "airline_class",
+          "type": "AIRLINE_CLASS_STRING"
+        },
+        {
+          "name": "airline_days",
+          "type": "AMAZON.DayOfWeek"
+        },
+        {
+          "name": "airline_time",
+          "type": "AMAZON.TIME"
+        },
+        {
+          "name": "hotel_location",
+          "type": "AMAZON.US_CITY"
+        },
+        {
+          "name": "hotel_star_rating",
+          "type": "HOTEL_STAR_RATING_STRING"
+        },
+        {
+          "name": "hotel_price",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "food_cuisine",
+          "type": "FOOD_CUISINE_STRING"
+        },
+        {
+          "name": "food_type",
+          "type": "FOOD_TYPE_STRING"
+        },
+        {
+          "name": "car_model",
+          "type": "CAR_MODEL_STRING"
+        },
+        {
+          "name": "car_rental_company",
+          "type": "CAR_RENTAL_COMPANY_STRING"
+        },
+        {
+          "name": "car_mileage",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "car_price",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "car_features",
+          "type": "CAR_FEATURES_STRING"
         }
       ],
       "intent": "superIntent"

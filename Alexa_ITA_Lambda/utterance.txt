@@ -35,3 +35,19 @@ superIntent {guests} guests
 superIntent in {destination} till {enddate}
 superIntent from {startdate}
 superIntent till {enddate}
+superIntent go to {module}
+superIntent {preferences_action} {preferences}
+superIntent set airline name to {airline_name}
+superIntent set airline class to {airline_class}
+superIntent set airline days to {airline_days}
+superIntent set airline time to {airline_time}
+superIntent set hotel location to {hotel_location}
+superIntent set hotel rating to {hotel_star_rating}
+superIntent set hotel price to {hotel_price}
+superIntent set food cuisine to {food_cuisine}
+superIntent set food type to {food_type}
+superIntent set car model to {car_model}
+superIntent set car rental company to {car_rental_company}
+superIntent set car mileage to {car_mileage}
+superIntent set car price to {car_price}
+superIntent set car features to {car_features}

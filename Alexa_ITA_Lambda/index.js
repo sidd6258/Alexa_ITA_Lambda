@@ -1,10 +1,32 @@
+var express = require('express'),
+    mongo = require('./routes/mongo'),
+    mysql = require('./routes/mysql');
+var mongoSessionConnectURL = "mongodb://ec2-34-224-101-89.compute-1.amazonaws.com:27017/iTravelDB";
+var ObjectId = require('mongodb').ObjectID;
+var crypto = require('crypto');
+var key = '00%i%Travel%System%00';
+var expressSession = require("express-session");
+var mongoStore = require("connect-mongo")(expressSession);
+var app = express();
+app.use(expressSession({
+    secret: 'secret_string',
+    resave: false,  //don't save session if unmodified
+    saveUninitialized: false,	// don't create session until something stored
+    duration: 30 * 60 * 1000,
+    activeDuration: 5 * 60 * 1000,
+    store: new mongoStore({
+        url: mongoSessionConnectURL
+    })
+}));
+mongo.connect(mongoSessionConnectURL, function() {
 
-    var speechOutput;
+});
+var speechOutput;
     var reprompt;
     var welcomeOutput = "<s>Welcome to the Intelligent travel agent.</s> " +
-    "<s>You can ask to book a flight, book a Hotel or book a rental car</s>";
+    "<s>You can ask to book a flight, book a Hotel, book a rental car or check your own preferences</s>";
     var welcomeReprompt = "You can say, " +
-    "I want to book a flight, book a hotel or I want to book a rental car";
+    "I want to book a flight, book a hotel or I want to book a rental car or go to preferences";
     var tripIntro = [
         "This sounds like a cool trip. ",
         "This will be fun. ",
@@ -13,10 +35,10 @@
 
     var snippets = {
             WELCOME: "<s>Welcome to the Intelligent travel agent.</s> " +
-            "<s>You can ask to book a flight, book a Hotel or book a rental car</s>",
+            "<s>You can ask to book a flight, book a Hotel, book a rental car or check your own preferences</s>",
 
             WELCOME_REPROMPT: "You can say, " +
-            "I want to book a hotel or I want to book a rental car",
+            "I want to book a hotel or I want to book a rental car or go to preferences",
 
             DESTINATION: "Ok, Where do you want to book the hotel?",
             DESTINATION_CAR: "Ok, Where do you want to book the rental car?",
@@ -89,9 +111,12 @@
     var hotelOptions = null;
     var carOptions = null;
     var flightOptions=null;
+    var preferenceEditOptions=null;
+	var preferenceEditSelection = null;
     var module = null;
     var state = null;
-
+	var profile;
+	var mongoUser;
 
     //========================================================Skill Code=================================
 
@@ -99,7 +124,7 @@
 
     const Alexa = require('alexa-sdk');
     const request=require('request');
-    const APP_ID = "amzn1.ask.skill.06e1a5f6-c4a2-4b77-844b-8e86b0e465a2"; // TODO replace with your app ID (OPTIONAL).
+    const APP_ID = "amzn1.ask.skill.cd5c77f1-cc66-4610-ae51-5f146d2be1b3"; // TODO replace with your app ID (OPTIONAL).
     //var flights=require('./flights');
     var Speech=require('ssml-builder');
     var moment = require('moment'); // deals with dates and date formatting, for instance converts AMAZON.DATE to timestamp
@@ -107,24 +132,20 @@
     var handlers = {
             'LaunchRequest': function () {
             	if (this.event.session.user.accessToken == undefined) {
-
-            	      this.emit(':tellWithLinkAccountCard','to start using this skill, please use the companion app to authenticate on Amazon');
-
-            	            return;
-
-            	        }
-            	var amznProfileURL = 'https://api.amazon.com/user/profile?access_token=';
+                    this.emit(':tellWithLinkAccountCard','to start using this skill, please use the companion app to authenticate on Amazon');
+                    return;
+                }
+                var amznProfileURL = 'https://api.amazon.com/user/profile?access_token=';
 
                 amznProfileURL += this.event.session.user.accessToken;
                 this.attributes['state'] = 'welcome';
-                    
+
                 request(amznProfileURL, function(error, response, body) {
                     if (response.statusCode == 200) {
 
-                        var profile = JSON.parse(body);
+                        profile = JSON.parse(body);
                         console.log(profile.name);
-                        this.emit(':ask', "Hello, " + profile.name +"." + welcomeOutput, welcomeReprompt);  
-
+                        this.emit(':ask', "Hello, " + profile.name+"." + welcomeOutput, welcomeReprompt);
                     } else {
 
                         this.emit(':tell', "Hello, I can't connect to Amazon Profile Service right now, try again later");
@@ -132,16 +153,14 @@
                     }
 
                 }.bind(this));
-                                          
             },
             'superIntent': function () {
-
                 module = this.event.request.intent.slots.module.value;
                 if (module != undefined){
                     this.attributes['module'] = module;
                     console.log(this.attributes);
                 }
-
+				console.log("module 1 "+module);
                 if(this.attributes['module'] == 'car'){
 	
 	                if(Object.keys(this.attributes).length === 0) { // Check if it's the
@@ -653,6 +672,304 @@
 				          console.log("ajay ajay out");
 		                }
 	            	}
+                	if(this.attributes['module'] == 'preferences'){
+                        console.log("Inside Preferences");
+                        if(Object.keys(this.attributes).length === 0) { // Check if it's the
+                            // first time the
+                            // skill has been
+                            // invoked
+                            this.attributes['state'] = undefined;
+                            this.attributes['preferences'] = undefined;
+                            this.attributes['preferences_action'] = undefined;
+                            this.attributes['preferenceEditSelection'] = undefined;
+                            this.attributes['preferenceEditOptions']=undefined;
+                            this.attributes['preferenceEditConfirmation']=undefined;
+                        }
+                        this.attributes['state'] = 'preferences';
+						console.log(profile);
+                        console.log(profile.email);
+						//mongo.connect(mongoSessionConnectURL, function() {
+							console.log("Successfully connected");
+							var coll = mongo.collection('users');
+							coll.findOne({"email": profile.email}, {
+								"first_name": 1,
+								"last_name": 1,
+								"email": 1,
+								"gender": 1,
+								"dob": 1,
+								"contact_information": 1,
+								"preferences": 1,
+								"_id": 1
+							}, function (err, user) {
+								if (user) {
+                                    console.log('user------>' + JSON.stringify(user));
+                                    mongoUser = user;
+                                    speechText = "Please choose one from Flight Preferences, Hotel Preferences or Car Preferences you want to look for or edit ?";
+                                    repromptText = "Please say Flight Preferences, Hotel Preferences or Car Preferences"; // could be improved by using alternative prompt text
+                                    this.emit(':ask', speechText, repromptText);
+
+                                }
+                                if(err){
+									console.log("Got error");
+								}
+							}.bind(this));
+						//}.bind(this));
+                    }
+                    if(mongoUser != undefined) {
+                        var preferences = this.event.request.intent.slots.preferences.value;
+                        var preferences_action = this.event.request.intent.slots.preferences_action.value;
+                        var preferenceEditSelection = this.event.request.intent.slots.selection.value;
+                        var preferenceEditConfirmation = this.event.request.intent.slots.confirmation.value;
+                        var airline_name = this.event.request.intent.slots.airline_name.value;
+                        var airline_class = this.event.request.intent.slots.airline_class.value;
+                        var airline_days = this.event.request.intent.slots.airline_days.value;
+                        var airline_time = this.event.request.intent.slots.airline_time.value;
+                        var hotel_location = this.event.request.intent.slots.hotel_location.value;
+                        var hotel_star_rating = this.event.request.intent.slots.hotel_star_rating.value;
+                        var hotel_price = this.event.request.intent.slots.hotel_price.value;
+                        var food_cuisine = this.event.request.intent.slots.food_cuisine.value;
+                        var food_type = this.event.request.intent.slots.food_type.value;
+                        var car_model = this.event.request.intent.slots.car_model.value;
+                        var car_rental_company = this.event.request.intent.slots.car_rental_company.value;
+                        var car_mileage = this.event.request.intent.slots.car_mileage.value;
+                        var car_price = this.event.request.intent.slots.car_price.value;
+                        var car_features = this.event.request.intent.slots.car_features.value;
+                        console.log(this.attributes);
+                        if (preferences != undefined) {
+                            this.attributes['preferences'] = preferences;
+                            console.log(this.attributes);
+                        }
+                        if (preferences_action != undefined){
+                            this.attributes['preferences_action'] = preferences_action;
+                            console.log(this.attributes);
+                        }
+                        if (preferenceEditSelection != undefined){
+                            this.attributes['preferenceEditSelection'] = preferenceEditSelection;
+                        }
+                        if (preferenceEditConfirmation != undefined){
+                            this.attributes['preferenceEditConfirmation'] = preferenceEditConfirmation;
+                        }
+                        if (this.attributes['preferences'] == 'flight preferences' && this.attributes['preferences_action'] == 'look for') {
+                            var airlineClass;
+                            var daysToFlyText = "";
+                            if(mongoUser.preferences.flight.airline_class != undefined) {
+                                if (mongoUser.preferences.flight.airline_class == "EC") {
+                                    airlineClass = "Economy";
+                                }
+                                if (mongoUser.preferences.flight.airline_class == "FC") {
+                                    airlineClass = "First";
+                                }
+                                if (mongoUser.preferences.flight.airline_class == "BC") {
+                                    airlineClass = "Business";
+                                }
+                            }
+                            if (mongoUser.preferences.flight.airline_days.days != null) {
+                                var daysToFly = mongoUser.preferences.flight.airline_days.days;
+                                for (var i = 0; i < daysToFly.length; i++) {
+                                    daysToFlyText += daysToFly[i];
+                                }
+                            }
+                            if(mongoUser.preferences.flight.airline_name != undefined && airlineClass && daysToFlyText && mongoUser.preferences.flight.airline_time!=undefined) {
+                                speechText = "Your saved Flight Preferences are " + mongoUser.preferences.flight.airline_name + " airline " + airlineClass +
+                                    " class, the set days you are interested to fly are " + daysToFlyText + " and the interested time to fly is set to "
+									+ mongoUser.preferences.flight.airline_time;
+                                this.emit(':ask', speechText, "");
+                            }else {
+                                var formSpeechText;
+                                formSpeechText = "Your saved Flight Preferences are ";
+                                if (mongoUser.preferences.flight.airline_name != undefined) {
+                                    formSpeechText += mongoUser.preferences.flight.airline_name + " airline ";
+                                }
+                                if (airlineClass) {
+                                    formSpeechText += airlineClass + " class ";
+                                }
+                                if (daysToFlyText) {
+                                    formSpeechText += "the set days you are interested to fly are " + daysToFlyText;
+                                }
+                                if (mongoUser.preferences.flight.airline_time != undefined) {
+                                    formSpeechText += " and the interested time to fly is set to " + mongoUser.preferences.flight.airline_time;
+                                }
+                                this.emit(':ask', formSpeechText, "");
+                            }
+
+                        } if (this.attributes['preferences'] == 'hotel preferences' && this.attributes['preferences_action'] == 'look for') {
+                        	if(mongoUser.preferences.hotel.hotel_location!= undefined && mongoUser.preferences.hotel.hotel_star_rating!= undefined &&
+								mongoUser.preferences.hotel.hotel_price!=undefined && mongoUser.preferences.food_cuisine && mongoUser.preferences.food_type) {
+                                speechText = "Your saved Hotel Preferences are hotel location is to be at " + mongoUser.preferences.hotel.hotel_location +
+                                    " hotels should be having a " + mongoUser.preferences.hotel.hotel_star_rating +
+                                    " star rating and hotel price should be around dollar " + mongoUser.preferences.hotel.hotel_price +
+                                    " your selected cuisine is " + mongoUser.preferences.food_cuisine + " and food is of " + mongoUser.preferences.food_type + " type."
+                                this.emit(':ask', speechText, "");
+                            }else{
+                                var formSpeechText;
+                                formSpeechText = "Your saved Hotel Preferences are ";
+                                if(mongoUser.preferences.hotel.hotel_location){
+                                    formSpeechText += "hotel location is to be at "+ mongoUser.preferences.hotel.hotel_location;
+								}
+								if(mongoUser.preferences.hotel.hotel_star_rating!= undefined){
+                                    formSpeechText += " hotels should be having a " + mongoUser.preferences.hotel.hotel_star_rating;
+                                }
+                                if(mongoUser.preferences.hotel.hotel_price!=undefined){
+                                    formSpeechText += " star rating and hotel price should be around dollar "+mongoUser.preferences.hotel.hotel_price;
+                                }
+                                if(mongoUser.preferences.food_cuisine){
+                                    formSpeechText += " your selected cuisine is " + mongoUser.preferences.food_cuisine;
+                                }
+								if(mongoUser.preferences.food_type){
+                                    formSpeechText += " and food is of " + mongoUser.preferences.food_type + " type."
+                                }
+                                this.emit(':ask', formSpeechText, "");
+							}
+
+                        } if (this.attributes['preferences'] == 'car preferences' && this.attributes['preferences_action'] == 'look for') {
+                            var carFeaturesText = "";
+                            if (mongoUser.preferences.car.car_features.features != null) {
+                                var carFeatures = mongoUser.preferences.car.car_features.features;
+                                for (var i = 0; i < carFeatures.length; i++) {
+                                    carFeaturesText += carFeatures[i];
+                                }
+                            }
+                            if(mongoUser.preferences.car.car_model != undefined && mongoUser.preferences.car.car_rental_company !=undefined &&
+								mongoUser.preferences.car.car_mileage != undefined &&  mongoUser.preferences.car.car_price !=undefined && carFeaturesText) {
+                                speechText = "Your saved Car Preferences are the model you want to travel is " + mongoUser.preferences.car.car_model
+                                    + " the rental company name is " + mongoUser.preferences.car.car_rental_company + " mileage is " +
+                                    mongoUser.preferences.car.car_mileage + " price is set to dollar " + mongoUser.preferences.car.car_price
+                                    + " and car features you included are " + carFeaturesText;
+                                this.emit(':ask', speechText, "");
+                            }else{
+                                var formSpeechText;
+                                formSpeechText = "Your saved Car Preferences are ";
+                                if(mongoUser.preferences.car.car_model != undefined){
+                                    formSpeechText += "the model you want to travel is "+ mongoUser.preferences.car.car_model;
+                                }
+                                if(mongoUser.preferences.car.car_rental_company !=undefined){
+                                    formSpeechText += " the rental company name is " + mongoUser.preferences.car.car_rental_company;
+                                }
+                                if(mongoUser.preferences.car.car_mileage != undefined){
+                                    formSpeechText += " mileage is " +mongoUser.preferences.car.car_mileage;
+                                }
+                                if(mongoUser.preferences.car.car_price !=undefined){
+                                    formSpeechText += " price is set to dollar " + mongoUser.preferences.car.car_price;
+                                }
+                                if(carFeaturesText){
+                                    formSpeechText += " and car features you included are " + carFeaturesText;
+                                }
+                                this.emit(':ask', formSpeechText, "");
+							}
+                        }if(this.attributes['preferences'] == 'flight preferences' && this.attributes['preferences_action'] == 'edit'
+							&& preferenceEditSelection == undefined && preferenceEditConfirmation == undefined) {
+                            speechText = "What would you like to edit from flight preferences, please choose one option " +
+								"Option 1 for airline name, Option 2 for airline class, Option 3 for airline " +
+								"days you want to fly on, Option 4 for airline time.";
+                            repromptText = "Please choose one option from said options 1 2 3 4"; // could be improved by using alternative prompt text
+                            preferenceEditOptions = {
+                                1:"airline name",
+                                2:"airline class",
+                                3:"airline days",
+                                4:"airline time"};
+                            this.attributes['preferenceEditOptions']=preferenceEditOptions;
+                            this.emit(':ask', speechText, repromptText);
+                        }
+                        if(this.attributes['preferences'] == 'hotel preferences' && this.attributes['preferences_action'] == 'edit'
+                            && preferenceEditSelection == undefined && preferenceEditConfirmation == undefined) {
+                            speechText = "What would you like to edit from hotel preferences, please choose one option " +
+                            "Option 1 for hotel location, Option 2 for hotel rating, Option 3 for hotel price "+
+                            "Option 4 for food cuisine, Option 5 for food type.";
+                            repromptText = "Please choose one option from said options 1 2 3 4 5"; // could be improved by using alternative prompt text
+                            preferenceEditOptions = {
+								1:"hotel location",
+                                2:"hotel rating",
+                                3:"hotel price",
+								4:"food cuisine",
+                                5:"food type"};
+                            this.attributes['preferenceEditOptions']=preferenceEditOptions;
+                            this.emit(':ask', speechText, repromptText);
+						}
+                        if(this.attributes['preferences'] == 'car preferences' && this.attributes['preferences_action'] == 'edit'
+                            && preferenceEditSelection == undefined && preferenceEditConfirmation == undefined) {
+                            speechText = "What would you like to edit from car preferences, please choose one option " +
+								"Option 1 for car model, Option 2 for car rental company, Option 3 for car mileage "+
+                                "Option 4 for car price, Option 5 for car features.";
+							repromptText = "Please choose one option from options 1 2 3 4"; // could be improved by using alternative prompt text
+                            preferenceEditOptions = {
+								1:"car model",
+                                2:"car rental company",
+                                3:"car mileage",
+                                4:"car price",
+								5:"car features"};
+                            this.attributes['preferenceEditOptions']=preferenceEditSelection;
+                            this.emit(':ask', speechText, repromptText);
+                        }
+                        if(preferenceEditSelection != undefined){
+                            //console.log("preferenceEditSelection"+preferenceEditSelection);
+                            speechText = "You are about to edit "+ this.attributes['preferenceEditOptions'][preferenceEditSelection]+". Please Confirm.";
+                            //console.log(speechText);
+                            repromptText ="You are about to edit "+ this.attributes['preferenceEditOptions'][preferenceEditSelection]+". Please Confirm.";
+                            //console.log(repromptText);
+                            this.emit(':ask', speechText, repromptText);
+                        }
+                        if(preferenceEditConfirmation != undefined && preferenceEditConfirmation == "yes"){
+                            /*console.log("preferenceEditSelection------------>"+preferenceEditSelection);
+                            console.log("preferenceEditConfirmation------------>"+preferenceEditConfirmation);
+                            console.log("this.attributes['preferenceEditSelection']------------>"+this.attributes['preferenceEditSelection']);*/
+                            this.attributes['preferenceEditConfirmation'] = preferenceEditConfirmation;
+                            preferenceEditSelection = this.attributes['preferenceEditSelection'];
+                            speechText = "What " + this.attributes['preferenceEditOptions'][preferenceEditSelection] + " you want to set to "+ this.attributes['preferences']+
+								"? Please say like set "+this.attributes['preferenceEditOptions'][preferenceEditSelection]+" to ";
+                            repromptText = "Please say like set "+this.attributes['preferenceEditOptions'][preferenceEditSelection]+" to";
+                            //console.log(this.attributes);
+                            this.emit(':ask', speechText, repromptText);
+                        }
+                        if(airline_name != undefined){
+                            /*console.log("profile.email------------>"+profile.email);
+                            console.log("airline_name------------>"+airline_name);
+                            console.log("mongoSessionConnectURL------------>"+mongoSessionConnectURL);*/
+                            mongoUser.preferences.flight.airline_name = airline_name;
+                            /*console.log("mongoUser------------>"+JSON.stringify(mongoUser));
+                            console.log("profile.email------------>"+profile.email);*/
+							var coll = mongo.collection('users');
+                            coll.update({"email": profile.email}, {
+								$set: mongoUser
+						}, function (err, user) {
+                                if (user) {
+                                    console.log('user------>' + JSON.stringify(user));
+                                }
+                                if(err){
+                                    console.log("Got error");
+                                }
+                            }.bind(this));
+                            speechText = "Airline name as "+mongoUser.preferences.flight.airline_name+" has updated successfully";
+                            console.log("speechText------------>"+speechText);
+                            this.emit(':tell', speechText);
+						}if(airline_class != undefined){
+
+                        }if(airline_days != undefined){
+
+                        }if(airline_time != undefined){
+
+                        }if(hotel_location != undefined){
+
+                        }if(hotel_star_rating != undefined){
+
+                        }if(hotel_price != undefined){
+
+                        }if(food_cuisine != undefined){
+
+                        }if(food_type != undefined){
+
+                        }if(car_model != undefined){
+
+                        }if(car_rental_company != undefined){
+
+                        }if(car_mileage != undefined){
+
+                        }if(car_price != undefined){
+
+                        }if(car_features != undefined){
+
+                        }
+
+                    }
             },
             'AMAZON.HelpIntent': function () {
                 speechOutput = "";
@@ -660,7 +977,7 @@
                 this.emit(':ask', speechOutput, reprompt);
             },
             'Unhandled': function () {
-                HelpMessage =snippets.HELP; 
+                var HelpMessage =snippets.HELP;
                 this.emit(':ask', HelpMessage, HelpMessage);
             },
             'AMAZON.CancelIntent': function () {
@@ -678,7 +995,6 @@
     };
     function isPastDate(sdate) {
         var today = moment();
-
         if (sdate < today) {
             return true
         } else {
@@ -686,15 +1002,13 @@
         }
     }
     function isFutureDate(edate,sdate) {
-//        var today = moment();
-    	
         if (sdate < edate) {
             return true
         } else {
             return false
         }
     }
-    exports.handler = (event, context) => {
+    exports.handler = function(event, context){
         var alexa = Alexa.handler(event, context);
         alexa.APP_ID = APP_ID;
         alexa.registerHandlers(handlers);
