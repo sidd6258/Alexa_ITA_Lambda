@@ -15,23 +15,9 @@
   "license": "SEE LICENSE IN LICENSE.txt",
   "dependencies": {
     "alexa-sdk": "^1.0.8",
-    "bcrypt-nodejs": "0.0.3",
-    "body-parser": "~1.0.0",
-    "checklist-model": "^0.11.0",
-    "connect-mongo": "^1.1.0",
-    "cookie-parser": "~1.0.1",
-    "crypto": "0.0.3",
-    "debug": "~0.7.4",
-    "ejs": "^2.2.4",
-    "express": "3.2.6",
-    "express-session": "^1.13.0",
-    "mocha": "^2.4.5",
-    "mongodb": "^2.1.16",
-    "morgan": "~1.0.0",
-    "mysql": "^2.10.2",
+    "express": "^4.16.1",
     "request": "^2.71.0",
-    "serverless": "^1.21.1",
-    "static-favicon": "~1.0.0"
+    "serverless": "^1.21.1"
   },
   "repository": {
     "type": "git",
