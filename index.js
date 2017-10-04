@@ -291,6 +291,36 @@
 	            }
 	        	
 	        	console.log("option request : "+ JSON.stringify(this.event.request));
+	        	 var myJSONObject={};
+                 myJSONObject={"destination":this.attributes['destination_car'],
+                         "sdatetime": this.attributes['startdate_car'],
+                         "edatetime":this.attributes['enddate_car']
+                 };
+	    	     request({
+	    	               url: "http://travelagentapi-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
+	    	               method: "POST",
+	    	               json: true,   // <--Very important!!!
+	    	               body: myJSONObject
+	    	                  }, function (error, response, body){
+	    	                          console.log("res"+response);
+	    	                          if (!error && response.statusCode == 200) {
+	    	                              console.log("place"+JSON.stringify(response));
+	    	                              var carinfo = response.cars;
+	    	                              console.log("car object is"+carinfo);
+	    	                              var speechText = "";
+	    	                              speechText += carinfo;
+	    	                              console.log(speechText);
+	    	                              var repromptText = "For instructions on what you can say, please say help me.";
+	    	                              this.emit(':tell', speechText);
+	    	                          }
+	    	                      else
+	    	                      {
+	    	                          speechText = snippets.ERROR;
+	    	                          repromptText = snippets.ERROR; 
+	    	                          this.emit(':ask', speechText, repromptText);
+	    	                      }
+	    	                  }.bind(this));
+	        	
 	        	carOptions = {      1:"Option A",
 	                    2:"Option B",
 	                    3:"Option C",
