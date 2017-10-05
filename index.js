@@ -265,9 +265,9 @@
 	        	console.log('car option selection is '+car_selection);
 	        }
 	        
-	        car_confirmation = this.event.request.intent.slots.confirmation.value;
-	        // module=this.event.request.intent.slots.module.value;       	
-	        this.attributes['car_confirmation_state'] = car_confirmation;
+//	        car_confirmation = this.event.request.intent.slots.confirmation.value;
+//	        // module=this.event.request.intent.slots.module.value;       	
+//	        this.attributes['car_confirmation_state'] = car_confirmation;
 	        	
 	        	
 	        	if(car_selection != null && this.attributes['state']=="car_selection"){               
@@ -290,16 +290,16 @@
 	                this.event.request.dialogState = "STARTED";
 	                this.emit(':ask', speechText, repromptText);
 	            }
-	        	
-	        	console.log("option request : "+ JSON.stringify(this.event.request));
-	        	 var myJSONObject={};
-                 myJSONObject={"destination":this.attributes['destination_car'],
-                         "sdatetime": this.attributes['startdate_car'],
-                         "edatetime":this.attributes['enddate_car']
-                 };
-                 
-                 console.log("before request : ");
-	    	     request({
+	        	                 
+                 if( this.attributes['state']='call_api'){
+                	 console.log("option request : "+ JSON.stringify(this.event.request));
+    	        	 var myJSONObject={};
+                     myJSONObject={"destination":this.attributes['destination_car'],
+                             "sdatetime": this.attributes['startdate_car'],
+                             "edatetime":this.attributes['enddate_car']
+                     };
+                     console.log("before request : ");	
+	    	         request({
 	    	               url: "http://travelagentapi-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
 	    	               method: "POST",
 	    	               json: true,   // <--Very important!!!
@@ -333,6 +333,7 @@
 	    	                      }
 	    	                  }.bind(this));
 	    	     console.log("after request : ");
+                 }
 	    },
 	    'AMAZON.HelpIntent': function () {
 	        speechOutput = "";
@@ -451,6 +452,7 @@
 	    		  && this.event.request.intent.slots.startdate_car.value!=undefined
 	    		  && this.event.request.intent.slots.enddate_car.value!=undefined
 	    		  && this.event.request.intent.slots.guests_car.value!=undefined){
+	    	  this.attributes['state']='call_api';
 	    	  return this.event.request.intent;
 	      }
 	      this.emit(":delegate");
