@@ -296,44 +296,42 @@
                          "sdatetime": this.attributes['startdate_car'],
                          "edatetime":this.attributes['enddate_car']
                  };
+                 
+                 console.log("before request : ");
 	    	     request({
 	    	               url: "http://travelagentapi-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
 	    	               method: "POST",
 	    	               json: true,   // <--Very important!!!
 	    	               body: myJSONObject
 	    	                  }, function (error, response, body){
-	    	                          console.log("res"+response);
+	    	                	  console.log("inside request : ");
+	    	                          console.log("res"+JSON.stringify(response));
 	    	                          if (!error && response.statusCode == 200) {
-	    	                              console.log("place"+JSON.stringify(response));
-	    	                              var carinfo = response.cars;
-	    	                              console.log("car object is"+carinfo);
+	    	                              console.log("place"+JSON.stringify(body));
+	    	                              var carinfo = body.cars;
+	    	                              console.log("car object is "+carinfo);
 	    	                              var speechText = "";
-	    	                              speechText += carinfo;
+	    	                              speechText += carinfo+", choose one option";
+	    	                              carOptions = body.carOptions;
+	    	                              var carObject=body.carObject;
+	    	                              this.attributes['carObject']=carObject;
+	    	                              this.attributes['carOptions']=carOptions;
 	    	                              console.log(speechText);
-	    	                              var repromptText = "For instructions on what you can say, please say help me.";
-	    	                              this.emit(':tell', speechText);
+	    	                              var repromptText = "For instructions on what you can say, please say help me.";	    	                	         
+	    	                	          this.event.request.dialogState = "STARTED";	
+	    	                	          console.log(this.attributes);
+	    	                	        //say the results    
+	    	                	          this.attributes['state']='car_selection';
+	    	                	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
 	    	                          }
 	    	                      else
 	    	                      {
-	    	                          speechText = snippets.ERROR;
-	    	                          repromptText = snippets.ERROR; 
+	    	                          speechText = "snippets.ERROR";
+	    	                          repromptText = "snippets.ERROR"; 
 	    	                          this.emit(':ask', speechText, repromptText);
 	    	                      }
 	    	                  }.bind(this));
-	        	
-	        	carOptions = {      1:"Option A",
-	                    2:"Option B",
-	                    3:"Option C",
-	                    4:"Option D",
-	                    5:"Option E"}
-	          speechText = "Five Cars available 1, 2, 3, 4, 5, choose one option";
-	          repromptText = "Five Cars available 1, 2, 3, 4, 5, choose one option";
-	          this.attributes['carOptions']=carOptions;
-	          this.event.request.dialogState = "STARTED";	
-	          console.log(this.attributes);
-	        //say the results    
-	          this.attributes['state']='car_selection';
-	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
+	    	     console.log("after request : ");
 	    },
 	    'AMAZON.HelpIntent': function () {
 	        speechOutput = "";
