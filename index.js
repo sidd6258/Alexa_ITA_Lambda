@@ -262,6 +262,7 @@
 	        if(this.attributes['state']=="car_selection"){
 	        	car_selection = this.event.request.intent.slots.selection.value;
 	        	this.attributes['car_selection_state'] = car_selection;
+	        	console.log('car option selection is '+car_selection);
 	        }
 	        
 	        car_confirmation = this.event.request.intent.slots.confirmation.value;
@@ -305,23 +306,23 @@
 	    	               body: myJSONObject
 	    	                  }, function (error, response, body){
 	    	                	  console.log("inside request : ");
-	    	                          console.log("res"+JSON.stringify(response));
+	    	                         // console.log("res"+JSON.stringify(response));
 	    	                          if (!error && response.statusCode == 200) {
-	    	                              console.log("place"+JSON.stringify(body));
+	    	                              //console.log("place"+JSON.stringify(body));
 	    	                              var carinfo = body.cars;
-	    	                              console.log("car object is "+carinfo);
+	    	                             // console.log("car object is "+carinfo);
 	    	                              var speechText = "";
 	    	                              speechText += carinfo+", choose one option";
 	    	                              carOptions = body.carOptions;
-	    	                              var carObject=body.carObject;
-	    	                              this.attributes['carObject']=carObject;
+	    	                             // var carObject=body.carObject;
+	    	                              //this.attributes['carObject']=carObject;
 	    	                              this.attributes['carOptions']=carOptions;
 	    	                              console.log(speechText);
 	    	                              var repromptText = "For instructions on what you can say, please say help me.";	    	                	         
 	    	                	          this.event.request.dialogState = "STARTED";	
-	    	                	          console.log(this.attributes);
-	    	                	        //say the results    
 	    	                	          this.attributes['state']='car_selection';
+	    	                	          console.log(this.attributes);
+	    	                	        //say the results    	    	                	          
 	    	                	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
 	    	                          }
 	    	                      else
