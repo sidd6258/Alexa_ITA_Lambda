@@ -257,12 +257,13 @@
 	        //Now let's recap the trip
 	        if(this.attributes['state']=="car_selection"){
 	        	car_selection = this.event.request.intent.slots.selection.value;
-	        	this.attributes['car_selection'] = car_selection;
+	        	this.attributes['car_selection_state'] = car_selection;
+	        	console.log('car option selection is '+car_selection);
 	        }
 	        
-	        car_confirmation = this.event.request.intent.slots.confirmation.value;
-	        // module=this.event.request.intent.slots.module.value;       	
-	        this.attributes['car_confirmation'] = car_confirmation;
+//	        car_confirmation = this.event.request.intent.slots.confirmation.value;
+//	        // module=this.event.request.intent.slots.module.value;       	
+//	        this.attributes['car_confirmation_state'] = car_confirmation;
 	        	
 	        	
 	        	if(car_selection != null && this.attributes['state']=="car_selection"){               
@@ -285,21 +286,50 @@
 	                this.event.request.dialogState = "STARTED";
 	                this.emit(':ask', speechText, repromptText);
 	            }
-	        	
-	        	console.log("option request : "+ JSON.stringify(this.event.request));
-	        	carOptions = {      1:"Option A",
-	                    2:"Option B",
-	                    3:"Option C",
-	                    4:"Option D",
-	                    5:"Option E"}
-	          speechText = "Five Cars available 1, 2, 3, 4, 5, choose one option";
-	          repromptText = "Five Cars available 1, 2, 3, 4, 5, choose one option";
-	          this.attributes['carOptions']=carOptions;
-	          this.event.request.dialogState = "STARTED";	
-	          console.log(this.attributes);
-	        //say the results    
-	          this.attributes['state']='car_selection';
-	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
+	        	                 
+                 if( this.attributes['state']='call_api'){
+                	 console.log("option request : "+ JSON.stringify(this.event.request));
+    	        	 var myJSONObject={};
+                     myJSONObject={"destination":this.attributes['destination_car'],
+                             "sdatetime": this.attributes['startdate_car'],
+                             "edatetime":this.attributes['enddate_car']
+                     };
+                     console.log("before request : ");	
+	    	         request({
+	    	               url: "http://travelagentapi-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
+	    	               method: "POST",
+	    	               json: true,   // <--Very important!!!
+	    	               body: myJSONObject
+	    	                  }, function (error, response, body){
+	    	                	  console.log("inside request : ");
+	    	                         // console.log("res"+JSON.stringify(response));
+	    	                          if (!error && response.statusCode == 200) {
+	    	                              //console.log("place"+JSON.stringify(body));
+	    	                              var carinfo = body.cars;
+	    	                             // console.log("car object is "+carinfo);
+	    	                              var speechText = "";
+	    	                              speechText += carinfo+", choose one option";
+	    	                              carOptions = body.carOptions;
+	    	                             // var carObject=body.carObject;
+	    	                              //this.attributes['carObject']=carObject;
+	    	                              this.attributes['carOptions']=carOptions;
+	    	                              console.log(speechText);
+	    	                              var repromptText = "For instructions on what you can say, please say help me.";	    	                	         
+	    	                	          this.event.request.dialogState = "STARTED";	
+	    	                	          this.attributes['state']='car_selection';
+	    	                	          console.log(this.attributes);
+	    	                	        //say the results    	    	                	          
+	    	                	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
+	    	                          }
+	    	                      else
+	    	                      {
+	    	                          speechText = "snippets.ERROR";
+	    	                          repromptText = "snippets.ERROR"; 
+	    	                          this.emit(':ask', speechText, repromptText);
+	    	                      }
+	    	                  }.bind(this));
+	    	     console.log("after request : ");
+                 }
 	    },
 	    'AMAZON.HelpIntent': function () {
 	        speechOutput = "";
@@ -418,6 +448,7 @@
 	    		  && this.event.request.intent.slots.startdate_car.value!=undefined
 	    		  && this.event.request.intent.slots.enddate_car.value!=undefined
 	    		  && this.event.request.intent.slots.guests_car.value!=undefined){
+	    	  this.attributes['state']='call_api';
 	    	  return this.event.request.intent;
 	      }
 	      this.emit(":delegate");
