@@ -1,14 +1,10 @@
 	/* eslint-disable  func-names */
 	/* eslint quote-props: ["error", "consistent"]*/
 
-	// alexa-cookbook sample code
 
 	// There are three sections, Text Strings, Skill Code, and Helper Function(s).
 	// You can copy and paste the entire file contents as the code for a new Lambda function,
 	// or copy & paste section #3, the helper function, to the bottom of your existing Lambda code.
-
-	// TODO add URL to this entry in the cookbook
-
 
 	 // 1. Text strings =====================================================================================================
 	 //    Modify these strings and messages to change the behavior of your Lambda function
