@@ -314,6 +314,7 @@
 	    	                              var speechText = "";
 	    	                              speechText += carinfo+", choose one option";
 	    	                              carOptions = body.carOptions;
+	    	                              
 	    	                             // var carObject=body.carObject;
 	    	                              //this.attributes['carObject']=carObject;
 	    	                              this.attributes['carOptions']=carOptions;
