@@ -313,10 +313,9 @@
 	    	                             // console.log("car object is "+carinfo);
 	    	                              var speechText = "";
 	    	                              speechText += carinfo+", choose one option";
-	    	                              carOptions = body.carOptions;
-	    	                              
-	    	                             // var carObject=body.carObject;
-	    	                              //this.attributes['carObject']=carObject;
+	    	                              carOptions = body.carOptions;	    	                              
+	    	                              var carObject=body.carObject;
+	    	                              this.attributes['carObject']=carObject;
 	    	                              this.attributes['carOptions']=carOptions;
 	    	                              console.log(speechText);
 	    	                              var repromptText = "For instructions on what you can say, please say help me.";	    	                	         	    	                	          
