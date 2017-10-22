@@ -272,7 +272,7 @@
 	        	
 	        	if(car_selection != null && this.attributes['state']=="car_selection"){               
 	                this.attributes['car_selection'] = car_selection;             
-	                speechText = "Test Jenkins You are about to book car " + this.attributes['carOptions'][car_selection] + " " + ".Please Confirm. Jenkins version";
+	                speechText = "You are about to book car " + this.attributes['carOptions'][car_selection] + " " + ".Please Confirm.";
 	                repromptText ="You are about to book car " + this.attributes['carOptions'][car_selection] + " " + ".Please Confirm.";
 	                console.log(this.attributes);
 	                this.event.request.dialogState = "STARTED";	
