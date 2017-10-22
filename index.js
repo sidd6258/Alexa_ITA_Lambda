@@ -300,7 +300,7 @@
                      };
                      console.log("before request : ");	
 	    	         request({
-	    	               url: "http://travelagentapi-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
+	    	               url: "http://ainuco.ddns.net:4324/car",
 	    	               method: "POST",
 	    	               json: true,   // <--Very important!!!
 	    	               body: myJSONObject
