@@ -314,7 +314,7 @@
 	                this.emit(':ask', speechText, repromptText);
 	            }
 	        	                 
-                 if( this.attributes['state']='call_api'){
+                if( this.attributes['state']=='call_api'){
                 	 console.log("option request : "+ JSON.stringify(this.event.request));
     	        	 var myJSONObject={};
                      myJSONObject={"destination":this.attributes['destination_car'],
@@ -337,14 +337,16 @@
 	    	                              var speechText = "";
 	    	                              speechText += carinfo+", choose one option";
 	    	                              carOptions = body.carOptions;
+	    	                              
 	    	                             // var carObject=body.carObject;
 	    	                              //this.attributes['carObject']=carObject;
 	    	                              this.attributes['carOptions']=carOptions;
 	    	                              console.log(speechText);
-	    	                              var repromptText = "For instructions on what you can say, please say help me.";	    	                	         
-	    	                	          this.event.request.dialogState = "STARTED";	
+	    	                              var repromptText = "For instructions on what you can say, please say help me.";	    	                	         	    	                	          
 	    	                	          this.attributes['state']='car_selection';
+	    	                	          this.event.request.dialogState = "STARTED";	
 	    	                	          console.log(this.attributes);
+	    	                	          console.log("dialog state is "+this.event.request.dialogState);
 	    	                	        //say the results    	    	                	          
 	    	                	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
 	    	                          }
@@ -356,7 +358,7 @@
 	    	                      }
 	    	                  }.bind(this));
 	    	     console.log("after request : ");
-                 }
+               }
 	    },
 	    'AMAZON.HelpIntent': function () {
 	        speechOutput = "";
