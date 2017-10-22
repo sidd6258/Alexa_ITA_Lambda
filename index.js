@@ -1,14 +1,10 @@
 	/* eslint-disable  func-names */
 	/* eslint quote-props: ["error", "consistent"]*/
 
-	// alexa-cookbook sample code
 
 	// There are three sections, Text Strings, Skill Code, and Helper Function(s).
 	// You can copy and paste the entire file contents as the code for a new Lambda function,
 	// or copy & paste section #3, the helper function, to the bottom of your existing Lambda code.
-
-	// TODO add URL to this entry in the cookbook
-
 
 	 // 1. Text strings =====================================================================================================
 	 //    Modify these strings and messages to change the behavior of your Lambda function
@@ -19,12 +15,7 @@
 	 const request=require('request');
 	 const welcomeOutput = "Let's plan a trip. What would you like to book? Say book a hotel, book a car or book a flight";
 	 const welcomeReprompt = "Let me know how can i help you. Say book a hotel, book a car or book a flight";
-	 const tripIntro = [
-	   "This sounds like a cool trip. ",
-	   "This will be fun. ",
-	   "Oh, I like this trip. "
-	 ];
-
+	 
 	 var destination_car = null;
 	 var startdate_car = null;
 	 var enddate_car = null;
@@ -106,21 +97,53 @@
 
 	// ====================================================API call=================================================
 
-	        	console.log("option request : "+ JSON.stringify(this.event.request));
-	        	hotelOptions = {      1:"Option A",
-	                    2:"Option B",
-	                    3:"Option C",
-	                    4:"Option D",
-	                    5:"Option E"}
-	          speechText = "Five Hotels available 1, 2, 3, 4 and 5. choose one option";
-	          repromptText = "Five Hotels available 1, 2, 3, 4 and 5. choose one option";
-	          this.attributes['hotelOptions']=hotelOptions;
-	          this.event.request.dialogState = "STARTED";	
-	          console.log(this.attributes);
-			// ==========================================say the results ===================================================    
-	          this.attributes['state']='hotel_selection';
-	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
-	    	}
+	        	// console.log("option request : "+ JSON.stringify(this.event.request));
+				var myJSONObject={};
+                     myJSONObject={"destination":this.attributes['destination_hotel'],
+                             "sdatetime": this.attributes['startdate_hotel'],
+                             "edatetime":this.attributes['enddate_hotel']
+                     };
+				console.log("before request : "+JSON.stringify(myJSONObject));
+
+				request({
+	    	               url: "http://ainuco.ddns.net:4324/htl",
+	    	               method: "POST",
+	    	               json: true,   // <--Very important!!!
+	    	               body: myJSONObject
+	    	                  }, function (error, response, body){
+	    	                	  console.log("inside request : ");
+	    	                         // console.log("res"+JSON.stringify(response));
+	    	                          if (!error && response.statusCode == 200) {
+	    	                              //console.log("place"+JSON.stringify(body));
+	    	                              var hotelinfo = body.hotels;
+	    	                             // console.log("hotel object is "+hotelinfo);
+	    	                              var speechText = "";
+	    	                              speechText += hotelinfo+", choose one option";
+	    	                              hotelOptions = body.hotelOptions;
+										  
+										  var hotelObject=body.hotelObject;
+	    	                              this.attributes['hotelObject']=hotelObject;
+	    	                              this.attributes['hotelOptions']=hotelOptions;
+	    	                              console.log(speechText);
+	    	                              var repromptText = "For instructions on what you can say, please say help me.";	    	                	         
+	    	                	          this.event.request.dialogState = "STARTED";
+										  this.attributes['state']='hotel_selection';
+	    	                	          console.log(this.attributes);
+
+// ==========================================say the results ===================================================    
+	    	
+			                	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
+	    	                          }
+	    	                      else
+	    	                      {
+	    	                          speechText = "error occurred";
+	    	                          repromptText = "error occurred"; 
+	    	                          this.emit(':ask', speechText, repromptText);
+	    	                      }
+	    	                  }.bind(this));
+	    	     console.log("after request : ");
+                	
+			}
 	        
 	       	
 	         if(this.attributes['state']=="hotel_selection"){
