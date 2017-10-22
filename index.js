@@ -323,7 +323,7 @@
                      };
                      console.log("before request : ");	
 	    	         request({
-	    	               url: "http://travelagentapi-env.mqwha4phuc.us-east-1.elasticbeanstalk.com/car",
+	    	               url: "http://ainuco.ddns.net:4324/car",
 	    	               method: "POST",
 	    	               json: true,   // <--Very important!!!
 	    	               body: myJSONObject
@@ -336,10 +336,10 @@
 	    	                             // console.log("car object is "+carinfo);
 	    	                              var speechText = "";
 	    	                              speechText += carinfo+", choose one option";
-	    	                              carOptions = body.carOptions;
+	    	                              carOptions = body.carOptions;	 
 	    	                              
-	    	                             // var carObject=body.carObject;
-	    	                              //this.attributes['carObject']=carObject;
+	    	                              var carObject=body.carObject;
+	    	                              this.attributes['carObject']=carObject;
 	    	                              this.attributes['carOptions']=carOptions;
 	    	                              console.log(speechText);
 	    	                              var repromptText = "For instructions on what you can say, please say help me.";	    	                	         	    	                	          
