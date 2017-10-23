@@ -128,7 +128,7 @@
 	    	                              var repromptText = "For instructions on what you can say, please say help me.";	    	                	         
 	    	                	          this.event.request.dialogState = "STARTED";
 										  this.attributes['state']='hotel_selection';
-	    	                	          console.log(this.attributes);
+	    	                	        //   console.log(this.attributes);
 
 // ==========================================say the results ===================================================    
 	    	
@@ -149,15 +149,16 @@
 	         if(this.attributes['state']=="hotel_selection"){
 	        	hotel_selection = this.event.request.intent.slots.selection.value;
 	        	this.attributes['hotel_selection'] = hotel_selection;
+				console.log("hotel_selection: "+hotel_selection);
 	        }
 
 	        if(hotel_selection != null && this.attributes['state']=="hotel_selection"){               
 	                this.attributes['hotel_selection'] = hotel_selection;             
 	                speechText = "You are about to book hotel " + this.attributes['hotelOptions'][hotel_selection] + ". Please Confirm.";
 	                repromptText ="You are about to book hotel " + this.attributes['hotelOptions'][hotel_selection] + ". Please Confirm.";
-	                console.log(this.attributes);
+	                // console.log(this.attributes);
 
-	                console.log(this.attributes['hotelOptions'][hotel_selection]);
+	                // console.log(this.attributes['hotelOptions'][hotel_selection]);
 	                console.log(this.attributes['hotelOptions']);
 	                this.event.request.dialogState = "STARTED";	
 	                this.attributes['state']='hotel_confirmation';
