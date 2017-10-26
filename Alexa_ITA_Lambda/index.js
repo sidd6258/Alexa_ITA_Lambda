@@ -634,13 +634,65 @@
 		                	
 		                	this.attributes['state'] = 'flight_results';
 		                    var myJSONObject={};
-		                    myJSONObject={"input":flightDestination,
-		                            "sdatetime":"2017-6-07 16:25",
-		                            "edatetime":"2017-6-09 16:25"
+		                    myJSONObject={"destination":flightDestination,
+		                    		"origin":flightOrigin,
+		                            "sdatetime":flightStartDate,
 		                    };
 		                    console.log("ajay ajay");
 		                    console.log(myJSONObject);
-		                    
+		                    var speech=new Speech();
+		   	 				console.log("myJSONObject is "+JSON.stringify(myJSONObject));
+		   	 				console.log("Calling api ");
+		   	 				request({
+		   	 					url: "http://Sample-env.3ypbe4xuwp.us-east-1.elasticbeanstalk.com/fly",
+		   	 					method: "POST",
+		   	 					json: true,   // <--Very important!!!
+		   	 					body: myJSONObject
+		   	 				}, function (error, response, body){
+		   	 					console.log("res"+response);
+		   	 					if (!error && response.statusCode == 200) {
+
+		   	 						console.log("place"+JSON.stringify(response));
+
+		   	 						for(var i=0;i<5;i++)
+		   	 						{
+		   	 							speech.pause("500ms");
+		   	 							speech.say("Option "+(parseInt(i,10)+1)+":");
+		   	 							speech.pause("500ms");
+		   	 							speech.say(response.body.fltinfo[i].airline+" airline flight number "+response.body.fltinfo[i].flightNum+".");
+		   	 							speech.say("At ");
+		   	 							speech.sayAs({
+		   	 								"word":response.body.fltinfo[i].deptTime+":00",
+		   	 								"interpret": "time",
+
+		   	 							});
+		   	 							speech.say("hours");
+
+		   	 							speech.say("from");
+		   	 							speech.spell(response.body.fltinfo[i].deptAirportCode);
+		   	 							speech.say(" gate "+response.body.fltinfo[i].deptGate+".");
+		   	 							speech.pause("500ms");
+		   	 							speech.say("Price for the ticket is"+response.body.fltinfo[i].totalprice+" dollars.");
+		   	 							/*textpromt=textpromt+response.body.fltinfo[i].airline+" flight number "+response.body.fltinfo[i].flightNum+".At ";
+		   	 					           	textpromt=textpromt+"Option "+(i+1)+":";
+		   	 					           	textpromt=textpromt+"At "+response.body.fltinfo[i].deptTime+" from "+response.body.fltinfo[i].deptAirportCode+" gate "+response.body.fltinfo[i].deptGate+".";
+
+		   	 					           	textpromt=textpromt+"Price for the ticket is"+response.body.fltinfo[i].totalprice+".";
+		   	 					           	//speech.pause('1s');*/								                	}
+		   	 						var speechOutput = speech.ssml(true);
+		   	 						//console.log("textprompt"+textpromt);
+		   	 						this.emit(':tell',speechOutput);
+		   	 						//res.send(response);
+		   	 					}
+		   	 					else
+		   	 					{
+		   	 						console.log("error"+response+error);
+		   	 						textpromt="error";
+		   	 						this.emit(':tell',textpromt);
+
+		   	 						//res.send("error");
+		   	 					}
+		   	 				}.bind(this));
 		                    flightOptions = {      1:"Option A",
 	                                2:"Option B",
 	                                3:"Option C",
