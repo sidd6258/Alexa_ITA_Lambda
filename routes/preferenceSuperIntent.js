@@ -21,7 +21,7 @@ exports.preference = function(){
 //						// this.emit(':ask', speechText, repromptText);
 //                    }
 //				}.bind(this));
-    	
+    	this.event.request.dialogState = "STARTED"
 		if(this.attributes['module']=='flight'){
 			console.log("before emit state");
 			this.emitWithState("flightPreferenceIntent");

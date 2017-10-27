@@ -6,7 +6,7 @@ exports.flightPreference = function(){
 		this.attributes['state'] = "flightPreferences";
 		this.attributes['module']=this.event.request.intent.slots.module.value;
     	this.attributes['preference_action']=this.event.request.intent.slots.preference_action.value;
-    	console.log("flight pref : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+this.attributes);
+    	console.log("flight pref : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+JSON.stringify(this.attributes));
 	
 }
 
