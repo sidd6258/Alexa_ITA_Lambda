@@ -76,7 +76,7 @@
 	    'Unhandled': function () {
 	                HelpMessage ="help me"; 
 	                this.emit(':ask', HelpMessage, HelpMessage);
-	            },
+	    },
 	    'SessionEndedRequest': function () {
 	        var speechOutput = "";
 	        this.response.speak(speechOutput);
