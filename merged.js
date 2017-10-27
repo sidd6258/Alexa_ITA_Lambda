@@ -578,7 +578,7 @@
 	      console.log("in not completed");
 	      console.log("request inprogress: "+ JSON.stringify(this.event.request));
 	      if(this.event.request.intent.slots.module.value!=undefined 
-	    		  && this.event.request.intent.slots.action.value!=undefined
+	    		  && this.event.request.intent.slots.preference_action.value!=undefined
 	    		  ){
 	    	  return this.event.request.intent;
 	      }
