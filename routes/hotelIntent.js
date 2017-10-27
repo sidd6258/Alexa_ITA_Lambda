@@ -112,3 +112,35 @@ exports.hotel = function(){
 	                this.emit(':ask', speechText, repromptText);
 	            }
 }
+
+
+function delegateSlotCollection_hotel(){
+  console.log("in  hotel delegateSlotCollection");
+  console.log("current dialogState: "+this.event.request.dialogState);
+    if (this.event.request.dialogState === "STARTED") {
+      console.log("in Beginning");
+      updatedIntent=this.event.request.intent;
+      //optionally pre-fill slots: update the intent object with slot values for which
+      //you have defaults, then return Dialog.Delegate with this updated intent
+      // in the updatedIntent property
+      console.log("request started: "+ JSON.stringify(this.event.request));
+      this.emit(":delegate", updatedIntent);
+    } else if (this.event.request.dialogState !== "COMPLETED") {
+      console.log("in not completed");
+      console.log("request inprogress: "+ JSON.stringify(this.event.request));
+      if(this.event.request.intent.slots.destination_hotel.value!=undefined 
+    		  && this.event.request.intent.slots.startdate_hotel.value!=undefined
+    		  && this.event.request.intent.slots.enddate_hotel.value!=undefined
+    		  && this.event.request.intent.slots.guests_hotel.value!=undefined){
+    	  return this.event.request.intent;
+      }
+      this.emit(":delegate");
+    } else {
+      console.log("in completed");
+      console.log("returning: "+ JSON.stringify(this.response));
+      // Dialog is now complete and all required slots should be filled,
+      // so call your normal intent handler.
+      return this.event.request.intent;
+    }
+}
+
