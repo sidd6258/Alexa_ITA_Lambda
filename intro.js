@@ -1,4 +1,7 @@
 const request=require('request');
+const welcomeOutput = "Let's plan a trip. What would you like to book? Say book a hotel, book a car or book a flight";
+const welcomeReprompt = "Let me know how can i help you. Say book a hotel, book a car or book a flight";
+
 
 exports.intro = function(obj){
 	console.log("in new intro");
