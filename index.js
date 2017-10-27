@@ -39,7 +39,7 @@
 	    	funct1();
 	    		    },
 	    'hotelIntent': function () {
-	    	var hotelFunc = intro.intro.bind(this);
+	    	var hotelFunc = hotel.hotel.bind(this);
 	    	hotelFunc();
 	    },
 
