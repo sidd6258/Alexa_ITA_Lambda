@@ -1,6 +1,6 @@
 const request=require('request');
 
-exports.preference = function(){
+exports.flightPreference = function(){
 	console.log("in Flight pref");
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "flightPreferences";
