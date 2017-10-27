@@ -49,7 +49,8 @@
 
 	const handlers = {
 	    'LaunchRequest': function () {
-	    	intro.intro.bind(this);
+	    	var funct1 = intro.intro.bind(this);
+	    	funct1();
 	    		    },
 	    'hotelIntent': function () {
 
