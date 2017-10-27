@@ -1,10 +1,10 @@
 const request=require('request');
 
 exports.carPreference = function(){
-	console.log("in Hotel pref");
+	console.log("in Car pref");
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "carPreferences";
-    	this.attributes['car_brand']=this.event.request.intent.slots.hotel_brand.value;
+    	this.attributes['car_brand']=this.event.request.intent.slots.car_brand.value;
     	this.attributes['car_days']=this.event.request.intent.slots.car_days.value;
     	console.log("car pref : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+JSON.stringify(this.attributes));
     	//TO DO add mongo update
