@@ -24,7 +24,8 @@ exports.preference = function(){
     	this.event.request.dialogState = "STARTED"
 		if(this.attributes['module']=='flight'){
 			console.log("before emit state");
-			this.emitWithState("flightPreferenceIntent");
+//			this.emitWithState("flightPreferenceIntent");
+			this.emit("flightPreferenceIntent");
 			
 		} else if(this.attributes['module']=='car'){
 			
