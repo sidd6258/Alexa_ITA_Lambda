@@ -4,8 +4,8 @@ exports.flightPreference = function(){
 	console.log("in Flight pref");
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "flightPreferences";
-		this.attributes['module']=this.event.request.intent.slots.module.value;
-    	this.attributes['preference_action']=this.event.request.intent.slots.preference_action.value;
+    	this.attributes['airline_name']=this.event.request.intent.slots.airline_name.value;
+    	this.attributes['airline_days']=this.event.request.intent.slots.airline_days.value;
     	console.log("flight pref : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+JSON.stringify(this.attributes));
 	
 }
