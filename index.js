@@ -14,6 +14,8 @@
 	 var intro = require('./routes/intro')
 	 var carIntent = require('./routes/carIntent')
 	 var hotel = require('./routes/hotelIntent')
+	 var preferenceSuperIntent = require('./routes/preferenceSuperIntent')
+	 var flightPreferenceIntent = require('./routes/flightPreferenceIntent')
 
 	 var destination_flight = null;
 	 var startdate_flight = null;
@@ -41,6 +43,14 @@
 	    'hotelIntent': function () {
 	    	var hotelFunc = hotel.hotel.bind(this);
 	    	hotelFunc();
+	    },
+	    'preferenceSuperIntent': function(){
+	    	var prefer = preferenceSuperIntent.preference.bind(this);
+	    	prefer();
+	    },
+	    'flightPreferenceIntent': function(){
+	    	var flightPrefer = flightPreferenceIntent.flightPreference.bind(this);
+	    	flightPrefer();
 	    },
 
 	    'flightIntent': function () {
