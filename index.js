@@ -33,6 +33,14 @@
 	    	var hotelFunc = hotel.hotel.bind(this);
 	    	hotelFunc();
 	    },
+	    'preferenceSuperIntent': function(){
+	    	var prefer = preferenceSuperIntent.preference.bind(this);
+	    	prefer();
+	    },
+	    'flightPreferenceIntent': function(){
+	    	var flightPrefer = flightPreferenceIntent.flightPreference.bind(this);
+	    	flightPrefer();
+	    },
 
 	    'flightIntent': function () {
 
