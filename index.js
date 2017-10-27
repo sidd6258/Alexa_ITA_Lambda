@@ -49,9 +49,7 @@
 
 	const handlers = {
 	    'LaunchRequest': function () {
-	    	console.log("new launch");
-	    	intro.intro(this);
-	    	console.log("back");
+	    	intro.intro.bind(this);
 	    		    },
 	    'hotelIntent': function () {
 
