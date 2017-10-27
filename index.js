@@ -12,7 +12,7 @@
 	 const welcomeOutput = "Let's plan a trip. What would you like to book? Say book a hotel, book a car or book a flight";
 	 const welcomeReprompt = "Let me know how can i help you. Say book a hotel, book a car or book a flight";
 	 var intro = require('./routes/intro')
-	 var carIntent = require('.routes/carIntent')
+	 var carIntent = require('./routes/carIntent')
 	 var hotel = require('./routes/hotelIntent')
 
 	 var destination_flight = null;
