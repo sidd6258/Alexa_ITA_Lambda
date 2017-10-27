@@ -201,21 +201,54 @@
 
 	// ====================================================API call=================================================
 
-	        	console.log("option request : "+ JSON.stringify(this.event.request));
-	        	flightOptions = {      1:"Option A",
-	                    2:"Option B",
-	                    3:"Option C",
-	                    4:"Option D",
-	                    5:"Option E"}
-	          speechText = "Five flight available 1, 2, 3, 4 and 5. choose one option";
-	          repromptText = "Five flight available 1, 2, 3, 4 and 5. choose one option";
-	          this.attributes['flightOptions']=flightOptions;
-	          this.event.request.dialogState = "STARTED";	
-	          console.log(this.attributes);
-			// ==========================================say the results ===================================================    
-	          this.attributes['state']='flight_selection';
-	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
-	    	}
+	        	var myJSONObject={};
+                myJSONObject={"destination":this.attributes['destination_flight'],
+                		"origin":this.attributes['origin_flight'],
+                        "date": this.attributes['startdate_flight']
+                      
+                };
+			console.log("before request : "+JSON.stringify(myJSONObject));
+
+			request({
+   	               url: "http://ainuco.ddns.net:4324/flight",
+   	               method: "POST",
+   	               json: true,   // <--Very important!!!
+   	               body: myJSONObject
+   	                  }, function (error, response, body){
+   	                	  console.log("inside request : ");
+   	                         // console.log("res"+JSON.stringify(response));
+   	                          if (!error && response.statusCode == 200) {
+   	                              //console.log("place"+JSON.stringify(body));
+   	                              var flightinfo = body.flights;
+   	                             // console.log("hotel object is "+hotelinfo);
+   	                              var speechText = "";
+   	                              speechText += flightinfo+", choose one option";
+   	                           flightOptions = body.flightOptions;
+									  
+									  var flightObject=body.flightObject;
+   	                              this.attributes['flightObject']=flightObject;
+   	                              this.attributes['flightOptions']=flightOptions;
+   	                              console.log(speechText);
+   	                              var repromptText = "For instructions on what you can say, please say help me.";	    	                	         
+   	                	          this.event.request.dialogState = "STARTED";
+									  this.attributes['state']='flight_selection';
+   	                	        //   console.log(this.attributes);
+
+//==========================================say the results ===================================================    
+   	
+		                	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
+   	                          }
+   	                      else
+   	                      {
+   	                          speechText = "error occurred";
+   	                          repromptText = "error occurred"; 
+   	                          this.emit(':ask', speechText, repromptText);
+   	                      }
+   	                  }.bind(this));
+   	     console.log("after request : ");
+           	
+		}
+       
 	        
 	       	
 	         if(this.attributes['state']=="flight_selection"){
