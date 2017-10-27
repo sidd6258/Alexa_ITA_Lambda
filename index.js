@@ -15,6 +15,9 @@
 	 var carIntent = require('./routes/carIntent')
 	 var hotel = require('./routes/hotelIntent')
 	 var flight =require('./routes/flightIntent')
+	 var preferenceSuperIntent = require('./routes/preferenceSuperIntent')
+	 var flightPreferenceIntent = require('./routes/flightPreferenceIntent')
+	 
 	 var updatedIntent=null;
 
 
@@ -89,8 +92,3 @@
 	    alexa.registerHandlers(handlers);
 	    alexa.execute();
 	};
-
-	//    END of Intent Handlers {} ========================================================================================
-	// 3. Helper Function  =================================================================================================
-
-	
