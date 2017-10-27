@@ -44,7 +44,14 @@
 	    	var flightPrefer = flightPreferenceIntent.flightPreference.bind(this);
 	    	flightPrefer();
 	    },
-
+	    'carPreferenceIntent': function(){
+	    	var carPrefer = carPreferenceIntent.carPreference.bind(this);
+	    	carPrefer();
+	    },
+	    'hotelPreferenceIntent': function(){
+	    	var hotelPrefer = hotelPreferenceIntent.hotelPreference.bind(this);
+	    	hotelPrefer();
+	    },
 	    'flightIntent': function () {
 
 	    	//delegate to Alexa to collect all the required slot values
