@@ -17,6 +17,8 @@
 	 var flight =require('./routes/flightIntent')
 	 var preferenceSuperIntent = require('./routes/preferenceSuperIntent')
 	 var flightPreferenceIntent = require('./routes/flightPreferenceIntent')
+	 var hotelPreferenceIntent = require('./routes/hotelPreferenceIntent')
+	 var carPreferenceIntent = require('./routes/carPreferenceIntent')
 	 
 	 var updatedIntent=null;
 
