@@ -14,8 +14,8 @@ exports.flightPreference = function(){
     	var repromptText = "Flight preferences updated. " +
 		"Do you also want to update Hotel or car preferences, " +
 		"if yes then say update car prefrences or update hotel preferences.";
-    	this.event.request.dialogState === "STARTED";
-    	this.attributes['state']=="launch";
+    	this.event.request.dialogState = "STARTED";
+    	this.attributes['state']="launch";
     	this.emit(":ask",speechText,repromptText);	
 }
 
