@@ -5,7 +5,12 @@ exports.carPreference = function(){
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "carPreferences";
     	this.attributes['car_brand']=this.event.request.intent.slots.car_brand.value;
-    	this.attributes['car_days']=this.event.request.intent.slots.car_days.value;
+    	this.attributes['car_rental_company']=this.event.request.intent.slots.car_rental_company.value;
+    	this.attributes['car_mileage']=this.event.request.intent.slots.car_mileage.value;
+    	this.attributes['car_price']=this.event.request.intent.slots.car_price.value;
+    	this.attributes['car_features']=this.event.request.intent.slots.car_features.value;
+    	
+    	
     	console.log("car pref : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+JSON.stringify(this.attributes));
     	//TO DO add mongo update
     	var speechText="Car preferences updated. " +

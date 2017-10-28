@@ -6,7 +6,13 @@ exports.flightPreference = function(){
 		this.attributes['state'] = "flightPreferences";
     	this.attributes['airline_name']=this.event.request.intent.slots.airline_name.value;
     	this.attributes['airline_days']=this.event.request.intent.slots.airline_days.value;
-    	console.log("flight pref : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+JSON.stringify(this.attributes));
+    	this.attributes['airline_class']=this.event.request.intent.slots.airline_class.value;
+    	this.attributes['airline_time']=this.event.request.intent.slots.airline_time.value;
+    	this.attributes['food_cuisine']=this.event.request.intent.slots.food_cuisine.value;
+    	this.attributes['food_type']=this.event.request.intent.slots.food_type.value;
+    	
+    	
+    	console.log("flight pref : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"+JSON.stringify(this.attributes));
     	//TO DO add mongo update
     	var speechText="Flight preferences updated. " +
     			"Do you also want to update Hotel or car preferences, " +

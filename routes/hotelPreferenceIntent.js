@@ -5,7 +5,12 @@ exports.hotelPreference = function(){
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "hotelPreferences";
     	this.attributes['hotel_name']=this.event.request.intent.slots.hotel_name.value;
-    	this.attributes['hotel_days']=this.event.request.intent.slots.hotel_days.value;
+    	this.attributes['hotel_location']=this.event.request.intent.slots.hotel_location.value;
+    	this.attributes['hotel_star_rating']=this.event.request.intent.slots.hotel_star_rating.value;
+    	this.attributes['hotel_price']=this.event.request.intent.slots.hotel_price.value;
+    	this.attributes['food_cuisine']=this.event.request.intent.slots.food_cuisine.value;
+    	this.attributes['food_type']=this.event.request.intent.slots.food_type.value;
+    	
     	console.log("hotel pref : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+JSON.stringify(this.attributes));
     	//TO DO add mongo update
     	var speechText="Hotel preferences updated. " +
