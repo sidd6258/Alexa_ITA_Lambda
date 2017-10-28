@@ -140,6 +140,9 @@ function delegateSlotCollection_preference(){
 	      //you have defaults, then return Dialog.Delegate with this updated intent
 	      // in the updatedIntent property
 	      console.log("request started: "+ JSON.stringify(this.event.request));
+	      if(this.attributes['car_action']=='view' || this.attributes['car_action']=='delete'  ){
+	    	  return this.event.request.intent;
+	      }
 	      this.emit(":delegate", updatedIntent);
 	    } else if (this.event.request.dialogState !== "COMPLETED") {
 	      console.log("in not completed");
