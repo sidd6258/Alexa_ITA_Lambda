@@ -31,22 +31,38 @@ exports.carPreference = function(){
                 console.log("response----->" + JSON.stringify(response));
                 console.log("body----->" + JSON.stringify(body));
                 mongoUser = body;
-                speechText = "Airline name as "+mongoUser.preferences.flight.airline_name+" has updated successfully";
                 console.log("speechText------------>"+speechText);
-                this.emit(':tell', speechText);
+                var speechText="Car preferences updated. "
+            		if (!this.attributes['airline_name'] || !this.attributes['hotel_name']){
+            			speechText+= "Do you also want to update ";
+            			if(!this.attributes['airline_name'] && this.attributes['hotel_name']){
+            				// no airline
+            				speechText += "Flight preferences, if yes then say update Flight preferences."
+            			}
+            			if(this.attributes['airline_name'] && !this.attributes['hotel_name']){
+            				// no hotel
+            				speechText += "Hotel preferences, if yes then say update Hotel preferences."
+            			}if(!this.attributes['airline_name'] && !this.attributes['hotel_name']){
+            				// no hotel and flight
+            				speechText += "Do you also want to update Hotel or Flight preferences, " +
+                			"if yes then say update Hotel prefrences or update Flight preferences.";
+            			}
+            		} else {
+            			// both done
+            			speechText+= "Now Let's plan a trip. What would you like to book? Say book a hotel, book a car or book a flight"
+            		}
+            		
+            			
+            	var repromptText = speechText;
+            	this.event.request.dialogState = "STARTED";
+            	this.attributes['state']="launch";
+            	this.emit(":ask",speechText,repromptText);	
+                
             }else{
                 console.log("error----->" + error);
 			}
         }.bind(this));
-    	var speechText="Car preferences updated. " +
-    			"Do you also want to update Hotel or Flight preferences, " +
-    			"if yes then say update Hotel prefrences or update Flight preferences.";
-    	var repromptText = "Car preferences updated. " +
-				"Do you also want to update Hotel or Flight preferences, " +
-				"if yes then say update Hotel prefrences or update Flight preferences.";
-    	this.event.request.dialogState = "STARTED";
-    	this.attributes['state']="launch";
-    	this.emit(":ask",speechText,repromptText);	
+    	
 }
 
 function delegateSlotCollection_preference(){
