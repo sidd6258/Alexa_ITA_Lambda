@@ -16,6 +16,7 @@ exports.carPreference = function(){
     	user.preferences.car.car_mileage=this.attributes['car_mileage'];
     	user.preferences.car.car_price=this.attributes['car_price'];
     	user.preferences.car.car_features=this.attributes['car_features'];
+    	var url = "http://ainuco.ddns.net:4324/users/"+profile.email;
     	
     	
     	console.log("car pref : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+JSON.stringify(this.attributes));
