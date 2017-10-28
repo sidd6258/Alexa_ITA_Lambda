@@ -15,8 +15,8 @@ exports.flightPreference = function(){
     	user.preferences.flight.airline_days=this.attributes['airline_days'];
     	user.preferences.flight.airline_class=this.attributes['airline_class'];
     	user.preferences.flight.airline_time=this.attributes['airline_time'];
-    	user.preferences.flight.food_cuisine=this.attributes['food_cuisine'];
-    	user.preferences.flight.food_type=this.attributes['food_type'];
+    	user.preferences.food_cuisine=this.attributes['food_cuisine'];
+    	user.preferences.food_type=this.attributes['food_type'];
         var url = "http://ainuco.ddns.net:4324/users/"+profile.email;
 
     	

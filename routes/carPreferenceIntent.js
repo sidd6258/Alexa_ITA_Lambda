@@ -9,10 +9,35 @@ exports.carPreference = function(){
     	this.attributes['car_mileage']=this.event.request.intent.slots.car_mileage.value;
     	this.attributes['car_price']=this.event.request.intent.slots.car_price.value;
     	this.attributes['car_features']=this.event.request.intent.slots.car_features.value;
+    	var user=this.attributes['mongo_user'];
+    	user.preferences.car.car_brand=this.attributes['car_brand'];
+    	user.preferences.car.car_rental_company=this.attributes['car_rental_company'];
+    	user.preferences.car.car_mileage=this.attributes['car_mileage'];
+    	user.preferences.car.car_price=this.attributes['car_price'];
+    	user.preferences.car.car_features=this.attributes['car_features'];
     	
     	
     	console.log("car pref : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+JSON.stringify(this.attributes));
     	//TO DO add mongo update
+    	
+    	request({
+            url: url,
+            method: "POST",
+            json: true,
+			body:user
+		}, function (error, response, body) {
+        	console.log(body);
+            if (!error && response.statusCode == 200) {
+                console.log("response----->" + JSON.stringify(response));
+                console.log("body----->" + JSON.stringify(body));
+                mongoUser = body;
+                speechText = "Airline name as "+mongoUser.preferences.flight.airline_name+" has updated successfully";
+                console.log("speechText------------>"+speechText);
+                this.emit(':tell', speechText);
+            }else{
+                console.log("error----->" + error);
+			}
+        }.bind(this));
     	var speechText="Car preferences updated. " +
     			"Do you also want to update Hotel or Flight preferences, " +
     			"if yes then say update Hotel prefrences or update Flight preferences.";
