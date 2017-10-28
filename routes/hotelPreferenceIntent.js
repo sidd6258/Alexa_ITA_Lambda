@@ -5,9 +5,63 @@ exports.hotelPreference = function(){
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "hotelPreferences";
     	this.attributes['hotel_name']=this.event.request.intent.slots.hotel_name.value;
-    	this.attributes['hotel_days']=this.event.request.intent.slots.hotel_days.value;
+    	this.attributes['hotel_location']=this.event.request.intent.slots.hotel_location.value;
+    	this.attributes['hotel_star_rating']=this.event.request.intent.slots.hotel_star_rating.value;
+    	this.attributes['hotel_price']=this.event.request.intent.slots.hotel_price.value;
+    	this.attributes['food_cuisine']=this.event.request.intent.slots.food_cuisine.value;
+    	this.attributes['food_type']=this.event.request.intent.slots.food_type.value;
+    	var user=this.attributes['mongo_user'];
+    	user.preferences.hotel.hotel_name=this.attributes['hotel_name'];
+    	user.preferences.hotel.hotel_location=this.attributes['hotel_location'];
+    	user.preferences.hotel.hotel_star_rating=this.attributes['hotel_star_rating'];
+    	user.preferences.hotel.hotel_price=this.attributes['hotel_price'];
+    	user.preferences.food_cuisine=this.attributes['food_cuisine'];
+    	user.preferences.food_type=this.attributes['food_type'];
+    	var url = "http://ainuco.ddns.net:4324/users/"+this.attributes['profile'].email;
+    	
     	console.log("hotel pref : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+JSON.stringify(this.attributes));
     	//TO DO add mongo update
+    	request({
+            url: url,
+            method: "POST",
+            json: true,
+			body:user
+		}, function (error, response, body) {
+        	console.log(body);
+            if (!error && response.statusCode == 200) {
+                console.log("response----->" + JSON.stringify(response));
+                console.log("body----->" + JSON.stringify(body));
+                mongoUser = body;
+                var speechText="Hotel preferences updated. "
+            		if (!this.attributes['airline_name'] || !this.attributes['car_name']){
+            			speechText+= "Do you also want to update ";
+            			if(!this.attributes['airline_name'] && this.attributes['car_name']){
+            				// no flight
+            				speechText += "Flight preferences, if yes then say update Flight preferences."
+            			}
+            			if(this.attributes['airline_name'] && !this.attributes['car_name']){
+            				// no car
+            				speechText += "car preferences, if yes then say update car preferences."
+            			}if(!this.attributes['airline_name'] && !this.attributes['car_name']){
+            				// no car and flight
+            				speechText += "Do you also want to update car or Flight preferences, " +
+                			"if yes then say update car prefrences or update Flight preferences.";
+            			}
+            		} else {
+            			// both done
+            			speechText+= "Now Let's plan a trip. What would you like to book? Say book a hotel, book a car or book a flight"
+            		}
+                console.log("speechText------------>"+speechText);
+
+            			
+            	var repromptText = speechText;
+                
+                
+                this.emit(':tell', speechText);
+            }else{
+                console.log("error----->" + error);
+			}
+        }.bind(this));
     	var speechText="Hotel preferences updated. " +
     			"Do you also want to update Flight or Car preferences, " +
     			"if yes then say update Flight prefrences or update Car preferences.";
