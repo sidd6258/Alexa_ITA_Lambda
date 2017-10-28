@@ -13,12 +13,28 @@ exports.carPreference = function(){
     	
     	console.log("car pref : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+JSON.stringify(this.attributes));
     	//TO DO add mongo update
-    	var speechText="Car preferences updated. " +
-    			"Do you also want to update Hotel or Flight preferences, " +
-    			"if yes then say update Hotel prefrences or update Flight preferences.";
-    	var repromptText = "Car preferences updated. " +
-				"Do you also want to update Hotel or Flight preferences, " +
-				"if yes then say update Hotel prefrences or update Flight preferences.";
+    	var speechText="Car preferences updated. "
+    		if (!this.attributes['airline_name'] || !this.attributes['hotel_name']){
+    			speechText+= "Do you also want to update ";
+    			if(!this.attributes['airline_name'] && this.attributes['hotel_name']){
+    				// no airline
+    				speechText += "Flight preferences, if yes then say update Flight preferences."
+    			}
+    			if(this.attributes['airline_name'] && !this.attributes['hotel_name']){
+    				// no hotel
+    				speechText += "Hotel preferences, if yes then say update Hotel preferences."
+    			}if(!this.attributes['airline_name'] && !this.attributes['hotel_name']){
+    				// no hotel and flight
+    				speechText += "Do you also want to update Hotel or Flight preferences, " +
+        			"if yes then say update Hotel prefrences or update Flight preferences.";
+    			}
+    		} else {
+    			// both done
+    			speechText+= "Now Let's plan a trip. What would you like to book? Say book a hotel, book a car or book a flight"
+    		}
+    		
+    			
+    	var repromptText = speechText;
     	this.event.request.dialogState = "STARTED";
     	this.attributes['state']="launch";
     	this.emit(":ask",speechText,repromptText);	
