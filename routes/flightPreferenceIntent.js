@@ -146,6 +146,9 @@ function delegateSlotCollection_preference(){
 	    } else if (this.event.request.dialogState !== "COMPLETED") {
 	      console.log("in not completed");
 	      console.log("request inprogress: "+ JSON.stringify(this.event.request));
+	      if(this.attributes['flight_action']=='view' || this.attributes['flight_action']=='delete'  ){
+	    	  return this.event.request.intent;
+	      }
 	      this.emit(":delegate");
 	    } else {
 	      console.log("in completed");

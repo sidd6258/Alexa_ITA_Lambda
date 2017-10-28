@@ -133,7 +133,12 @@ function delegateSlotCollection_preference(){
 	    } else if (this.event.request.dialogState !== "COMPLETED") {
 	      console.log("in not completed");
 	      console.log("request inprogress: "+ JSON.stringify(this.event.request));
+	      
+	      if(this.attributes['hotel_action']=='view' || this.attributes['hotel_action']=='delete'  ){
+	    	  return this.event.request.intent;
+	      }
 	      this.emit(":delegate");
+	      
 	    } else {
 	      console.log("in completed");
 	      console.log("returning: "+ JSON.stringify(this.response));
