@@ -1,5 +1,5 @@
 const request=require('request');
-const welcomeOutput = "Let's plan a trip. What would you like to book? Say book a hotel, book a car or book a flight";
+const welcomeOutput = "Let's plan a trip. What would you like to book? Say book a hotel, car or flight. If you want to update your preferences, you can also say go to preferences";
 const welcomeReprompt = "Let me know how can i help you. Say book a hotel, book a car or book a flight";
 
 
@@ -21,6 +21,8 @@ exports.intro = function(){
 
             var profile = JSON.parse(body);
             console.log(profile.name);
+            this.attributes['profile']=profile;
+
             this.emit(':ask', "Hello " + profile.name +", " + welcomeOutput, welcomeReprompt);  
 
         } else {

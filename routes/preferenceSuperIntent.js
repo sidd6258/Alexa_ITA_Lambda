@@ -12,12 +12,14 @@ exports.preference = function(){
      if (!error && response.statusCode == 200) {
          body = JSON.parse(JSON.stringify(body));
 			mongoUser = body[0];
+			console.log(JSON.stringify(body))
 			this.attributes['mongo_user'] = mongoUser;
 			// speechText = "Please choose one from Flight Preferences, Hotel Preferences or Car Preferences you want to look for or edit ?";
 			// repromptText = "Please say Flight Preferences, Hotel Preferences or Car Preferences"; // could be improved by using alternative prompt text
 			// this.emit(':ask', speechText, repromptText);
+			this.emit(':ask',preferencewelcomeOutput, preferenceWelcomeReprompt);  
+
      }
 	}.bind(this));
-	 this.emit(':ask',preferencewelcomeOutput, preferenceWelcomeReprompt);  
 
 }
