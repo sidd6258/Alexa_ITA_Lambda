@@ -17,7 +17,7 @@ exports.hotelPreference = function(){
     	user.preferences.hotel.hotel_price=this.attributes['hotel_price'];
     	user.preferences.food_cuisine=this.attributes['food_cuisine'];
     	user.preferences.food_type=this.attributes['food_type'];
-    	var url = "http://ainuco.ddns.net:4324/users/"+profile.email;
+    	var url = "http://ainuco.ddns.net:4324/users/"+this.attributes['profile'].email;
     	
     	console.log("hotel pref : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+JSON.stringify(this.attributes));
     	//TO DO add mongo update

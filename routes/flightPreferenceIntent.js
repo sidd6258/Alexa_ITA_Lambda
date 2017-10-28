@@ -17,7 +17,7 @@ exports.flightPreference = function(){
     	user.preferences.flight.airline_time=this.attributes['airline_time'];
     	user.preferences.food_cuisine=this.attributes['food_cuisine'];
     	user.preferences.food_type=this.attributes['food_type'];
-        var url = "http://ainuco.ddns.net:4324/users/"+profile.email;
+        var url = "http://ainuco.ddns.net:4324/users/"+this.attributes['profile'].email;
 
     	
     	
