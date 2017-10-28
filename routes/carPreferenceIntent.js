@@ -3,10 +3,10 @@ const request=require('request');
 exports.carPreference = function(){
 	console.log("in Car pref");
 	console.log(JSON.stringify(this.attributes))
-	
+			this.attributes['car_action'] == this.event.request.intent.slots.car_action.value;
+
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "carPreferences";
-		this.attributes['car_action'] == this.event.request.intent.slots.car_action.value;
 		
 		
 		if (this.attributes['car_action']=='add'){
