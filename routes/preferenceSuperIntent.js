@@ -2,8 +2,8 @@ const request=require('request');
 
 exports.preference = function(){
 	
-	 var preferencewelcomeOutput = "Which preference you want to update? you can say update flight preferences,update car preferences or update hotel preferences";
-	 var preferenceWelcomeReprompt = "Which preference you want to update? you can say update flight preferences,update car preferences or update hotel preferences";
+	 var preferencewelcomeOutput = "Which preference you want to update or view? you can say flight preferences, car preferences or hotel preferences";
+	 var preferenceWelcomeReprompt = "you can say flight preferences, car preferences or hotel preferences";
 		request({
 		url: "http://ainuco.ddns.net:4324/users/"+this.attributes['profile'].email,
 		method: "GET",
