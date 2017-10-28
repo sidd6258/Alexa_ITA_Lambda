@@ -4,7 +4,7 @@ exports.hotelPreference = function(){
 	console.log("in Hotel pref");
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "hotelPreferences";
-		this.attributes['car_action'] == this.event.request.intent.slots.car_action.value;
+		this.attributes['hotel_action'] == this.event.request.intent.slots.hotel_action.value;
 		
 		if (this.attributes['hotel_action']=='add'){
 	    	this.attributes['hotel_name']=this.event.request.intent.slots.hotel_name.value;
