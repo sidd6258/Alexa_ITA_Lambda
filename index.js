@@ -17,6 +17,8 @@
 	 var flight =require('./routes/flightIntent')
 	 var preferenceSuperIntent = require('./routes/preferenceSuperIntent')
 	 var flightPreferenceIntent = require('./routes/flightPreferenceIntent')
+	 var hotelPreferenceIntent = require('./routes/hotelPreferenceIntent')
+	 var carPreferenceIntent = require('./routes/carPreferenceIntent')
 	 
 	 var updatedIntent=null;
 
@@ -44,7 +46,14 @@
 	    	var flightPrefer = flightPreferenceIntent.flightPreference.bind(this);
 	    	flightPrefer();
 	    },
-
+	    'carPreferenceIntent': function(){
+	    	var carPrefer = carPreferenceIntent.carPreference.bind(this);
+	    	carPrefer();
+	    },
+	    'hotelPreferenceIntent': function(){
+	    	var hotelPrefer = hotelPreferenceIntent.hotelPreference.bind(this);
+	    	hotelPrefer();
+	    },
 	    'flightIntent': function () {
 
 	    	//delegate to Alexa to collect all the required slot values

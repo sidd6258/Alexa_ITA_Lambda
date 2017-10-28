@@ -1,19 +1,19 @@
 const request=require('request');
 
-exports.flightPreference = function(){
-	console.log("in Flight pref");
+exports.hotelPreference = function(){
+	console.log("in Hotel pref");
 		var filledSlots = delegateSlotCollection_preference.call(this);
-		this.attributes['state'] = "flightPreferences";
-    	this.attributes['airline_name']=this.event.request.intent.slots.airline_name.value;
-    	this.attributes['airline_days']=this.event.request.intent.slots.airline_days.value;
-    	console.log("flight pref : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+JSON.stringify(this.attributes));
+		this.attributes['state'] = "hotelPreferences";
+    	this.attributes['hotel_name']=this.event.request.intent.slots.hotel_name.value;
+    	this.attributes['hotel_days']=this.event.request.intent.slots.hotel_days.value;
+    	console.log("hotel pref : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+JSON.stringify(this.attributes));
     	//TO DO add mongo update
-    	var speechText="Flight preferences updated. " +
-    			"Do you also want to update Hotel or car preferences, " +
-    			"if yes then say update car prefrences or update hotel preferences.";
-    	var repromptText = "Flight preferences updated. " +
-		"Do you also want to update Hotel or car preferences, " +
-		"if yes then say update car prefrences or update hotel preferences.";
+    	var speechText="Hotel preferences updated. " +
+    			"Do you also want to update Flight or Car preferences, " +
+    			"if yes then say update Flight prefrences or update Car preferences.";
+    	var repromptText = "Hotel preferences updated. " +
+				"Do you also want to update Flight or car preferences, " +
+				"if yes then say update Flight prefrences or update Car preferences.";
     	this.event.request.dialogState = "STARTED";
     	this.attributes['state']="launch";
     	this.emit(":ask",speechText,repromptText);	
