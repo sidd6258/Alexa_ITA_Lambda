@@ -21,6 +21,8 @@ exports.intro = function(){
 
             var profile = JSON.parse(body);
             console.log(profile.name);
+            this.attributes['profile']=profile;
+
             this.emit(':ask', "Hello " + profile.name +", " + welcomeOutput, welcomeReprompt);  
 
         } else {
