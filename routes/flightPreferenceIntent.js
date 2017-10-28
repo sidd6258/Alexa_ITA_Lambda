@@ -35,7 +35,26 @@ exports.flightPreference = function(){
                 console.log("response----->" + JSON.stringify(response));
                 console.log("body----->" + JSON.stringify(body));
                 mongoUser = body;
-                speechText = "Airline name as "+mongoUser.preferences.flight.airline_name+" has updated successfully";
+                var speechText="Flight preferences updated. "
+            		if (!this.attributes['hotel_name'] || !this.attributes['car_name']){
+            			speechText+= "Do you also want to update ";
+            			if(!this.attributes['hotel_name'] && this.attributes['car_name']){
+            				// no hotel
+            				speechText += "hotel preferences, if yes then say update hotel preferences."
+            			}
+            			if(this.attributes['hotel_name'] && !this.attributes['car_name']){
+            				// no car
+            				speechText += "car preferences, if yes then say update car preferences."
+            			}if(!this.attributes['hotel_name'] && !this.attributes['car_name']){
+            				// no hotel and Car
+            				speechText += "Do you also want to update car or hotel preferences, " +
+                			"if yes then say update car prefrences or update hotel preferences.";
+            			}
+            		} else {
+            			// both done
+            			speechText+= "Now Let's plan a trip. What would you like to book? Say book a hotel, book a car or book a flight"
+            		}
+                
                 console.log("speechText------------>"+speechText);
                 this.emit(':tell', speechText);
             }else{
