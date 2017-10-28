@@ -11,11 +11,11 @@ exports.carPreference = function(){
     	this.attributes['car_price']=this.event.request.intent.slots.car_price.value;
     	this.attributes['car_features']=this.event.request.intent.slots.car_features.value;
     	var user=this.attributes['mongo_user'];
-    	user.preferences.car.car_brand=this.attributes['car_brand'];
-    	user.preferences.car.car_rental_company=this.attributes['car_rental_company'];
+    	user.preferences.car.car_brand.push(this.attributes['car_brand']);
+    	user.preferences.car.car_rental_company.push(this.attributes['car_rental_company']);
     	user.preferences.car.car_mileage=this.attributes['car_mileage'];
     	user.preferences.car.car_price=this.attributes['car_price'];
-    	user.preferences.car.car_features=this.attributes['car_features'];
+    	user.preferences.car.car_features.push(this.attributes['car_features']);
     	var url = "http://ainuco.ddns.net:4324/users/"+this.attributes['profile'].email;
     	
     	
