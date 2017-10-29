@@ -10,7 +10,7 @@ exports.carIntent=function(){
 console.log("in car intent")
 
 	    	
-	    	if(this.attributes['state']=="launch" || this.attributes['state']=="flight_booked" || this.attributes['state']=="hotel_booked"){
+	    	if(this.attributes['state']=="flight_booked" || this.attributes['state']=="hotel_booked"){
 	    		
 	    		if(this.attributes['hotel_status'] == "booked"){
 	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
@@ -44,7 +44,9 @@ console.log("in car intent")
 	    			} 
 	        		
 	    		} 
-	    		
+	    	}
+	    	
+	    		if(this.attributes['state']=="launch"){
 	    		var filledSlots = delegateSlotCollection_car.call(this);
 	    		destination_car=this.event.request.intent.slots.destination_car.value;
 	            startdate_car=this.event.request.intent.slots.startdate_car.value;
