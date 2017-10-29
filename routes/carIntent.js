@@ -18,6 +18,7 @@ console.log("in car intent")
 			    		" from "+this.attributes['startdate_hotel']+
 			    		" till "+this.attributes['enddate_hotel']+
 			    		" for "+this.attributes['guests_hotel']+" guests."
+			    		console.log(this.attributes);
 	        			this.emit(':confirmIntent', speechText, repromptText);
 	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
 	    				this.event.request.intent.slots.destination_car.value = this.attributes['destination_hotel'];
@@ -34,6 +35,7 @@ console.log("in car intent")
 			    		" for "+this.attributes['guests_flight']+" guests."
 	    	    		var repromptText = speechText;
 	    	    		
+	    				console.log(this.attributes);
 	    	    		this.emit(':confirmIntent', speechText, repromptText);
 	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
 	    				this.event.request.intent.slots.destination_car.value = this.attributes['destination_flight'];
@@ -81,6 +83,7 @@ console.log("in car intent")
 	                console.log(this.attributes);
 	                this.event.request.dialogState = "STARTED";	
 	                this.attributes['state']='car_confirmation';
+	                console.log(this.attributes);
 	                this.emit(':confirmIntent', speechText, repromptText);
 	            }
 	        	
@@ -117,12 +120,14 @@ console.log("in car intent")
 	    	          	            console.log(this.attributes);
 	    	        	                this.attributes['state']='car_booked';
 	    	        	                this.event.request.dialogState = "STARTED";
+	    	        	                console.log(this.attributes);
 	    	        	                this.emit(':ask', speechText, repromptText);
 	    	        	                }
 	    	                      else
 	    	                      {
 	    	                          speechText = "snippets.ERROR";
 	    	                          repromptText = "snippets.ERROR"; 
+	    	                          console.log(this.attributes);
 	    	                          this.emit(':ask', speechText, repromptText);
 	    	                      }
 	    	                  }.bind(this));
@@ -161,7 +166,8 @@ console.log("in car intent")
 	    	                	          this.event.request.dialogState = "STARTED";	
 	    	                	          console.log(this.attributes);
 	    	                	          console.log("dialog state is "+this.event.request.dialogState);
-	    	                	        //say the results    	    	                	          
+	    	                	        //say the results    	    	    
+	    	                	          console.log(this.attributes);
 	    	                	          this.emit(':elicitSlot','selection', speechText, repromptText,this.event.request.intent);
 	    	                          }
 	    	                      else

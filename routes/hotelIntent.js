@@ -22,6 +22,7 @@ exports.hotel = function(){
 			    		" for "+this.attributes['guests_car']+" guests."
 			    		var repromptText = speechText;
 			    		
+			    		console.log(this.attributes);
 			    		this.emit(':confirmIntent', speechText, repromptText);
 	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
 	    				this.event.request.intent.slots.destination_hotel.value = this.attributes['destination_car'];
@@ -37,6 +38,8 @@ exports.hotel = function(){
 		    			speechText = "do you want to book the hotel in "+this.attributes['destination_flight']+
 		    			" from "+this.attributes['startdate_flight']+
 		    			" for "+this.attributes['guests_flight']+" guests."
+		    			
+		    			console.log(this.attributes);
 		    			this.emit(':confirmIntent', speechText, repromptText);
 	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
 	    				this.event.request.intent.slots.destination_hotel.value = this.attributes['destination_flight'];
@@ -98,6 +101,7 @@ exports.hotel = function(){
 
 // ==========================================say the results ===================================================    
 	    	
+										  console.log(this.attributes);
 			                	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
 	    	                          }
 	    	                      else
@@ -128,6 +132,7 @@ exports.hotel = function(){
 	                console.log(this.attributes['hotelOptions']);
 	                this.event.request.dialogState = "STARTED";	
 	                this.attributes['state']='hotel_confirmation';
+	                console.log(this.attributes);
 	                this.emit(':confirmIntent', speechText, repromptText);
 	            }
 	        	
@@ -167,9 +172,9 @@ exports.hotel = function(){
 	    	      	                	}
 	    	      	                }
 	    	      	                repromptText = speechText;
-	    	      	                console.log(this.attributes);
 	    	        	                this.attributes['state']='hotel_booked';
 	    	        	                this.event.request.dialogState = "STARTED";
+	    	        	                console.log(this.attributes);
 	    	        	                this.emit(':ask', speechText, repromptText);
 	    	        	                }
 	    	                      else

@@ -18,6 +18,7 @@ exports.flight=function(){
 	    		" for "+this.attributes['guests_car']+" guests."
 	    		var repromptText = speechText;
 	    		
+	    		console.log(this.attributes);
 	    		this.emit(':confirmIntent', speechText, repromptText);
 			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
 				this.event.request.intent.slots.destination_flight.value = this.attributes['destination_car'];
@@ -32,6 +33,8 @@ exports.flight=function(){
     			speechText = "do you want to book the flight in "+this.attributes['destination_hotel']+
     			" from "+this.attributes['startdate_hotel']+
     			" for "+this.attributes['guests_hotel']+" guests."
+    			
+    			console.log(this.attributes);
     			this.emit(':confirmIntent', speechText, repromptText);
 			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
 				this.event.request.intent.slots.destination_flight.value = this.attributes['destination_hotel'];
@@ -92,6 +95,7 @@ exports.flight=function(){
 
 //==========================================say the results ===================================================    
 
+							  console.log(this.attributes);
                 	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
                          }
                      else
@@ -122,6 +126,7 @@ exports.flight=function(){
             console.log(this.attributes['flightOptions']);
             this.event.request.dialogState = "STARTED";	
             this.attributes['state']='flight_confirmation';
+            console.log(this.attributes);
             this.emit(':confirmIntent', speechText, repromptText);
         }
     	
@@ -164,9 +169,10 @@ exports.flight=function(){
 	                          	}
 	                          }
 	                          repromptText = speechText;
-	                          console.log(this.attributes);
 	                          this.event.request.dialogState = "STARTED";	
+	                          this.attributes['flight_status'] = 'booked';
 
+	                          console.log(this.attributes);
 	                          this.emit(':ask', speechText, repromptText);
 	        	                }
 	                      else
