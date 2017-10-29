@@ -105,7 +105,7 @@ exports.hotel = function(){
 // ==========================================say the results ===================================================    
 	    	
 										  console.log(this.attributes);
-			                	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
+			                	          this.emit(':elicitSlot','selection', speechText, repromptText,this.event.request.intent);
 	    	                          }
 	    	                      else
 	    	                      {
