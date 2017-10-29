@@ -2,10 +2,9 @@ const request=require('request');
 
 exports.hotelPreference = function(){
 	console.log("in Hotel pref");
-	this.attributes['hotel_action'] == this.event.request.intent.slots.hotel_action.value;
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "hotelPreferences";
-		
+		this.attributes['hotel_action'] == this.event.request.intent.slots.hotel_action.value;
 		
 		if (this.attributes['hotel_action']=='add'){
 	    	this.attributes['hotel_name']=this.event.request.intent.slots.hotel_name.value;
@@ -130,7 +129,7 @@ function delegateSlotCollection_preference(){
 	      //you have defaults, then return Dialog.Delegate with this updated intent
 	      // in the updatedIntent property
 	      console.log("request started: "+ JSON.stringify(this.event.request));
-	      if(this.attributes['car_action']=='view' || this.attributes['car_action']=='delete'  ){
+	      if(this.event.request.intent.slots.hotel_action.value=='view' || this.event.request.intent.slots.hotel_action.value=='delete'){
 	    	  return this.event.request.intent;
 	      }
 	      this.emit(":delegate", updatedIntent);
@@ -138,7 +137,7 @@ function delegateSlotCollection_preference(){
 	      console.log("in not completed");
 	      console.log("request inprogress: "+ JSON.stringify(this.event.request));
 	      
-	      if(this.attributes['hotel_action']=='view' || this.attributes['hotel_action']=='delete'){
+	      if(this.event.request.intent.slots.hotel_action.value=='view' || this.event.request.intent.slots.hotel_action.value=='delete'){
 	    	  return this.event.request.intent;
 	      }
 	      this.emit(":delegate");

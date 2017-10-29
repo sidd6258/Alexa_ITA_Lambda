@@ -3,11 +3,10 @@ const request=require('request');
 exports.carPreference = function(){
 	console.log("in Car pref");
 	console.log(JSON.stringify(this.attributes))
-			this.attributes['car_action'] == this.event.request.intent.slots.car_action.value;
 
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "carPreferences";
-		
+		this.attributes['car_action'] == this.event.request.intent.slots.car_action.value;
 		
 		if (this.attributes['car_action']=='add'){
     	this.attributes['car_brand']=this.event.request.intent.slots.car_brand.value;
@@ -140,7 +139,7 @@ function delegateSlotCollection_preference(){
 	      //you have defaults, then return Dialog.Delegate with this updated intent
 	      // in the updatedIntent property
 	      console.log("request started: "+ JSON.stringify(this.event.request));
-	      if(this.attributes['car_action']=='view' || this.attributes['car_action']=='delete'  ){
+	      if(this.event.request.intent.slots.car_action.value=='view' || this.event.request.intent.slots.car_action.value=='delete'  ){
 	    	  return this.event.request.intent;
 	      }
 	      this.emit(":delegate", updatedIntent);
@@ -148,7 +147,7 @@ function delegateSlotCollection_preference(){
 	      console.log("in not completed");
 	      console.log("request inprogress: "+ JSON.stringify(this.event.request));
 	      console.log(this.event.request.intent.slots.car_action.value);
-	      if(this.attributes['car_action']=='view' || this.attributes['car_action']=='delete'  ){
+	      if(this.event.request.intent.slots.car_action.value=='view' || this.event.request.intent.slots.car_action.value=='delete'  ){
 	    	  return this.event.request.intent;
 	      }
 	      this.emit(":delegate");
