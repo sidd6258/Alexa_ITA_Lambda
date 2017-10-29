@@ -25,7 +25,8 @@ exports.flight=function(){
 	        	this.event.request.intent.slots.startdate_flight.value=this.attributes['startdate_car'];
 	        	this.event.request.intent.slots.guests_flight.value=this.attributes['guests_car'];
 	        	
-	        	this.event.request.intent.confirmationStatus = 'NONE'
+	        	this.event.request.intent.confirmationStatus = 'NONE';
+	        	this.attributes['state']="launch";
 			} 
     		
 		}else if(this.attributes['hotel_status'] == "booked"){
@@ -41,7 +42,8 @@ exports.flight=function(){
 	        	this.event.request.intent.slots.startdate_flight.value=this.attributes['startdate_hotel'];
 	        	this.event.request.intent.slots.guests_flight.value=this.attributes['guests_hotel'];
 	        	
-	        	this.event.request.intent.confirmationStatus = 'NONE'
+	        	this.event.request.intent.confirmationStatus = 'NONE';
+	        	this.attributes['state']="launch";
 			} 
 		}
 	}

@@ -30,7 +30,8 @@ exports.hotel = function(){
 	    	        	this.event.request.intent.slots.enddate_hotel.value=this.attributes['enddate_car'];
 	    	        	this.event.request.intent.slots.guests_hotel.value=this.attributes['guests_car'];
 	    	        	
-	    	        	this.event.request.intent.confirmationStatus = 'NONE'
+	    	        	this.event.request.intent.confirmationStatus = 'NONE';
+	    	        	this.attributes['state']="launch";
 	    			} 
 		    		
 	    		}else if(this.attributes['flight_status'] == "booked"){
@@ -46,7 +47,8 @@ exports.hotel = function(){
 	    	        	this.event.request.intent.slots.startdate_hotel.value=this.attributes['startdate_flight'];
 	    	        	this.event.request.intent.slots.guests_hotel.value=this.attributes['guests_flight'];
 	    	        	
-	    	        	this.event.request.intent.confirmationStatus = 'NONE'
+	    	        	this.event.request.intent.confirmationStatus = 'NONE';
+	    	        	this.attributes['state']="launch";
 	    			} 
 	    		}
 	    	}
