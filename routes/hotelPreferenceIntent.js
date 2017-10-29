@@ -77,7 +77,7 @@ exports.hotelPreference = function(){
 					}
 
 				if(user.preferences.hotel.hotel_location){
-						speechText += 'near '+ user.preferences.hotel.hotel_location+ ". ";
+						speechText += 'preferred location near '+ user.preferences.hotel.hotel_location+ ". ";
 					}
 				
 				if(user.preferences.hotel.hotel_star_rating){

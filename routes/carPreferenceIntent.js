@@ -90,7 +90,7 @@ exports.carPreference = function(){
 				}
 			
 			if(user.preferences.car.car_mileage){
-					speechText += 'Daliy limit, '+ user.preferences.car.car_mileage+ " miles" +". ";
+					speechText += 'Daily limit, '+ user.preferences.car.car_mileage+ " miles" +". ";
 				}
 
 			if(user.preferences.car.car_price){

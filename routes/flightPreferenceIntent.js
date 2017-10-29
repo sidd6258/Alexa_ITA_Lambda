@@ -84,7 +84,7 @@ exports.flightPreference = function(){
 				
 				if(user.preferences.flight.airline_days){
 					speechText += 'preferred travelling days'; 
-					user.preferences.flight.airline_name.forEach(function(element) {
+					user.preferences.flight.airline_days.forEach(function(element) {
 					    speechText+= " , "+element ;
 					});						
 					speechText+= ". ";
