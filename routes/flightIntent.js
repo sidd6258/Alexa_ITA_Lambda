@@ -132,26 +132,47 @@ exports.flight=function(){
             this.attributes['flight_confirmation'] = flight_confirmation; 
             this.attributes['flight_status'] = "booked";
             flight_selection = this.attributes['flight_selection'];
-            this.attributes['state']='flight_booked';
-            speechText = "You booked " + this.attributes['flightOptions'][flight_selection] +". ";
-            if (this.attributes['car_status']!= "booked" || this.attributes['hotel_status']!= "booked"){
-            	speechText += "Do you also want to book a ";
-            	if (this.attributes['car_status']== "booked" && this.attributes['hotel_status']!= "booked"){
-            		speechText += "hotel? Say book a hotel."
-            	}
-            	
-            	if (this.attributes['car_status']!= "booked" && this.attributes['hotel_status']== "booked"){
-            		speechText += "car? Say book a car."
-            	}
-            	if (this.attributes['car_status']!= "booked" && this.attributes['hotel_status']== "booked"){
-            		speechText += "car or a hotel? Say book a car or book a hotel."
-            	}
-            }
-            repromptText = speechText;
-            console.log(this.attributes);
-            this.event.request.dialogState = "STARTED";	
+            console.log("before booking request : ");	
+            myJSONObject={"attributes":this.attributes};
+	        request({
+	               url: "http://ainuco.ddns.net:4324/flightBooking",
+	               method: "POST",
+	               json: true,   // <--Very important!!!
+	               body: myJSONObject
+	                  }, function (error, response, body){
+	                	  console.log("inside request : ");
+	                         // console.log("res"+JSON.stringify(response));
+	                      if (!error && response.statusCode == 200) {
+	      	                
+	                          this.attributes['state']='flight_booked';
+	                          speechText = "You booked " + this.attributes['flightOptions'][flight_selection] +". ";
+	                          if (this.attributes['car_status']!= "booked" || this.attributes['hotel_status']!= "booked"){
+	                          	speechText += "Do you also want to book a ";
+	                          	if (this.attributes['car_status']== "booked" && this.attributes['hotel_status']!= "booked"){
+	                          		speechText += "hotel? Say book a hotel."
+	                          	}
+	                          	
+	                          	if (this.attributes['car_status']!= "booked" && this.attributes['hotel_status']== "booked"){
+	                          		speechText += "car? Say book a car."
+	                          	}
+	                          	if (this.attributes['car_status']!= "booked" && this.attributes['hotel_status']== "booked"){
+	                          		speechText += "car or a hotel? Say book a car or book a hotel."
+	                          	}
+	                          }
+	                          repromptText = speechText;
+	                          console.log(this.attributes);
+	                          this.event.request.dialogState = "STARTED";	
 
-            this.emit(':ask', speechText, repromptText);
+	                          this.emit(':ask', speechText, repromptText);
+	        	                }
+	                      else
+	                      {
+	                          speechText = "snippets.ERROR";
+	                          repromptText = "snippets.ERROR"; 
+	                          this.emit(':ask', speechText, repromptText);
+	                      }
+	                  }.bind(this));
+
         }
 }
 
