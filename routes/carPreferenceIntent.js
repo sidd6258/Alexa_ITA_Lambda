@@ -147,7 +147,7 @@ function delegateSlotCollection_preference(){
 	    } else if (this.event.request.dialogState !== "COMPLETED") {
 	      console.log("in not completed");
 	      console.log("request inprogress: "+ JSON.stringify(this.event.request));
-	      console.log(this.attributes['car_action']);
+	      console.log(this.event.request.intent.slots.car_action.value);
 	      if(this.attributes['car_action']=='view' || this.attributes['car_action']=='delete'  ){
 	    	  return this.event.request.intent;
 	      }
