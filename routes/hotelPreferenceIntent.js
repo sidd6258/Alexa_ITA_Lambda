@@ -4,7 +4,8 @@ exports.hotelPreference = function(){
 	console.log("in Hotel pref");
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "hotelPreferences";
-		this.attributes['hotel_action'] == this.event.request.intent.slots.hotel_action.value;
+		this.attributes['hotel_action'] = this.event.request.intent.slots.hotel_action.value;
+		var user=this.attributes['mongo_user'];
 		
 		if (this.attributes['hotel_action']=='add'){
 	    	this.attributes['hotel_name']=this.event.request.intent.slots.hotel_name.value;
@@ -13,7 +14,7 @@ exports.hotelPreference = function(){
 	    	this.attributes['hotel_price']=this.event.request.intent.slots.hotel_price.value;
 	    	this.attributes['food_cuisine']=this.event.request.intent.slots.food_cuisine.value;
 	    	this.attributes['food_type']=this.event.request.intent.slots.food_type.value;
-	    	var user=this.attributes['mongo_user'];
+
 	    	user.preferences.hotel.hotel_name=this.attributes['hotel_name'];
 	    	user.preferences.hotel.hotel_location=this.attributes['hotel_location'];
 	    	user.preferences.hotel.hotel_star_rating=this.attributes['hotel_star_rating'];
@@ -76,7 +77,7 @@ exports.hotelPreference = function(){
 					}
 
 				if(user.preferences.hotel.hotel_location){
-						speechText += 'near '+ user.preferences.hotel.hotel_location+ ". ";
+						speechText += 'preferred location near '+ user.preferences.hotel.hotel_location+ ". ";
 					}
 				
 				if(user.preferences.hotel.hotel_star_rating){
@@ -129,11 +130,19 @@ function delegateSlotCollection_preference(){
 	      //you have defaults, then return Dialog.Delegate with this updated intent
 	      // in the updatedIntent property
 	      console.log("request started: "+ JSON.stringify(this.event.request));
+	      if(this.event.request.intent.slots.hotel_action.value=='view' || this.event.request.intent.slots.hotel_action.value=='delete'){
+	    	  return this.event.request.intent;
+	      }
 	      this.emit(":delegate", updatedIntent);
 	    } else if (this.event.request.dialogState !== "COMPLETED") {
 	      console.log("in not completed");
 	      console.log("request inprogress: "+ JSON.stringify(this.event.request));
+	      
+	      if(this.event.request.intent.slots.hotel_action.value=='view' || this.event.request.intent.slots.hotel_action.value=='delete'){
+	    	  return this.event.request.intent;
+	      }
 	      this.emit(":delegate");
+	      
 	    } else {
 	      console.log("in completed");
 	      console.log("returning: "+ JSON.stringify(this.response));

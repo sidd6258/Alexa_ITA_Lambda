@@ -11,6 +11,40 @@ console.log("in car intent")
 
 	    	
 	    	if(this.attributes['state']=="launch" || this.attributes['state']=="flight_booked" || this.attributes['state']=="hotel_booked"){
+	    		
+	    		if(this.attributes['hotel_status'] == "booked"){
+	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
+	    				var speechText = "do you want to book the car in "+this.attributes['destination_hotel']+
+			    		" from "+this.attributes['startdate_hotel']+
+			    		" till "+this.attributes['enddate_hotel']+
+			    		" for "+this.attributes['guests_hotel']+" guests."
+	        			this.emit(':confirmIntent', speechText, repromptText);
+	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
+	    				this.event.request.intent.slots.destination_car.value = this.attributes['destination_hotel'];
+	    	        	this.event.request.intent.slots.startdate_car.value=this.attributes['startdate_hotel'];
+	    	        	this.event.request.intent.slots.enddate_car.value=this.attributes['enddate_hotel'];
+	    	        	this.event.request.intent.slots.guests_car.value=this.attributes['guests_hotel'];
+	    	        	
+	    	        	this.event.request.intent.confirmationStatus = 'NONE';
+	    			} 
+	    		}else if(this.attributes['flight_status'] == "booked"){
+	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
+	    				var speechText = "do you want to book the car in "+this.attributes['destination_flight']+
+			    		" from "+this.attributes['startdate_flight']+
+			    		" for "+this.attributes['guests_flight']+" guests."
+	    	    		var repromptText = speechText;
+	    	    		
+	    	    		this.emit(':confirmIntent', speechText, repromptText);
+	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
+	    				this.event.request.intent.slots.destination_car.value = this.attributes['destination_flight'];
+	    	        	this.event.request.intent.slots.startdate_car.value=this.attributes['startdate_flight'];
+	    	        	this.event.request.intent.slots.guests_car.value=this.attributes['guests_flight'];
+	    	        	
+	    	        	this.event.request.intent.confirmationStatus = 'NONE';
+	    			} 
+	        		
+	    		} 
+	    		
 	    		var filledSlots = delegateSlotCollection_car.call(this);
 	    		destination_car=this.event.request.intent.slots.destination_car.value;
 	            startdate_car=this.event.request.intent.slots.startdate_car.value;
@@ -50,15 +84,48 @@ console.log("in car intent")
 	        	
 	        	if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){        		
 	                this.attributes['car_confirmation'] = car_confirmation;   
+	                this.attributes['car_status'] = "booked";
 	                car_selection = this.attributes['car_selection'];
-	                speechText = "You booked " + this.attributes['carOptions'][car_selection] + " " + ". Do you also want to book a flight or a hotel? Say book a flight or book a hotel.";
-	                repromptText ="You booked " + this.attributes['carOptions'][car_selection] + " " + ". Do you also want to book a flight or a hotel? Say book a flight or book a hotel.";
-	                console.log(this.attributes);
-	                this.attributes['state']='car_booked';
-	                this.event.request.dialogState = "STARTED";
-	                this.emit(':ask', speechText, repromptText);
-	            }
-	        	                 
+                    console.log("before booking request : ");	
+                    myJSONObject={"attributes":this.attributes};
+	    	        request({
+	    	               url: "http://ainuco.ddns.net:4324/carBooking",
+	    	               method: "POST",
+	    	               json: true,   // <--Very important!!!
+	    	               body: myJSONObject
+	    	                  }, function (error, response, body){
+	    	                	  console.log("inside request : ");
+	    	                         // console.log("res"+JSON.stringify(response));
+	    	                      if (!error && response.statusCode == 200) {
+	    	          	                speechText = "You booked " + this.attributes['carOptions'][car_selection] +". ";
+	    	          	              if (this.attributes['flight_status']!= "booked" || this.attributes['hotel_status']!= "booked"){
+	    	          	            	speechText += "Do you also want to book a ";
+	    	          	            	if (this.attributes['flight_status']== "booked" && this.attributes['hotel_status']!= "booked"){
+	    	          	            		speechText += "hotel? Say book a hotel."
+	    	          	            	}
+	    	          	            	
+	    	          	            	if (this.attributes['flight_status']!= "booked" && this.attributes['hotel_status']== "booked"){
+	    	          	            		speechText += "flight? Say book a flight."
+	    	          	            	}
+	    	          	            	if (this.attributes['flight_status']!= "booked" && this.attributes['hotel_status']== "booked"){
+	    	          	            		speechText += "flight or a hotel? Say book a flight or book a hotel."
+	    	          	            	}
+	    	          	            }
+	    	          	            repromptText = speechText;
+	    	          	            console.log(this.attributes);
+	    	        	                this.attributes['state']='car_booked';
+	    	        	                this.event.request.dialogState = "STARTED";
+	    	        	                this.emit(':ask', speechText, repromptText);
+	    	        	                }
+	    	                      else
+	    	                      {
+	    	                          speechText = "snippets.ERROR";
+	    	                          repromptText = "snippets.ERROR"; 
+	    	                          this.emit(':ask', speechText, repromptText);
+	    	                      }
+	    	                  }.bind(this));
+
+	            }	        	                 
                 if( this.attributes['state']=='call_api'){
                 	 console.log("option request : "+ JSON.stringify(this.event.request));
     	        	 var myJSONObject={};
@@ -93,7 +160,7 @@ console.log("in car intent")
 	    	                	          console.log(this.attributes);
 	    	                	          console.log("dialog state is "+this.event.request.dialogState);
 	    	                	        //say the results    	    	                	          
-	    	                	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
+	    	                	          this.emit(':elicitSlot','selection', speechText, repromptText,this.event.request.intent);
 	    	                          }
 	    	                      else
 	    	                      {

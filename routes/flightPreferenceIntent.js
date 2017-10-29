@@ -2,9 +2,13 @@ const request=require('request');
 
 exports.flightPreference = function(){
 	console.log("in Flight pref");
-		var filledSlots = delegateSlotCollection_preference.call(this);
+	
+	
+	var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "flightPreferences";
-		this.attributes['flight_action'] == this.event.request.intent.slots.flight_action.value;
+		this.attributes['flight_action'] = this.event.request.intent.slots.flight_action.value;
+		var user=this.attributes['mongo_user'];
+		
 		
 		if (this.attributes['flight_action']=='add'){
 			this.attributes['airline_name']=this.event.request.intent.slots.airline_name.value;
@@ -13,7 +17,7 @@ exports.flightPreference = function(){
 	    	this.attributes['airline_time']=this.event.request.intent.slots.airline_time.value;
 	    	this.attributes['food_cuisine']=this.event.request.intent.slots.food_cuisine.value;
 	    	this.attributes['food_type']=this.event.request.intent.slots.food_type.value;
-	    	var user=this.attributes['mongo_user'];
+
 	    	user.preferences.flight.airline_name=this.attributes['airline_name'];
 	    	user.preferences.flight.airline_days=this.attributes['airline_days'];
 	    	user.preferences.flight.airline_class=this.attributes['airline_class'];
@@ -67,15 +71,8 @@ exports.flightPreference = function(){
 		}
 		 else if(this.attributes['flight_action']=='view'){
 				
-			 user.preferences.flight.airline_name=this.attributes['airline_name'];
-		    	user.preferences.flight.airline_days=this.attributes['airline_days'];
-		    	user.preferences.flight.airline_class=this.attributes['airline_class'];
-		    	user.preferences.flight.airline_time=this.attributes['airline_time'];
-		    	user.preferences.food_cuisine=this.attributes['food_cuisine'];
-		    	user.preferences.food_type=this.attributes['food_type'];
-		    	
-			 
 				var speechText= 'your flight preferences are as follows. '
+					console.log(user);
 					
 				if(user.preferences.flight.airline_name){
 						speechText += 'preferred airline'; 
@@ -87,7 +84,7 @@ exports.flightPreference = function(){
 				
 				if(user.preferences.flight.airline_days){
 					speechText += 'preferred travelling days'; 
-					user.preferences.flight.airline_name.forEach(function(element) {
+					user.preferences.flight.airline_days.forEach(function(element) {
 					    speechText+= " , "+element ;
 					});						
 					speechText+= ". ";
@@ -142,10 +139,16 @@ function delegateSlotCollection_preference(){
 	      //you have defaults, then return Dialog.Delegate with this updated intent
 	      // in the updatedIntent property
 	      console.log("request started: "+ JSON.stringify(this.event.request));
+	      if(this.event.request.intent.slots.flight_action.value=='view' || this.event.request.intent.slots.flight_action.value=='delete'  ){
+	    	  return this.event.request.intent;
+	      }
 	      this.emit(":delegate", updatedIntent);
 	    } else if (this.event.request.dialogState !== "COMPLETED") {
 	      console.log("in not completed");
 	      console.log("request inprogress: "+ JSON.stringify(this.event.request));
+	      if(this.event.request.intent.slots.flight_action.value=='view' || this.event.request.intent.slots.flight_action.value=='delete'  ){
+	    	  return this.event.request.intent;
+	      }
 	      this.emit(":delegate");
 	    } else {
 	      console.log("in completed");

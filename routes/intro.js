@@ -22,8 +22,23 @@ exports.intro = function(){
             var profile = JSON.parse(body);
             console.log(profile.name);
             this.attributes['profile']=profile;
+        	request({
+        		url: "http://ainuco.ddns.net:4324/users/"+this.attributes['profile'].email,
+        		method: "GET",
+        		json: true   // <--Very important!!!
+        	}, function (error, response, body) {
+             if (!error && response.statusCode == 200) {
+                 body = JSON.parse(JSON.stringify(body));
+        			mongoUser = body[0];
+        			console.log(JSON.stringify(body))
+        			this.attributes['mongo_user'] = mongoUser;
 
-            this.emit(':ask', "Hello " + profile.name +", " + welcomeOutput, welcomeReprompt);  
+                    this.emit(':ask', "Hello " + profile.name +", " + welcomeOutput, welcomeReprompt);  
+
+             }
+             
+        	}.bind(this));
+
 
         } else {
 
