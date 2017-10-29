@@ -71,8 +71,6 @@ exports.carPreference = function(){
 	        }.bind(this));
 		} else if(this.attributes['car_action']=='view'){
 			
-			
-			
 			var speechText= 'your car preferences are as follows. '
 				
 			if(user.preferences.car.car_brand){
