@@ -9,7 +9,7 @@ var destination_flight = null;
 	 const request=require('request');
 	 
 exports.flight=function(){
-	if(this.attributes['state']=="launch" || this.attributes['state']=="hotel_booked" || this.attributes['state']=="car_booked"){
+	if(this.attributes['state']=="hotel_booked" || this.attributes['state']=="car_booked"){
 		
 		if(this.attributes['car_status'] == "booked"){
 			if(this.event.request.intent.confirmationStatus == 'NONE'){
@@ -41,6 +41,9 @@ exports.flight=function(){
 	        	this.event.request.intent.confirmationStatus = 'NONE'
 			} 
 		}
+	}
+	
+	if(this.attributes['state']=="launch"){
 		
 		var filledSlots = delegateSlotCollection_flight.call(this);
 		destination_flight=this.event.request.intent.slots.destination_flight.value;

@@ -12,7 +12,7 @@ exports.hotel = function(){
 //delegate to Alexa to collect all the required slot values
 	    	console.log("in hotel intent")
 	    	
-	    	if(this.attributes['state']=="launch" || this.attributes['state']=="flight_booked" || this.attributes['state']=="car_booked"){
+	    	if(this.attributes['state']=="flight_booked" || this.attributes['state']=="car_booked"){
 	    		
 	    		if(this.attributes['car_status'] == "booked"){
 	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
@@ -46,6 +46,9 @@ exports.hotel = function(){
 	    	        	this.event.request.intent.confirmationStatus = 'NONE'
 	    			} 
 	    		}
+	    	}
+	    	
+    		if(this.attributes['state']=="launch"){
 	    		
 	    		var filledSlots = delegateSlotCollection_hotel.call(this);
 
