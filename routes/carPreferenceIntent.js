@@ -7,6 +7,7 @@ exports.carPreference = function(){
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "carPreferences";
 		this.attributes['car_action'] == this.event.request.intent.slots.car_action.value;
+		console.log("this.attributes['car_action']"+this.attributes['car_action'])
 		
 		if (this.attributes['car_action']=='add'){
     	this.attributes['car_brand']=this.event.request.intent.slots.car_brand.value;

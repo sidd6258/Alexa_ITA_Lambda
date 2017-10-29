@@ -7,6 +7,7 @@ exports.flightPreference = function(){
 	var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "flightPreferences";
 		this.attributes['flight_action'] == this.event.request.intent.slots.flight_action.value;
+		console.log("this.attributes['flight_action']"+this.attributes['flight_action'])
 		
 		if (this.attributes['flight_action']=='add'){
 			this.attributes['airline_name']=this.event.request.intent.slots.airline_name.value;
