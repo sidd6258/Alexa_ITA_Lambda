@@ -123,6 +123,7 @@ console.log("in car intent")
 	    	          	            repromptText = speechText;
 	    	          	            console.log(this.attributes);
 	    	        	                this.attributes['state']='car_booked';
+	    	        	                this.attributes['car_status'] = 'booked';
 	    	        	                this.event.request.dialogState = "STARTED";
 	    	        	                console.log(this.attributes);
 	    	        	                this.emit(':ask', speechText, repromptText);

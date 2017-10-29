@@ -176,6 +176,9 @@ exports.hotel = function(){
 	    	      	                }
 	    	      	                repromptText = speechText;
 	    	        	                this.attributes['state']='hotel_booked';
+	    	        	                
+	    	        	                this.attributes['state']='hotel_booked';
+	    	        	                this.attributes['hotel_status']='booked';
 	    	        	                this.event.request.dialogState = "STARTED";
 	    	        	                console.log(this.attributes);
 	    	        	                this.emit(':ask', speechText, repromptText);
