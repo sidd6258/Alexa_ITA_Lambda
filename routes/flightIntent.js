@@ -141,8 +141,7 @@ exports.flight=function(){
 
 
     	if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){        		
-            this.attributes['flight_confirmation'] = flight_confirmation; 
-            this.attributes['flight_status'] = "booked";
+//            this.attributes['flight_confirmation'] = flight_confirmation; 
             flight_selection = this.attributes['flight_selection'];
             console.log("before booking request : ");	
             myJSONObject={"attributes":this.attributes};

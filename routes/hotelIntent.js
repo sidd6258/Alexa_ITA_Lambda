@@ -146,7 +146,7 @@ exports.hotel = function(){
 
 
 	        	if(this.event.request.intent.confirmationStatus == 'CONFIRMED' && this.attributes['state']=='hotel_confirmation'){        		
-	                this.attributes['hotel_confirmation'] = hotel_confirmation;   
+//	                this.attributes['hotel_confirmation'] = hotel_confirmation;   
 	                hotel_selection = this.attributes['hotel_selection'];
                     console.log("before booking request : ");	
                     myJSONObject={"attributes":this.attributes};
