@@ -71,22 +71,14 @@ exports.flightPreference = function(){
 		}
 		 else if(this.attributes['flight_action']=='view'){
 				
-			 user.preferences.flight.airline_name=this.attributes['airline_name'];
-		    	user.preferences.flight.airline_days=this.attributes['airline_days'];
-		    	user.preferences.flight.airline_class=this.attributes['airline_class'];
-		    	user.preferences.flight.airline_time=this.attributes['airline_time'];
-		    	user.preferences.food_cuisine=this.attributes['food_cuisine'];
-		    	user.preferences.food_type=this.attributes['food_type'];
-		    	
-			 
 				var speechText= 'your flight preferences are as follows. '
 					console.log(user.preferences.flight);
 					
 				if(user.preferences.flight.airline_name){
-						speechText += 'preferred airline'+user.preferences.flight.airline_name; 
-//						user.preferences.flight.airline_name.forEach(function(element) {
-//						    speechText+= " , "+element ;
-//						});
+						speechText += 'preferred airline'; 
+						user.preferences.flight.airline_name.forEach(function(element) {
+						    speechText+= " , "+element ;
+						});
 						speechText+= ". ";
 					}
 				
