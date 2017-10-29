@@ -27,7 +27,9 @@ exports.flight=function(){
 	        	
 	        	this.event.request.intent.confirmationStatus = 'NONE';
 	        	var filledSlots = delegateSlotCollection_flight.call(this);
-			} 
+			}  else {
+				var filledSlots = delegateSlotCollection_car.call(this);
+			}
     		
 		}else if(this.attributes['hotel_status'] == "booked"){
 			if(this.event.request.intent.confirmationStatus == 'NONE'){
@@ -45,7 +47,9 @@ exports.flight=function(){
 	        	this.event.request.intent.confirmationStatus = 'NONE';
 	        	
 	        	var filledSlots = delegateSlotCollection_flight.call(this);
-			} 
+			}  else {
+				var filledSlots = delegateSlotCollection_car.call(this);
+			}
 		}
 	}
 	

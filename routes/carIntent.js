@@ -29,7 +29,9 @@ console.log("in car intent")
 	    	        	this.event.request.intent.confirmationStatus = 'NONE';
 	    	        	this.attributes['state']="launch";
 	    	        	var filledSlots = delegateSlotCollection_car.call(this);
-	    			} 
+	    			} else {
+	    				var filledSlots = delegateSlotCollection_car.call(this);
+	    			}
 	    		}else if(this.attributes['flight_status'] == "booked"){
 	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
 	    				var speechText = "do you want to book the car in "+this.attributes['destination_flight']+
@@ -47,7 +49,9 @@ console.log("in car intent")
 	    	        	this.event.request.intent.confirmationStatus = 'NONE';
 	    	        	this.attributes['state']="launch";
 	    	        	var filledSlots = delegateSlotCollection_car.call(this);
-	    			} 
+	    			}  else {
+	    				var filledSlots = delegateSlotCollection_car.call(this);
+	    			}
 	        		
 	    		} 
 	    	}
