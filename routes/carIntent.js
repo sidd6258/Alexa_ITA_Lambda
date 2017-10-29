@@ -107,7 +107,7 @@ console.log("in car intent")
 	    	          	            	if (this.attributes['flight_status']!= "booked" && this.attributes['hotel_status']== "booked"){
 	    	          	            		speechText += "flight? Say book a flight."
 	    	          	            	}
-	    	          	            	if (this.attributes['flight_status']!= "booked" && this.attributes['hotel_status']== "booked"){
+	    	          	            	if (this.attributes['flight_status']!= "booked" && this.attributes['hotel_status']!= "booked"){
 	    	          	            		speechText += "flight or a hotel? Say book a flight or book a hotel."
 	    	          	            	}
 	    	          	            }
