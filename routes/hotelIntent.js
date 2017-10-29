@@ -11,10 +11,10 @@ const request=require('request');
 exports.hotel = function(){
 //delegate to Alexa to collect all the required slot values
 	    	console.log("in hotel intent")
-
+	    	
 	    	if(this.attributes['state']=="launch" || this.attributes['state']=="flight_booked" || this.attributes['state']=="car_booked"){
 	    		
-	    		if(this.attributes['state']=='car_booked'){
+	    		if(this.attributes['car_status'] == "booked"){
 	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
 			    		var speechText = "do you want to book the hotel in "+this.attributes['destination_car']+
 			    		" from "+this.attributes['startdate_car']+
@@ -32,10 +32,19 @@ exports.hotel = function(){
 	    	        	this.event.request.intent.confirmationStatus = 'NONE'
 	    			} 
 		    		
-	    		}else if(this.attributes['state']=='flight_booked'){
-	    			speechText = "do you want to book the hotel in "+this.attributes['destination_flight']+
-	    			" from "+this.attributes['startdate_flight']+
-	    			" for "+this.attributes['guests_flight']+" guests."
+	    		}else if(this.attributes['flight_status'] == "booked"){
+	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
+		    			speechText = "do you want to book the hotel in "+this.attributes['destination_flight']+
+		    			" from "+this.attributes['startdate_flight']+
+		    			" for "+this.attributes['guests_flight']+" guests."
+		    			this.emit(':confirmIntent', speechText, repromptText);
+	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
+	    				this.event.request.intent.slots.destination_hotel.value = this.attributes['destination_flight'];
+	    	        	this.event.request.intent.slots.startdate_hotel.value=this.attributes['startdate_flight'];
+	    	        	this.event.request.intent.slots.guests_hotel.value=this.attributes['guests_flight'];
+	    	        	
+	    	        	this.event.request.intent.confirmationStatus = 'NONE'
+	    			} 
 	    		}
 	    		
 	    		var filledSlots = delegateSlotCollection_hotel.call(this);
@@ -140,9 +149,22 @@ exports.hotel = function(){
 	    	                         // console.log("res"+JSON.stringify(response));
 	    	                      if (!error && response.statusCode == 200) {
 	    	      	                
-	    	      	                speechText = "You booked " + this.attributes['hotelOptions'][hotel_selection] + ". Do you also want to book a car or a flight? Say book a car or book a flight.";
-	    	      	                repromptText ="You booked " + this.attributes['hotelOptions'][hotel_selection] + " . Do you also want to book a car or a flight? Say book a car or book a flight.";
-	    	        	                console.log(this.attributes);
+	    	                    	  speechText = "You booked " + this.attributes['hotelOptions'][hotel_selection] +". ";
+	    	      	                if (this.attributes['car_status']!= "booked" || this.attributes['flight_status']!= "booked"){
+	    	      	                	speechText += "Do you also want to book a ";
+	    	      	                	if (this.attributes['car_status']== "booked" && this.attributes['flight_status']!= "booked"){
+	    	      	                		speechText += "flight? Say book a flight."
+	    	      	                	}
+	    	      	                	
+	    	      	                	if (this.attributes['car_status']!= "booked" && this.attributes['flight_status']== "booked"){
+	    	      	                		speechText += "car? Say book a car."
+	    	      	                	}
+	    	      	                	if (this.attributes['car_status']!= "booked" && this.attributes['flight_status']== "booked"){
+	    	      	                		speechText += "car or a flight? Say book a car or book a flight."
+	    	      	                	}
+	    	      	                }
+	    	      	                repromptText = speechText;
+	    	      	                console.log(this.attributes);
 	    	        	                this.attributes['state']='hotel_booked';
 	    	        	                this.event.request.dialogState = "STARTED";
 	    	        	                this.emit(':ask', speechText, repromptText);
