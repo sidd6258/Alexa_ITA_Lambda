@@ -134,6 +134,7 @@ exports.flight=function(){
             flight_selection = this.attributes['flight_selection'];
             console.log("before booking request : ");	
             myJSONObject={"attributes":this.attributes};
+            console.log("This.Attributes : "+ JSON.stringify(myJSONObject));
 	        request({
 	               url: "http://ainuco.ddns.net:4324/flightBooking",
 	               method: "POST",
