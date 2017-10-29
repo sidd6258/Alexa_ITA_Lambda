@@ -26,7 +26,6 @@ exports.flight=function(){
 	        	this.event.request.intent.slots.guests_flight.value=this.attributes['guests_car'];
 	        	
 	        	this.event.request.intent.confirmationStatus = 'NONE';
-	        	this.attributes['state']="launch";
 	        	var filledSlots = delegateSlotCollection_flight.call(this);
 			} 
     		
@@ -44,7 +43,7 @@ exports.flight=function(){
 	        	this.event.request.intent.slots.guests_flight.value=this.attributes['guests_hotel'];
 	        	
 	        	this.event.request.intent.confirmationStatus = 'NONE';
-	        	this.attributes['state']="launch";
+	        	
 	        	var filledSlots = delegateSlotCollection_flight.call(this);
 			} 
 		}
@@ -207,6 +206,7 @@ function delegateSlotCollection_flight(){
 	    		  && this.event.request.intent.slots.startdate_flight.value!=undefined
 	    		  && this.event.request.intent.slots.origin_flight.value!=undefined
 	    		  && this.event.request.intent.slots.guests_flight.value!=undefined){
+	    	  this.attributes['state']="launch";
 	    	  return this.event.request.intent;
 	      }
 	      this.emit(":delegate");
