@@ -137,27 +137,45 @@ exports.hotel = function(){
 	        	if(this.event.request.intent.confirmationStatus == 'CONFIRMED' && this.attributes['state']=='hotel_confirmation'){        		
 	                this.attributes['hotel_confirmation'] = hotel_confirmation;   
 	                hotel_selection = this.attributes['hotel_selection'];
-	                this.attributes['state']='hotel_booked';
-	                this.attributes['hotel_status']= "booked";
-	                speechText = "You booked " + this.attributes['hotelOptions'][hotel_selection] +". ";
-	                if (this.attributes['car_status']!= "booked" || this.attributes['flight_status']!= "booked"){
-	                	speechText += "Do you also want to book a ";
-	                	if (this.attributes['car_status']== "booked" && this.attributes['flight_status']!= "booked"){
-	                		speechText += "flight? Say book a flight."
-	                	}
-	                	
-	                	if (this.attributes['car_status']!= "booked" && this.attributes['flight_status']== "booked"){
-	                		speechText += "car? Say book a car."
-	                	}
-	                	if (this.attributes['car_status']!= "booked" && this.attributes['flight_status']== "booked"){
-	                		speechText += "car or a flight? Say book a car or book a flight."
-	                	}
-	                }
-	                repromptText = speechText;
-	                console.log(this.attributes);
-	                this.event.request.dialogState = "STARTED";	
-
-	                this.emit(':ask', speechText, repromptText);
+                    console.log("before booking request : ");	
+                    myJSONObject={"attributes":this.attributes};
+	    	        request({
+	    	               url: "http://ainuco.ddns.net:4324/hotelBooking",
+	    	               method: "POST",
+	    	               json: true,   // <--Very important!!!
+	    	               body: myJSONObject
+	    	                  }, function (error, response, body){
+	    	                	  console.log("inside request : ");
+	    	                         // console.log("res"+JSON.stringify(response));
+	    	                      if (!error && response.statusCode == 200) {
+	    	      	                
+	    	                    	  speechText = "You booked " + this.attributes['hotelOptions'][hotel_selection] +". ";
+	    	      	                if (this.attributes['car_status']!= "booked" || this.attributes['flight_status']!= "booked"){
+	    	      	                	speechText += "Do you also want to book a ";
+	    	      	                	if (this.attributes['car_status']== "booked" && this.attributes['flight_status']!= "booked"){
+	    	      	                		speechText += "flight? Say book a flight."
+	    	      	                	}
+	    	      	                	
+	    	      	                	if (this.attributes['car_status']!= "booked" && this.attributes['flight_status']== "booked"){
+	    	      	                		speechText += "car? Say book a car."
+	    	      	                	}
+	    	      	                	if (this.attributes['car_status']!= "booked" && this.attributes['flight_status']== "booked"){
+	    	      	                		speechText += "car or a flight? Say book a car or book a flight."
+	    	      	                	}
+	    	      	                }
+	    	      	                repromptText = speechText;
+	    	      	                console.log(this.attributes);
+	    	        	                this.attributes['state']='hotel_booked';
+	    	        	                this.event.request.dialogState = "STARTED";
+	    	        	                this.emit(':ask', speechText, repromptText);
+	    	        	                }
+	    	                      else
+	    	                      {
+	    	                          speechText = "snippets.ERROR";
+	    	                          repromptText = "snippets.ERROR"; 
+	    	                          this.emit(':ask', speechText, repromptText);
+	    	                      }
+	    	                  }.bind(this));
 	            }
 }
 
