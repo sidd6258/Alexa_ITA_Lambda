@@ -15,6 +15,11 @@
 	 var carIntent = require('./routes/carIntent')
 	 var hotel = require('./routes/hotelIntent')
 	 var flight =require('./routes/flightIntent')
+	 var preferenceSuperIntent = require('./routes/preferenceSuperIntent')
+	 var flightPreferenceIntent = require('./routes/flightPreferenceIntent')
+	 var hotelPreferenceIntent = require('./routes/hotelPreferenceIntent')
+	 var carPreferenceIntent = require('./routes/carPreferenceIntent')
+	 
 	 var updatedIntent=null;
 
 
@@ -33,7 +38,22 @@
 	    	var hotelFunc = hotel.hotel.bind(this);
 	    	hotelFunc();
 	    },
-
+	    'preferenceSuperIntent': function(){
+	    	var prefer = preferenceSuperIntent.preference.bind(this);
+	    	prefer();
+	    },
+	    'flightPreferenceIntent': function(){
+	    	var flightPrefer = flightPreferenceIntent.flightPreference.bind(this);
+	    	flightPrefer();
+	    },
+	    'carPreferenceIntent': function(){
+	    	var carPrefer = carPreferenceIntent.carPreference.bind(this);
+	    	carPrefer();
+	    },
+	    'hotelPreferenceIntent': function(){
+	    	var hotelPrefer = hotelPreferenceIntent.hotelPreference.bind(this);
+	    	hotelPrefer();
+	    },
 	    'flightIntent': function () {
 
 	    	//delegate to Alexa to collect all the required slot values
@@ -65,7 +85,7 @@
 	    'Unhandled': function () {
 	                HelpMessage ="help me"; 
 	                this.emit(':ask', HelpMessage, HelpMessage);
-	            },
+	    },
 	    'SessionEndedRequest': function () {
 	        var speechOutput = "";
 	        this.response.speak(speechOutput);
@@ -81,8 +101,3 @@
 	    alexa.registerHandlers(handlers);
 	    alexa.execute();
 	};
-
-	//    END of Intent Handlers {} ========================================================================================
-	// 3. Helper Function  =================================================================================================
-
-	
