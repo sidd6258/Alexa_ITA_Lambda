@@ -159,7 +159,7 @@ exports.hotel = function(){
 	    	      	                	if (this.attributes['car_status']!= "booked" && this.attributes['flight_status']== "booked"){
 	    	      	                		speechText += "car? Say book a car."
 	    	      	                	}
-	    	      	                	if (this.attributes['car_status']!= "booked" && this.attributes['flight_status']== "booked"){
+	    	      	                	if (this.attributes['car_status']!= "booked" && this.attributes['flight_status']!= "booked"){
 	    	      	                		speechText += "car or a flight? Say book a car or book a flight."
 	    	      	                	}
 	    	      	                }
