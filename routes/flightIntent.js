@@ -115,7 +115,7 @@ exports.flight=function(){
             repromptText ="You are about to book flight " + this.attributes['flightOptions'][flight_selection] + ". Please Confirm.";
             console.log(this.attributes);
 
-            console.log(this.attributes['flightOptions'][hotel_selection]);
+            console.log(this.attributes['flightOptions'][flight_selection]);
             console.log(this.attributes['flightOptions']);
             this.event.request.dialogState = "STARTED";	
             this.attributes['state']='flight_confirmation';
