@@ -32,6 +32,8 @@ exports.intro = function(){
         			mongoUser = body[0];
         			console.log(JSON.stringify(body))
         			this.attributes['mongo_user'] = mongoUser;
+        			if(profile.name=="Siddharth Gupta")
+        				profile.name="Chuutiya";
                     this.emit(':ask', "Hello " + profile.name +", " + welcomeOutput, welcomeReprompt);  
 
              }

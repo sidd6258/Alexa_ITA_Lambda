@@ -13,6 +13,31 @@ exports.hotel = function(){
 	    	console.log("in hotel intent")
 
 	    	if(this.attributes['state']=="launch" || this.attributes['state']=="flight_booked" || this.attributes['state']=="car_booked"){
+	    		
+	    		if(this.attributes['state']=='car_booked'){
+	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
+			    		var speechText = "do you want to book the hotel in "+this.attributes['destination_car']+
+			    		" from "+this.attributes['startdate_car']+
+			    		" till "+this.attributes['enddate_car']+
+			    		" for "+this.attributes['guests_car']+" guests."
+			    		var repromptText = speechText;
+			    		
+			    		this.emit(':confirmIntent', speechText, repromptText);
+	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
+	    				this.event.request.intent.slots.destination_hotel.value = this.attributes['destination_car'];
+	    	        	this.event.request.intent.slots.startdate_hotel.value=this.attributes['startdate_car'];
+	    	        	this.event.request.intent.slots.enddate_hotel.value=this.attributes['enddate_car'];
+	    	        	this.event.request.intent.slots.guests_hotel.value=this.attributes['guests_car'];
+	    	        	
+	    	        	this.event.request.intent.confirmationStatus = 'NONE'
+	    			} 
+		    		
+	    		}else if(this.attributes['state']=='flight_booked'){
+	    			speechText = "do you want to book the hotel in "+this.attributes['destination_flight']+
+	    			" from "+this.attributes['startdate_flight']+
+	    			" for "+this.attributes['guests_flight']+" guests."
+	    		}
+	    		
 	    		var filledSlots = delegateSlotCollection_hotel.call(this);
 
 	    		destination_hotel=this.event.request.intent.slots.destination_hotel.value;
@@ -100,7 +125,7 @@ exports.hotel = function(){
 	   //      	this.attributes['hotel_confirmation'] = hotel_confirmation;
 
 
-	        	if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){        		
+	        	if(this.event.request.intent.confirmationStatus == 'CONFIRMED' && this.attributes['state']=='hotel_confirmation'){        		
 	                this.attributes['hotel_confirmation'] = hotel_confirmation;   
 	                hotel_selection = this.attributes['hotel_selection'];
 	                this.attributes['state']='hotel_booked';
