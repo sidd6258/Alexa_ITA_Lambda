@@ -51,14 +51,33 @@ console.log("in car intent")
 	        	if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){        		
 	                this.attributes['car_confirmation'] = car_confirmation;   
 	                car_selection = this.attributes['car_selection'];
-	                speechText = "You booked " + this.attributes['carOptions'][car_selection] + " " + ". Do you also want to book a flight or a hotel? Say book a flight or book a hotel.";
-	                repromptText ="You booked " + this.attributes['carOptions'][car_selection] + " " + ". Do you also want to book a flight or a hotel? Say book a flight or book a hotel.";
-	                console.log(this.attributes);
-	                this.attributes['state']='car_booked';
-	                this.event.request.dialogState = "STARTED";
-	                this.emit(':ask', speechText, repromptText);
-	            }
-	        	                 
+                    console.log("before booking request : ");	
+                    myJSONObject={"attributes":this.attributes};
+	    	        request({
+	    	               url: "http://ainuco.ddns.net:4324/carBooking",
+	    	               method: "POST",
+	    	               json: true,   // <--Very important!!!
+	    	               body: myJSONObject
+	    	                  }, function (error, response, body){
+	    	                	  console.log("inside request : ");
+	    	                         // console.log("res"+JSON.stringify(response));
+	    	                      if (!error && response.statusCode == 200) {
+	    	          	                speechText = "You booked " + this.attributes['carOptions'][car_selection] + " " + ". Do you also want to book a flight or a hotel? Say book a flight or book a hotel.";
+	    	        	                repromptText ="You booked " + this.attributes['carOptions'][car_selection] + " " + ". Do you also want to book a flight or a hotel? Say book a flight or book a hotel.";
+	    	        	                console.log(this.attributes);
+	    	        	                this.attributes['state']='car_booked';
+	    	        	                this.event.request.dialogState = "STARTED";
+	    	        	                this.emit(':ask', speechText, repromptText);
+	    	        	                }
+	    	                      else
+	    	                      {
+	    	                          speechText = "snippets.ERROR";
+	    	                          repromptText = "snippets.ERROR"; 
+	    	                          this.emit(':ask', speechText, repromptText);
+	    	                      }
+	    	                  }.bind(this));
+
+	            }	        	                 
                 if( this.attributes['state']=='call_api'){
                 	 console.log("option request : "+ JSON.stringify(this.event.request));
     	        	 var myJSONObject={};
