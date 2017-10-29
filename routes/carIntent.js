@@ -27,6 +27,7 @@ console.log("in car intent")
 	    	        	this.event.request.intent.slots.guests_car.value=this.attributes['guests_hotel'];
 	    	        	
 	    	        	this.event.request.intent.confirmationStatus = 'NONE';
+	    	        	this.attributes['state']="launch";
 	    			} 
 	    		}else if(this.attributes['flight_status'] == "booked"){
 	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
@@ -43,6 +44,7 @@ console.log("in car intent")
 	    	        	this.event.request.intent.slots.guests_car.value=this.attributes['guests_flight'];
 	    	        	
 	    	        	this.event.request.intent.confirmationStatus = 'NONE';
+	    	        	this.attributes['state']="launch";
 	    			} 
 	        		
 	    		} 
