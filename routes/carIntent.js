@@ -112,7 +112,7 @@ console.log("in car intent")
 	    	                	          console.log(this.attributes);
 	    	                	          console.log("dialog state is "+this.event.request.dialogState);
 	    	                	        //say the results    	    	                	          
-	    	                	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
+	    	                	          this.emit(':elicitSlot','selection', speechText, repromptText,this.event.request.intent);
 	    	                          }
 	    	                      else
 	    	                      {
