@@ -7,6 +7,7 @@ exports.flightPreference = function(){
 	var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "flightPreferences";
 		this.attributes['flight_action'] = this.event.request.intent.slots.flight_action.value;
+		var user=this.attributes['mongo_user'];
 		
 		if (this.attributes['flight_action']=='add'){
 			this.attributes['airline_name']=this.event.request.intent.slots.airline_name.value;
@@ -15,7 +16,7 @@ exports.flightPreference = function(){
 	    	this.attributes['airline_time']=this.event.request.intent.slots.airline_time.value;
 	    	this.attributes['food_cuisine']=this.event.request.intent.slots.food_cuisine.value;
 	    	this.attributes['food_type']=this.event.request.intent.slots.food_type.value;
-	    	var user=this.attributes['mongo_user'];
+
 	    	user.preferences.flight.airline_name=this.attributes['airline_name'];
 	    	user.preferences.flight.airline_days=this.attributes['airline_days'];
 	    	user.preferences.flight.airline_class=this.attributes['airline_class'];

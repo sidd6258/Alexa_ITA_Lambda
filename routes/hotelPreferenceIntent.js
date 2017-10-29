@@ -5,7 +5,8 @@ exports.hotelPreference = function(){
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "hotelPreferences";
 		this.attributes['hotel_action'] = this.event.request.intent.slots.hotel_action.value;
-
+		var user=this.attributes['mongo_user'];
+		
 		if (this.attributes['hotel_action']=='add'){
 	    	this.attributes['hotel_name']=this.event.request.intent.slots.hotel_name.value;
 	    	this.attributes['hotel_location']=this.event.request.intent.slots.hotel_location.value;
@@ -13,7 +14,7 @@ exports.hotelPreference = function(){
 	    	this.attributes['hotel_price']=this.event.request.intent.slots.hotel_price.value;
 	    	this.attributes['food_cuisine']=this.event.request.intent.slots.food_cuisine.value;
 	    	this.attributes['food_type']=this.event.request.intent.slots.food_type.value;
-	    	var user=this.attributes['mongo_user'];
+
 	    	user.preferences.hotel.hotel_name=this.attributes['hotel_name'];
 	    	user.preferences.hotel.hotel_location=this.attributes['hotel_location'];
 	    	user.preferences.hotel.hotel_star_rating=this.attributes['hotel_star_rating'];
