@@ -72,7 +72,7 @@ exports.flightPreference = function(){
 		 else if(this.attributes['flight_action']=='view'){
 				
 				var speechText= 'your flight preferences are as follows. '
-					console.log(user.preferences.flight);
+					console.log(user);
 					
 				if(user.preferences.flight.airline_name){
 						speechText += 'preferred airline'; 
