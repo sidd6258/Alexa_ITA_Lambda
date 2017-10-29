@@ -77,7 +77,7 @@ exports.carPreference = function(){
 				
 			if(user.preferences.car.car_brand){
 					speechText += 'car brand'; 
-					user.preferences.flight.airline_name.forEach(function(element) {
+					user.preferences.car.car_brand.forEach(function(element) {
 					    speechText+= " , "+element ;
 					});
 					speechText+= ". ";
@@ -85,7 +85,7 @@ exports.carPreference = function(){
 			
 			if(user.preferences.car.car_rental_company){
 					speechText += 'rental company'; 
-					user.preferences.flight.airline_name.forEach(function(element) {
+					user.preferences.car.car_rental_company.forEach(function(element) {
 					    speechText+= " , "+element ;
 					});
 					speechText+= ". ";
@@ -101,7 +101,7 @@ exports.carPreference = function(){
 
 			if(user.preferences.car.car_features){
 					speechText += 'car features'; 
-					user.preferences.flight.airline_name.forEach(function(element) {
+					user.preferences.car.car_features.forEach(function(element) {
 					    speechText+= " , "+element ;
 					});
 					speechText+= ". ";

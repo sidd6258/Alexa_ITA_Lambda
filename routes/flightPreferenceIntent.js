@@ -9,6 +9,7 @@ exports.flightPreference = function(){
 		this.attributes['flight_action'] = this.event.request.intent.slots.flight_action.value;
 		var user=this.attributes['mongo_user'];
 		
+		
 		if (this.attributes['flight_action']=='add'){
 			this.attributes['airline_name']=this.event.request.intent.slots.airline_name.value;
 	    	this.attributes['airline_days']=this.event.request.intent.slots.airline_days.value;
@@ -79,12 +80,13 @@ exports.flightPreference = function(){
 		    	
 			 
 				var speechText= 'your flight preferences are as follows. '
+					console.log(user.preferences.flight);
 					
 				if(user.preferences.flight.airline_name){
-						speechText += 'preferred airline'; 
-						user.preferences.flight.airline_name.forEach(function(element) {
-						    speechText+= " , "+element ;
-						});
+						speechText += 'preferred airline'+user.preferences.flight.airline_name; 
+//						user.preferences.flight.airline_name.forEach(function(element) {
+//						    speechText+= " , "+element ;
+//						});
 						speechText+= ". ";
 					}
 				
