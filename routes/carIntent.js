@@ -28,6 +28,7 @@ console.log("in car intent")
 	    	        	
 	    	        	this.event.request.intent.confirmationStatus = 'NONE';
 	    	        	this.attributes['state']="launch";
+	    	        	var filledSlots = delegateSlotCollection_car.call(this);
 	    			} 
 	    		}else if(this.attributes['flight_status'] == "booked"){
 	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
@@ -45,6 +46,7 @@ console.log("in car intent")
 	    	        	
 	    	        	this.event.request.intent.confirmationStatus = 'NONE';
 	    	        	this.attributes['state']="launch";
+	    	        	var filledSlots = delegateSlotCollection_car.call(this);
 	    			} 
 	        		
 	    		} 
@@ -136,6 +138,14 @@ console.log("in car intent")
 
 	            }	        	                 
                 if( this.attributes['state']=='call_api'){
+    	    		destination_car=this.event.request.intent.slots.destination_car.value;
+    	            startdate_car=this.event.request.intent.slots.startdate_car.value;
+    	            enddate_car=this.event.request.intent.slots.enddate_car.value;
+    	            guests_car=this.event.request.intent.slots.guests_car.value;
+    	            this.attributes['destination_car'] = destination_car;
+    	        	this.attributes['startdate_car'] = startdate_car;
+    	        	this.attributes['enddate_car'] = enddate_car;
+    	        	this.attributes['guests_car'] = guests_car;
                 	 console.log("option request : "+ JSON.stringify(this.event.request));
     	        	 var myJSONObject={};
                      myJSONObject={"destination":this.attributes['destination_car'],
