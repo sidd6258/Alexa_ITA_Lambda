@@ -75,7 +75,8 @@ exports.hotel = function(){
 				var myJSONObject={};
                      myJSONObject={"destination":this.attributes['destination_hotel'],
                              "sdatetime": this.attributes['startdate_hotel'],
-                             "edatetime":this.attributes['enddate_hotel']
+                             "edatetime":this.attributes['enddate_hotel'],
+                             "user":this.attributes['profile'].email
                      };
 				console.log("before request : "+JSON.stringify(myJSONObject));
 
