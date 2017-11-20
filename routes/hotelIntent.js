@@ -81,7 +81,7 @@ exports.hotel = function(){
 				console.log("before request : "+JSON.stringify(myJSONObject));
 
 				request({
-	    	               url: "http://ainuco.ddns.net:4324/htl",
+	    	               url: "http://ainuco.ddns.net:4324/hotel_recom",
 	    	               method: "POST",
 	    	               json: true,   // <--Very important!!!
 	    	               body: myJSONObject
