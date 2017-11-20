@@ -9,6 +9,7 @@ exports.flightPreference = function(){
 		this.attributes['flight_action'] = this.event.request.intent.slots.flight_action.value;
 		var user=this.attributes['mongo_user'];
 		
+		
 		if (this.attributes['flight_action']=='add'){
 			this.attributes['airline_name']=this.event.request.intent.slots.airline_name.value;
 	    	this.attributes['airline_days']=this.event.request.intent.slots.airline_days.value;
@@ -70,15 +71,8 @@ exports.flightPreference = function(){
 		}
 		 else if(this.attributes['flight_action']=='view'){
 				
-			 user.preferences.flight.airline_name=this.attributes['airline_name'];
-		    	user.preferences.flight.airline_days=this.attributes['airline_days'];
-		    	user.preferences.flight.airline_class=this.attributes['airline_class'];
-		    	user.preferences.flight.airline_time=this.attributes['airline_time'];
-		    	user.preferences.food_cuisine=this.attributes['food_cuisine'];
-		    	user.preferences.food_type=this.attributes['food_type'];
-		    	
-			 
 				var speechText= 'your flight preferences are as follows. '
+					console.log(user);
 					
 				if(user.preferences.flight.airline_name){
 						speechText += 'preferred airline'; 
@@ -90,7 +84,7 @@ exports.flightPreference = function(){
 				
 				if(user.preferences.flight.airline_days){
 					speechText += 'preferred travelling days'; 
-					user.preferences.flight.airline_name.forEach(function(element) {
+					user.preferences.flight.airline_days.forEach(function(element) {
 					    speechText+= " , "+element ;
 					});						
 					speechText+= ". ";

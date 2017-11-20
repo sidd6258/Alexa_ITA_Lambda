@@ -71,13 +71,11 @@ exports.carPreference = function(){
 	        }.bind(this));
 		} else if(this.attributes['car_action']=='view'){
 			
-			
-			
 			var speechText= 'your car preferences are as follows. '
 				
 			if(user.preferences.car.car_brand){
 					speechText += 'car brand'; 
-					user.preferences.flight.airline_name.forEach(function(element) {
+					user.preferences.car.car_brand.forEach(function(element) {
 					    speechText+= " , "+element ;
 					});
 					speechText+= ". ";
@@ -85,14 +83,14 @@ exports.carPreference = function(){
 			
 			if(user.preferences.car.car_rental_company){
 					speechText += 'rental company'; 
-					user.preferences.flight.airline_name.forEach(function(element) {
+					user.preferences.car.car_rental_company.forEach(function(element) {
 					    speechText+= " , "+element ;
 					});
 					speechText+= ". ";
 				}
 			
 			if(user.preferences.car.car_mileage){
-					speechText += 'Daliy limit, '+ user.preferences.car.car_mileage+ " miles" +". ";
+					speechText += 'Daily limit, '+ user.preferences.car.car_mileage+ " miles" +". ";
 				}
 
 			if(user.preferences.car.car_price){
@@ -101,7 +99,7 @@ exports.carPreference = function(){
 
 			if(user.preferences.car.car_features){
 					speechText += 'car features'; 
-					user.preferences.flight.airline_name.forEach(function(element) {
+					user.preferences.car.car_features.forEach(function(element) {
 					    speechText+= " , "+element ;
 					});
 					speechText+= ". ";
