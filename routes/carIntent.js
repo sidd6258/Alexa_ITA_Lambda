@@ -10,7 +10,7 @@ exports.carIntent=function(){
 console.log("in car intent")
 
 	    	
-	    	if(this.attributes['state']=="launch" || this.attributes['state']=="flight_booked" || this.attributes['state']=="hotel_booked"){
+	    	if(this.attributes['state']=="flight_booked" || this.attributes['state']=="hotel_booked"){
 	    		
 	    		if(this.attributes['hotel_status'] == "booked"){
 	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
@@ -18,6 +18,7 @@ console.log("in car intent")
 			    		" from "+this.attributes['startdate_hotel']+
 			    		" till "+this.attributes['enddate_hotel']+
 			    		" for "+this.attributes['guests_hotel']+" guests."
+			    		console.log(this.attributes);
 	        			this.emit(':confirmIntent', speechText, repromptText);
 	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
 	    				this.event.request.intent.slots.destination_car.value = this.attributes['destination_hotel'];
@@ -26,7 +27,11 @@ console.log("in car intent")
 	    	        	this.event.request.intent.slots.guests_car.value=this.attributes['guests_hotel'];
 	    	        	
 	    	        	this.event.request.intent.confirmationStatus = 'NONE';
-	    			} 
+	    	        	this.attributes['state']="launch";
+	    	        	var filledSlots = delegateSlotCollection_car.call(this);
+	    			} else {
+	    				var filledSlots = delegateSlotCollection_car.call(this);
+	    			}
 	    		}else if(this.attributes['flight_status'] == "booked"){
 	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
 	    				var speechText = "do you want to book the car in "+this.attributes['destination_flight']+
@@ -34,6 +39,7 @@ console.log("in car intent")
 			    		" for "+this.attributes['guests_flight']+" guests."
 	    	    		var repromptText = speechText;
 	    	    		
+	    				console.log(this.attributes);
 	    	    		this.emit(':confirmIntent', speechText, repromptText);
 	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
 	    				this.event.request.intent.slots.destination_car.value = this.attributes['destination_flight'];
@@ -41,10 +47,16 @@ console.log("in car intent")
 	    	        	this.event.request.intent.slots.guests_car.value=this.attributes['guests_flight'];
 	    	        	
 	    	        	this.event.request.intent.confirmationStatus = 'NONE';
-	    			} 
+	    	        	this.attributes['state']="launch";
+	    	        	var filledSlots = delegateSlotCollection_car.call(this);
+	    			}  else {
+	    				var filledSlots = delegateSlotCollection_car.call(this);
+	    			}
 	        		
 	    		} 
-	    		
+	    	}
+	    	
+	    		if(this.attributes['state']=="launch"){
 	    		var filledSlots = delegateSlotCollection_car.call(this);
 	    		destination_car=this.event.request.intent.slots.destination_car.value;
 	            startdate_car=this.event.request.intent.slots.startdate_car.value;
@@ -79,6 +91,7 @@ console.log("in car intent")
 	                console.log(this.attributes);
 	                this.event.request.dialogState = "STARTED";	
 	                this.attributes['state']='car_confirmation';
+	                console.log(this.attributes);
 	                this.emit(':confirmIntent', speechText, repromptText);
 	            }
 	        	
@@ -114,19 +127,30 @@ console.log("in car intent")
 	    	          	            repromptText = speechText;
 	    	          	            console.log(this.attributes);
 	    	        	                this.attributes['state']='car_booked';
+	    	        	                this.attributes['car_status'] = 'booked';
 	    	        	                this.event.request.dialogState = "STARTED";
+	    	        	                console.log(this.attributes);
 	    	        	                this.emit(':ask', speechText, repromptText);
 	    	        	                }
 	    	                      else
 	    	                      {
 	    	                          speechText = "snippets.ERROR";
 	    	                          repromptText = "snippets.ERROR"; 
+	    	                          console.log(this.attributes);
 	    	                          this.emit(':ask', speechText, repromptText);
 	    	                      }
 	    	                  }.bind(this));
 
 	            }	        	                 
                 if( this.attributes['state']=='call_api'){
+    	    		destination_car=this.event.request.intent.slots.destination_car.value;
+    	            startdate_car=this.event.request.intent.slots.startdate_car.value;
+    	            enddate_car=this.event.request.intent.slots.enddate_car.value;
+    	            guests_car=this.event.request.intent.slots.guests_car.value;
+    	            this.attributes['destination_car'] = destination_car;
+    	        	this.attributes['startdate_car'] = startdate_car;
+    	        	this.attributes['enddate_car'] = enddate_car;
+    	        	this.attributes['guests_car'] = guests_car;
                 	 console.log("option request : "+ JSON.stringify(this.event.request));
     	        	 var myJSONObject={};
                      myJSONObject={"destination":this.attributes['destination_car'],
@@ -159,7 +183,8 @@ console.log("in car intent")
 	    	                	          this.event.request.dialogState = "STARTED";	
 	    	                	          console.log(this.attributes);
 	    	                	          console.log("dialog state is "+this.event.request.dialogState);
-	    	                	        //say the results    	    	                	          
+	    	                	        //say the results    	    	    
+	    	                	          console.log(this.attributes);
 	    	                	          this.emit(':elicitSlot','selection', speechText, repromptText,this.event.request.intent);
 	    	                          }
 	    	                      else

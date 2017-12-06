@@ -9,7 +9,7 @@ var destination_flight = null;
 	 const request=require('request');
 	 
 exports.flight=function(){
-	if(this.attributes['state']=="launch" || this.attributes['state']=="hotel_booked" || this.attributes['state']=="car_booked"){
+	if(this.attributes['state']=="hotel_booked" || this.attributes['state']=="car_booked"){
 		
 		if(this.attributes['car_status'] == "booked"){
 			if(this.event.request.intent.confirmationStatus == 'NONE'){
@@ -18,29 +18,42 @@ exports.flight=function(){
 	    		" for "+this.attributes['guests_car']+" guests."
 	    		var repromptText = speechText;
 	    		
+	    		console.log(this.attributes);
 	    		this.emit(':confirmIntent', speechText, repromptText);
 			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
 				this.event.request.intent.slots.destination_flight.value = this.attributes['destination_car'];
 	        	this.event.request.intent.slots.startdate_flight.value=this.attributes['startdate_car'];
 	        	this.event.request.intent.slots.guests_flight.value=this.attributes['guests_car'];
 	        	
-	        	this.event.request.intent.confirmationStatus = 'NONE'
-			} 
+	        	this.event.request.intent.confirmationStatus = 'NONE';
+	        	var filledSlots = delegateSlotCollection_flight.call(this);
+			}  else {
+				var filledSlots = delegateSlotCollection_flight.call(this);
+			}
     		
 		}else if(this.attributes['hotel_status'] == "booked"){
 			if(this.event.request.intent.confirmationStatus == 'NONE'){
     			speechText = "do you want to book the flight in "+this.attributes['destination_hotel']+
     			" from "+this.attributes['startdate_hotel']+
     			" for "+this.attributes['guests_hotel']+" guests."
+    			
+    			console.log(this.attributes);
     			this.emit(':confirmIntent', speechText, repromptText);
 			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
 				this.event.request.intent.slots.destination_flight.value = this.attributes['destination_hotel'];
 	        	this.event.request.intent.slots.startdate_flight.value=this.attributes['startdate_hotel'];
 	        	this.event.request.intent.slots.guests_flight.value=this.attributes['guests_hotel'];
 	        	
-	        	this.event.request.intent.confirmationStatus = 'NONE'
-			} 
+	        	this.event.request.intent.confirmationStatus = 'NONE';
+	        	
+	        	var filledSlots = delegateSlotCollection_flight.call(this);
+			}  else {
+				var filledSlots = delegateSlotCollection_flight.call(this);
+			}
 		}
+	}
+	
+	if(this.attributes['state']=="launch"){
 		
 		var filledSlots = delegateSlotCollection_flight.call(this);
 		destination_flight=this.event.request.intent.slots.destination_flight.value;
@@ -89,7 +102,8 @@ exports.flight=function(){
 
 //==========================================say the results ===================================================    
 
-                	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
+							  console.log(this.attributes);
+                	          this.emit(':elicitSlot','selection', speechText, repromptText,this.event.request.intent);
                          }
                      else
                      {
@@ -119,6 +133,7 @@ exports.flight=function(){
             console.log(this.attributes['flightOptions']);
             this.event.request.dialogState = "STARTED";	
             this.attributes['state']='flight_confirmation';
+            console.log(this.attributes);
             this.emit(':confirmIntent', speechText, repromptText);
         }
     	
@@ -129,8 +144,7 @@ exports.flight=function(){
 
 
     	if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){        		
-            this.attributes['flight_confirmation'] = flight_confirmation; 
-            this.attributes['flight_status'] = "booked";
+//            this.attributes['flight_confirmation'] = flight_confirmation; 
             flight_selection = this.attributes['flight_selection'];
             console.log("before booking request : ");	
             myJSONObject={"attributes":this.attributes};
@@ -161,9 +175,10 @@ exports.flight=function(){
 	                          	}
 	                          }
 	                          repromptText = speechText;
-	                          console.log(this.attributes);
 	                          this.event.request.dialogState = "STARTED";	
+	                          this.attributes['flight_status'] = 'booked';
 
+	                          console.log(this.attributes);
 	                          this.emit(':ask', speechText, repromptText);
 	        	                }
 	                      else
@@ -195,6 +210,7 @@ function delegateSlotCollection_flight(){
 	    		  && this.event.request.intent.slots.startdate_flight.value!=undefined
 	    		  && this.event.request.intent.slots.origin_flight.value!=undefined
 	    		  && this.event.request.intent.slots.guests_flight.value!=undefined){
+	    	  this.attributes['state']="launch";
 	    	  return this.event.request.intent;
 	      }
 	      this.emit(":delegate");
