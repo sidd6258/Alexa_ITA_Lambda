@@ -152,8 +152,8 @@ exports.hotel = function(){
 //	                this.attributes['hotel_confirmation'] = hotel_confirmation;   
 	                hotel_selection = this.attributes['hotel_selection'];
                     console.log("before booking request : ");	
-                    myJSONObject={"attributes":JSON.stringify(this.attributes)};
-                    console.log("this.attributes : "+this.attributes);	
+                    myJSONObject={"attributes":this.attributes};
+                    console.log("this.attributes new : "+JSON.stringify(this.attributes));	
 	    	        request({
 	    	               url: "http://ainuco.ddns.net:4324/hotelBooking",
 	    	               method: "POST",
