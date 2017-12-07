@@ -101,6 +101,7 @@ console.log("in car intent")
 	                car_selection = this.attributes['car_selection'];
                     console.log("before booking request : ");	
                     myJSONObject={"attributes":this.attributes};
+                    console.log("this.attributes new : "+JSON.stringify(this.attributes));	
 	    	        request({
 	    	               url: "http://ainuco.ddns.net:4324/carBooking",
 	    	               method: "POST",
