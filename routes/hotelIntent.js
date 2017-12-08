@@ -153,6 +153,7 @@ exports.hotel = function(){
 	                hotel_selection = this.attributes['hotel_selection'];
                     console.log("before booking request : ");	
                     myJSONObject={"attributes":this.attributes};
+                    console.log("this.attributes new : "+JSON.stringify(this.attributes));	
 	    	        request({
 	    	               url: "http://ainuco.ddns.net:4324/hotelBooking",
 	    	               method: "POST",
