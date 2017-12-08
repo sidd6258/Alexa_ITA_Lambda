@@ -31,8 +31,10 @@ exports.hotel = function(){
 	    	        	this.event.request.intent.slots.guests_hotel.value=this.attributes['guests_car'];
 	    	        	
 	    	        	this.event.request.intent.confirmationStatus = 'NONE';
-	    	        	this.attributes['state']="launch";
-	    			} 
+	    	        	var filledSlots = delegateSlotCollection_hotel.call(this);
+	    			}  else {
+	    				var filledSlots = delegateSlotCollection_hotel.call(this);
+	    			}
 		    		
 	    		}else if(this.attributes['flight_status'] == "booked"){
 	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
@@ -46,10 +48,11 @@ exports.hotel = function(){
 	    				this.event.request.intent.slots.destination_hotel.value = this.attributes['destination_flight'];
 	    	        	this.event.request.intent.slots.startdate_hotel.value=this.attributes['startdate_flight'];
 	    	        	this.event.request.intent.slots.guests_hotel.value=this.attributes['guests_flight'];
-	    	        	
 	    	        	this.event.request.intent.confirmationStatus = 'NONE';
-	    	        	this.attributes['state']="launch";
-	    			} 
+	    	        	var filledSlots = delegateSlotCollection_hotel.call(this);
+	    			}  else {
+	    				var filledSlots = delegateSlotCollection_hotel.call(this);
+	    			}
 	    		}
 	    	}
 	    	
@@ -72,12 +75,13 @@ exports.hotel = function(){
 				var myJSONObject={};
                      myJSONObject={"destination":this.attributes['destination_hotel'],
                              "sdatetime": this.attributes['startdate_hotel'],
-                             "edatetime":this.attributes['enddate_hotel']
+                             "edatetime":this.attributes['enddate_hotel'],
+                             "user":this.attributes['profile'].email
                      };
 				console.log("before request : "+JSON.stringify(myJSONObject));
 
 				request({
-	    	               url: "http://ainuco.ddns.net:4324/htl",
+	    	               url: "http://ainuco.ddns.net:4324/hotel_recom",
 	    	               method: "POST",
 	    	               json: true,   // <--Very important!!!
 	    	               body: myJSONObject
@@ -104,7 +108,7 @@ exports.hotel = function(){
 // ==========================================say the results ===================================================    
 	    	
 										  console.log(this.attributes);
-			                	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
+			                	          this.emit(':elicitSlot','selection', speechText, repromptText,this.event.request.intent);
 	    	                          }
 	    	                      else
 	    	                      {
@@ -145,10 +149,11 @@ exports.hotel = function(){
 
 
 	        	if(this.event.request.intent.confirmationStatus == 'CONFIRMED' && this.attributes['state']=='hotel_confirmation'){        		
-	                this.attributes['hotel_confirmation'] = hotel_confirmation;   
+//	                this.attributes['hotel_confirmation'] = hotel_confirmation;   
 	                hotel_selection = this.attributes['hotel_selection'];
                     console.log("before booking request : ");	
                     myJSONObject={"attributes":this.attributes};
+                    console.log("this.attributes new : "+JSON.stringify(this.attributes));	
 	    	        request({
 	    	               url: "http://ainuco.ddns.net:4324/hotelBooking",
 	    	               method: "POST",
@@ -175,6 +180,9 @@ exports.hotel = function(){
 	    	      	                }
 	    	      	                repromptText = speechText;
 	    	        	                this.attributes['state']='hotel_booked';
+	    	        	                
+	    	        	                this.attributes['state']='hotel_booked';
+	    	        	                this.attributes['hotel_status']='booked';
 	    	        	                this.event.request.dialogState = "STARTED";
 	    	        	                console.log(this.attributes);
 	    	        	                this.emit(':ask', speechText, repromptText);
@@ -208,6 +216,7 @@ function delegateSlotCollection_hotel(){
     		  && this.event.request.intent.slots.startdate_hotel.value!=undefined
     		  && this.event.request.intent.slots.enddate_hotel.value!=undefined
     		  && this.event.request.intent.slots.guests_hotel.value!=undefined){
+    	  this.attributes['state']="launch";
     	  return this.event.request.intent;
       }
       this.emit(":delegate");

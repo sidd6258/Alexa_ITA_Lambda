@@ -28,7 +28,10 @@ console.log("in car intent")
 	    	        	
 	    	        	this.event.request.intent.confirmationStatus = 'NONE';
 	    	        	this.attributes['state']="launch";
-	    			} 
+	    	        	var filledSlots = delegateSlotCollection_car.call(this);
+	    			} else {
+	    				var filledSlots = delegateSlotCollection_car.call(this);
+	    			}
 	    		}else if(this.attributes['flight_status'] == "booked"){
 	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
 	    				var speechText = "do you want to book the car in "+this.attributes['destination_flight']+
@@ -45,7 +48,10 @@ console.log("in car intent")
 	    	        	
 	    	        	this.event.request.intent.confirmationStatus = 'NONE';
 	    	        	this.attributes['state']="launch";
-	    			} 
+	    	        	var filledSlots = delegateSlotCollection_car.call(this);
+	    			}  else {
+	    				var filledSlots = delegateSlotCollection_car.call(this);
+	    			}
 	        		
 	    		} 
 	    	}
@@ -95,6 +101,7 @@ console.log("in car intent")
 	                car_selection = this.attributes['car_selection'];
                     console.log("before booking request : ");	
                     myJSONObject={"attributes":this.attributes};
+                    console.log("this.attributes new : "+JSON.stringify(this.attributes));	
 	    	        request({
 	    	               url: "http://ainuco.ddns.net:4324/carBooking",
 	    	               method: "POST",
@@ -121,6 +128,7 @@ console.log("in car intent")
 	    	          	            repromptText = speechText;
 	    	          	            console.log(this.attributes);
 	    	        	                this.attributes['state']='car_booked';
+	    	        	                this.attributes['car_status'] = 'booked';
 	    	        	                this.event.request.dialogState = "STARTED";
 	    	        	                console.log(this.attributes);
 	    	        	                this.emit(':ask', speechText, repromptText);
@@ -136,15 +144,23 @@ console.log("in car intent")
 
 	            }	        	                 
                 if( this.attributes['state']=='call_api'){
+    	    		destination_car=this.event.request.intent.slots.destination_car.value;
+    	            startdate_car=this.event.request.intent.slots.startdate_car.value;
+    	            enddate_car=this.event.request.intent.slots.enddate_car.value;
+    	            guests_car=this.event.request.intent.slots.guests_car.value;
+    	            this.attributes['destination_car'] = destination_car;
+    	        	this.attributes['startdate_car'] = startdate_car;
+    	        	this.attributes['enddate_car'] = enddate_car;
+    	        	this.attributes['guests_car'] = guests_car;
                 	 console.log("option request : "+ JSON.stringify(this.event.request));
     	        	 var myJSONObject={};
                      myJSONObject={"destination":this.attributes['destination_car'],
                              "sdatetime": this.attributes['startdate_car'],
-                             "edatetime":this.attributes['enddate_car']
-                     };
+                             "edatetime":this.attributes['enddate_car'],
+                             "user":this.attributes['profile'].email                     };
                      console.log("before request : ");	
 	    	         request({
-	    	               url: "http://ainuco.ddns.net:4324/car",
+	    	               url: "http://ainuco.ddns.net:4324/car_recom",
 	    	               method: "POST",
 	    	               json: true,   // <--Very important!!!
 	    	               body: myJSONObject

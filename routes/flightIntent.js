@@ -26,8 +26,10 @@ exports.flight=function(){
 	        	this.event.request.intent.slots.guests_flight.value=this.attributes['guests_car'];
 	        	
 	        	this.event.request.intent.confirmationStatus = 'NONE';
-	        	this.attributes['state']="launch";
-			} 
+	        	var filledSlots = delegateSlotCollection_flight.call(this);
+			}  else {
+				var filledSlots = delegateSlotCollection_flight.call(this);
+			}
     		
 		}else if(this.attributes['hotel_status'] == "booked"){
 			if(this.event.request.intent.confirmationStatus == 'NONE'){
@@ -43,8 +45,11 @@ exports.flight=function(){
 	        	this.event.request.intent.slots.guests_flight.value=this.attributes['guests_hotel'];
 	        	
 	        	this.event.request.intent.confirmationStatus = 'NONE';
-	        	this.attributes['state']="launch";
-			} 
+	        	
+	        	var filledSlots = delegateSlotCollection_flight.call(this);
+			}  else {
+				var filledSlots = delegateSlotCollection_flight.call(this);
+			}
 		}
 	}
 	
@@ -98,7 +103,7 @@ exports.flight=function(){
 //==========================================say the results ===================================================    
 
 							  console.log(this.attributes);
-                	          this.emit(':elicitSlot','selection', speechText, repromptText,updatedIntent);
+                	          this.emit(':elicitSlot','selection', speechText, repromptText,this.event.request.intent);
                          }
                      else
                      {
@@ -139,8 +144,7 @@ exports.flight=function(){
 
 
     	if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){        		
-            this.attributes['flight_confirmation'] = flight_confirmation; 
-            this.attributes['flight_status'] = "booked";
+//            this.attributes['flight_confirmation'] = flight_confirmation; 
             flight_selection = this.attributes['flight_selection'];
             console.log("before booking request : ");	
             myJSONObject={"attributes":this.attributes};
@@ -206,6 +210,7 @@ function delegateSlotCollection_flight(){
 	    		  && this.event.request.intent.slots.startdate_flight.value!=undefined
 	    		  && this.event.request.intent.slots.origin_flight.value!=undefined
 	    		  && this.event.request.intent.slots.guests_flight.value!=undefined){
+	    	  this.attributes['state']="launch";
 	    	  return this.event.request.intent;
 	      }
 	      this.emit(":delegate");
