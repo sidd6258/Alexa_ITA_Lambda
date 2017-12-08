@@ -157,7 +157,8 @@ console.log("in car intent")
                      myJSONObject={"destination":this.attributes['destination_car'],
                              "sdatetime": this.attributes['startdate_car'],
                              "edatetime":this.attributes['enddate_car'],
-                             "user":this.attributes['profile'].email                     };
+                             "user":this.attributes['profile'].email                  
+                             };
                      console.log("before request : ");	
 	    	         request({
 	    	               url: "http://ainuco.ddns.net:4324/car_recom",
