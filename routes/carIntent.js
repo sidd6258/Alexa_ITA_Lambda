@@ -156,11 +156,11 @@ console.log("in car intent")
     	        	 var myJSONObject={};
                      myJSONObject={"destination":this.attributes['destination_car'],
                              "sdatetime": this.attributes['startdate_car'],
-                             "edatetime":this.attributes['enddate_car']
-                     };
+                             "edatetime":this.attributes['enddate_car'],
+                             "user":this.attributes['profile'].email                     };
                      console.log("before request : ");	
 	    	         request({
-	    	               url: "http://ainuco.ddns.net:4324/car",
+	    	               url: "http://ainuco.ddns.net:4324/car_recom",
 	    	               method: "POST",
 	    	               json: true,   // <--Very important!!!
 	    	               body: myJSONObject
