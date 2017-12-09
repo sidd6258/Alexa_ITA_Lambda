@@ -12,12 +12,12 @@ exports.flight=function(){
 	if(this.attributes['state']=="hotel_booked" || this.attributes['state']=="car_booked"){
 		
 		if(this.attributes['car_status'] == "booked"){
-			if(this.event.request.intent.confirmationStatus == 'NONE'){
+			if(this.event.request.intent.confirmationStatus == 'NONE' && this.attributes['flight_prompted'] == undefined){
 	    		var speechText = "do you want to book the flight to "+this.attributes['destination_car']+
 	    		" on "+this.attributes['startdate_car']+
 	    		" for "+this.attributes['guests_car']+" guests."
 	    		var repromptText = speechText;
-	    		
+	    		this.attributes['flight_prompted'] = 'yes';
 	    		console.log(this.attributes);
 	    		this.emit(':confirmIntent', speechText, repromptText);
 			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
@@ -32,11 +32,11 @@ exports.flight=function(){
 			}
     		
 		}else if(this.attributes['hotel_status'] == "booked"){
-			if(this.event.request.intent.confirmationStatus == 'NONE'){
+			if(this.event.request.intent.confirmationStatus == 'NONE' && this.attributes['flight_prompted'] == undefined){
     			speechText = "do you want to book the flight in "+this.attributes['destination_hotel']+
     			" from "+this.attributes['startdate_hotel']+
     			" for "+this.attributes['guests_hotel']+" guests."
-    			
+    			this.attributes['flight_prompted'] = 'yes';
     			console.log(this.attributes);
     			this.emit(':confirmIntent', speechText, repromptText);
 			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){

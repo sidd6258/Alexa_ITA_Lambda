@@ -13,11 +13,12 @@ console.log("in car intent")
 	    	if(this.attributes['state']=="flight_booked" || this.attributes['state']=="hotel_booked"){
 	    		
 	    		if(this.attributes['hotel_status'] == "booked"){
-	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
+	    			if(this.event.request.intent.confirmationStatus == 'NONE' && this.attributes['car_prompted'] == undefined){
 	    				var speechText = "do you want to book the car in "+this.attributes['destination_hotel']+
 			    		" from "+this.attributes['startdate_hotel']+
 			    		" till "+this.attributes['enddate_hotel']+
 			    		" for "+this.attributes['guests_hotel']+" guests."
+			    		this.attributes['car_prompted'] == 'yes';
 			    		console.log(this.attributes);
 	        			this.emit(':confirmIntent', speechText, repromptText);
 	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
@@ -33,12 +34,12 @@ console.log("in car intent")
 	    				var filledSlots = delegateSlotCollection_car.call(this);
 	    			}
 	    		}else if(this.attributes['flight_status'] == "booked"){
-	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
+	    			if(this.event.request.intent.confirmationStatus == 'NONE' && this.attributes['car_prompted'] == undefined){
 	    				var speechText = "do you want to book the car in "+this.attributes['destination_flight']+
 			    		" from "+this.attributes['startdate_flight']+
 			    		" for "+this.attributes['guests_flight']+" guests."
 	    	    		var repromptText = speechText;
-	    	    		
+	    				this.attributes['car_prompted'] == 'yes';
 	    				console.log(this.attributes);
 	    	    		this.emit(':confirmIntent', speechText, repromptText);
 	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
