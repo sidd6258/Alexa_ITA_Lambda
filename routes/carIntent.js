@@ -18,7 +18,7 @@ console.log("in car intent")
 			    		" from "+this.attributes['startdate_hotel']+
 			    		" till "+this.attributes['enddate_hotel']+
 			    		" for "+this.attributes['guests_hotel']+" guests."
-			    		this.attributes['car_prompted'] == 'yes';
+			    		this.attributes['car_prompted'] = 'yes';
 			    		console.log(this.attributes);
 	        			this.emit(':confirmIntent', speechText, repromptText);
 	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
@@ -39,7 +39,7 @@ console.log("in car intent")
 			    		" from "+this.attributes['startdate_flight']+
 			    		" for "+this.attributes['guests_flight']+" guests."
 	    	    		var repromptText = speechText;
-	    				this.attributes['car_prompted'] == 'yes';
+	    				this.attributes['car_prompted'] = 'yes';
 	    				console.log(this.attributes);
 	    	    		this.emit(':confirmIntent', speechText, repromptText);
 	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
