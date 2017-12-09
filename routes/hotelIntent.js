@@ -15,8 +15,8 @@ exports.hotel = function(){
 	    	
 	    	if(this.attributes['state']=="flight_booked" || this.attributes['state']=="car_booked"){
 	    		
-	    		if(this.attributes['car_status'] == "booked" && this.attributes['hotel_prompted'] == undefined){
-	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
+	    		if(this.attributes['car_status'] == "booked"){
+	    			if(this.event.request.intent.confirmationStatus == 'NONE' && this.attributes['hotel_prompted'] == undefined){
 			    		var speechText = "do you want to book the hotel in "+this.attributes['destination_car']+
 			    		" from "+this.attributes['startdate_car']+
 			    		" till "+this.attributes['enddate_car']+
@@ -37,8 +37,8 @@ exports.hotel = function(){
 	    				var filledSlots = delegateSlotCollection_hotel.call(this);
 	    			}
 		    		
-	    		}else if(this.attributes['flight_status'] == "booked" && this.attributes['hotel_prompted'] == undefined){
-	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
+	    		}else if(this.attributes['flight_status'] == "booked"){
+	    			if(this.event.request.intent.confirmationStatus == 'NONE' && this.attributes['hotel_prompted'] == undefined){
 		    			speechText = "do you want to book the hotel in "+this.attributes['destination_flight']+
 		    			" from "+this.attributes['startdate_flight']+
 		    			" for "+this.attributes['guests_flight']+" guests."
