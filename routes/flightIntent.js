@@ -70,13 +70,14 @@ exports.flight=function(){
     	var myJSONObject={};
         myJSONObject={"destination":this.attributes['destination_flight'],
         		"origin":this.attributes['origin_flight'],
-                "date": this.attributes['startdate_flight']
+                "date": this.attributes['startdate_flight'],
+                "user":this.attributes['profile'].email
               
         };
 	console.log("before request : "+JSON.stringify(myJSONObject));
 
 	request({
-              url: "http://ainuco.ddns.net:4324/flight",
+              url: "http://ainuco.ddns.net:4324/flight_recom",
               method: "POST",
               json: true,   // <--Very important!!!
               body: myJSONObject
