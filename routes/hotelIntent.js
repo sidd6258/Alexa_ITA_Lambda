@@ -11,6 +11,7 @@ const request=require('request');
 exports.hotel = function(){
 //delegate to Alexa to collect all the required slot values
 	    	console.log("in hotel intent")
+	    	console.log("hotel intent status"+this.event.request.intent.confirmationStatus)
 	    	
 	    	if(this.attributes['state']=="flight_booked" || this.attributes['state']=="car_booked"){
 	    		
