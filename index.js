@@ -28,8 +28,8 @@
 	'use strict';
 	const Alexa = require('alexa-sdk');
 	const APP_ID = undefined;  // TODO replace with your app ID (OPTIONAL).
-
-	const handlers = {
+	console.log("Siddharth ji ki jai ho");
+	const handlers = {			
 	    'LaunchRequest': function () {
 	    	var funct1 = intro.intro.bind(this);
 	    	funct1();
@@ -67,18 +67,18 @@
 	    	carFunc();	    	
 	    },
 	    'AMAZON.HelpIntent': function () {
-	        speechOutput = "";
+	        speechOutput = "Help Intent";
 	        reprompt = "";
 	        this.response.speak(speechOutput).listen(reprompt);
 	        this.emit(':responseReady');
 	    },
 	    'AMAZON.CancelIntent': function () {
-	        speechOutput = "";
+	        speechOutput = "Cancel Intent";
 	        this.response.speak(speechOutput);
 	        this.emit(':responseReady');
 	    },
 	    'AMAZON.StopIntent': function () {
-	        speechOutput = "";
+	        speechOutput = "Stop Intent";
 	        this.response.speak(speechOutput);
 	        this.emit(':responseReady');
 	    },
@@ -88,7 +88,7 @@
 	                this.emit(':tell', HelpMessage, HelpMessage);
 	    },
 	    'SessionEndedRequest': function () {
-	        var speechOutput = "";
+	        var speechOutput = "Session End request";
 	        this.response.speak(speechOutput);
 	        this.emit(':responseReady');
 	    },
