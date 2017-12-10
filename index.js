@@ -28,7 +28,7 @@
 	'use strict';
 	const Alexa = require('alexa-sdk');
 	const APP_ID = undefined;  // TODO replace with your app ID (OPTIONAL).
-	console.log(JSON.stringify(this.attributes));
+	console.log("Siddharth ji ki jai ho");
 	const handlers = {			
 	    'LaunchRequest': function () {
 	    	var funct1 = intro.intro.bind(this);
