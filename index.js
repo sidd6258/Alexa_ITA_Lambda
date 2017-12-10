@@ -67,18 +67,18 @@
 	    	carFunc();	    	
 	    },
 	    'AMAZON.HelpIntent': function () {
-	        speechOutput = "";
+	        speechOutput = "Help Intent";
 	        reprompt = "";
 	        this.response.speak(speechOutput).listen(reprompt);
 	        this.emit(':responseReady');
 	    },
 	    'AMAZON.CancelIntent': function () {
-	        speechOutput = "";
+	        speechOutput = "Cancel Intent";
 	        this.response.speak(speechOutput);
 	        this.emit(':responseReady');
 	    },
 	    'AMAZON.StopIntent': function () {
-	        speechOutput = "";
+	        speechOutput = "Stop Intent";
 	        this.response.speak(speechOutput);
 	        this.emit(':responseReady');
 	    },
@@ -87,7 +87,7 @@
 	                this.emit(':ask', HelpMessage, HelpMessage);
 	    },
 	    'SessionEndedRequest': function () {
-	        var speechOutput = "";
+	        var speechOutput = "Session End request";
 	        this.response.speak(speechOutput);
 	        this.emit(':responseReady');
 	    },
