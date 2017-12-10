@@ -83,8 +83,9 @@
 	        this.emit(':responseReady');
 	    },
 	    'Unhandled': function () {
+	    				console.log("unhandled reached");
 	                HelpMessage ="help me"; 
-	                this.emit(':ask', HelpMessage, HelpMessage);
+	                this.emit(':tell', HelpMessage, HelpMessage);
 	    },
 	    'SessionEndedRequest': function () {
 	        var speechOutput = "Session End request";
