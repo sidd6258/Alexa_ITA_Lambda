@@ -11,17 +11,18 @@ const request=require('request');
 exports.hotel = function(){
 //delegate to Alexa to collect all the required slot values
 	    	console.log("in hotel intent")
+	    	console.log("hotel intent status"+this.event.request.intent.confirmationStatus)
 	    	
 	    	if(this.attributes['state']=="flight_booked" || this.attributes['state']=="car_booked"){
 	    		
 	    		if(this.attributes['car_status'] == "booked"){
-	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
+	    			if(this.event.request.intent.confirmationStatus == 'NONE' && this.attributes['hotel_prompted'] == undefined){
 			    		var speechText = "do you want to book the hotel in "+this.attributes['destination_car']+
 			    		" from "+this.attributes['startdate_car']+
 			    		" till "+this.attributes['enddate_car']+
 			    		" for "+this.attributes['guests_car']+" guests."
 			    		var repromptText = speechText;
-			    		
+			    		this.attributes['hotel_prompted'] = "yes";
 			    		console.log(this.attributes);
 			    		this.emit(':confirmIntent', speechText, repromptText);
 	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
@@ -37,11 +38,11 @@ exports.hotel = function(){
 	    			}
 		    		
 	    		}else if(this.attributes['flight_status'] == "booked"){
-	    			if(this.event.request.intent.confirmationStatus == 'NONE'){
+	    			if(this.event.request.intent.confirmationStatus == 'NONE' && this.attributes['hotel_prompted'] == undefined){
 		    			speechText = "do you want to book the hotel in "+this.attributes['destination_flight']+
 		    			" from "+this.attributes['startdate_flight']+
 		    			" for "+this.attributes['guests_flight']+" guests."
-		    			
+		    			this.attributes['hotel_prompted'] = "yes";
 		    			console.log(this.attributes);
 		    			this.emit(':confirmIntent', speechText, repromptText);
 	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
