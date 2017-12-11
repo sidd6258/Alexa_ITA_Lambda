@@ -6,7 +6,7 @@ exports.hotelPreference = function(){
 		this.attributes['state'] = "hotelPreferences";
 		this.attributes['hotel_action'] = this.event.request.intent.slots.hotel_action.value;
 		var user=this.attributes['mongo_user'];
-		
+		console.log("in Hotel pref action" + this.attributes['hotel_action']);
 		if (this.attributes['hotel_action']=='add'){
 	    	this.attributes['hotel_name']=this.event.request.intent.slots.hotel_name.value;
 	    	this.attributes['hotel_location']=this.event.request.intent.slots.hotel_location.value;
@@ -69,7 +69,7 @@ exports.hotelPreference = function(){
 		}
 		 else if(this.attributes['hotel_action']=='show'){
 				
-			 
+			 console.log('show hotel preferences');
 				var speechText= 'your hotel preferences are as follows. '
 					
 				if(user.preferences.hotel.hotel_name){
