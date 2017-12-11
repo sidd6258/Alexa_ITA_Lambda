@@ -32,8 +32,8 @@ exports.intro = function(){
         			mongoUser = body[0];
         			console.log(JSON.stringify(body))
         			this.attributes['mongo_user'] = mongoUser;
-
-                    this.emit(':ask', "Hello " + profile.name +", " + welcomeOutput, welcomeReprompt);  
+        			console.log(JSON.stringify(this));
+                this.emit(':ask', "Hello " + profile.name +", " + welcomeOutput, welcomeReprompt);  
 
              }
              
