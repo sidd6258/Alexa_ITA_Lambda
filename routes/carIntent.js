@@ -235,6 +235,7 @@ function delegateSlotCollection_car(){
 	    } else if (this.event.request.dialogState !== "COMPLETED") {
 	      console.log("in not completed");
 	      console.log("request inprogress: "+ JSON.stringify(this.event.request));
+	      updatedIntent=this.event.request.intent;
 	      if(this.event.request.intent.slots.destination_car.value!=undefined 
 	    		  && this.event.request.intent.slots.startdate_car.value!=undefined
 	    		  && this.event.request.intent.slots.enddate_car.value!=undefined
@@ -242,7 +243,7 @@ function delegateSlotCollection_car(){
 	    	  this.attributes['state']='call_api';
 	    	  return this.event.request.intent;
 	      }
-	      this.emit(":delegate");
+	      this.emit(":delegate", updatedIntent);
 	    } else {
 	      console.log("in completed");
 	      console.log("returning: "+ JSON.stringify(this.response));
