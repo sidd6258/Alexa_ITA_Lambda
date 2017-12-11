@@ -135,7 +135,7 @@ exports.hotel = function(){
 	        		hotel_selection = parseInt(hotel_selection);
 	        		this.attributes['hotel_selection'] = hotel_selection;
 	        		this.attributes['state']="hotel_selected"
-	        	} else if(hotel_selection=='more'){
+	        	} else {
 	        		speechText='';
 	        		if (this.attributes['hotel_set']<6){
 	        			speechText +="the next 2 results are, "+ hotelInfo[this.attributes['hotel_set']]+hotelInfo[this.attributes['hotel_set']+1]+", choose one option or say more options.";
