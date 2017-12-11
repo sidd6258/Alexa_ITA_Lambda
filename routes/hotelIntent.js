@@ -239,6 +239,7 @@ function delegateSlotCollection_hotel(){
     } else if (this.event.request.dialogState !== "COMPLETED") {
       console.log("in not completed");
       console.log("request inprogress: "+ JSON.stringify(this.event.request));
+      updatedIntent=this.event.request.intent;
       if(this.event.request.intent.slots.destination_hotel.value!=undefined 
     		  && this.event.request.intent.slots.startdate_hotel.value!=undefined
     		  && this.event.request.intent.slots.enddate_hotel.value!=undefined
@@ -246,7 +247,7 @@ function delegateSlotCollection_hotel(){
     	  this.attributes['state']="launch";
     	  return this.event.request.intent;
       }
-      this.emit(":delegate");
+      this.emit(":delegate",updatedIntent);
     } else {
       console.log("in completed");
       console.log("returning: "+ JSON.stringify(this.response));
