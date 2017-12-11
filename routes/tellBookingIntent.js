@@ -24,6 +24,7 @@ exports.tellBookingIntent = function(){
                            speechText += body["speechText"]+" , If you want to book new trip say Book a flight, Book a Hotel or Book a Car";
                            speechTextReprompt=speechText;
                            this.attributes['state'] = 'launch';
+                           console.log(speechtext);
              	          this.emit(':ask',speechText, speechTextReprompt);
                        }
                    else
