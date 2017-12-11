@@ -15,6 +15,7 @@
 	 var carIntent = require('./routes/carIntent')
 	 var hotel = require('./routes/hotelIntent')
 	 var flight =require('./routes/flightIntent')
+	 var tellBookingIntent = require("./routes/tellBookingIntent")
 	 var preferenceSuperIntent = require('./routes/preferenceSuperIntent')
 	 var flightPreferenceIntent = require('./routes/flightPreferenceIntent')
 	 var hotelPreferenceIntent = require('./routes/hotelPreferenceIntent')
@@ -65,6 +66,10 @@
 	    'carIntent': function () {
 	    	var carFunc =  carIntent.carIntent.bind(this);
 	    	carFunc();	    	
+	    },
+	    'tellBookingIntent':function () {
+	    	var tellBookingFunc =  tellBookingIntent.tellBookingIntent.bind(this);
+	    	tellBookingFunc();	    	
 	    },
 	    'AMAZON.HelpIntent': function () {
 	        speechOutput = "Help Intent";
