@@ -130,7 +130,7 @@ function delegateSlotCollection_preference(){
 	      //you have defaults, then return Dialog.Delegate with this updated intent
 	      // in the updatedIntent property
 	      console.log("request started: "+ JSON.stringify(this.event.request));
-	      if(this.event.request.intent.slots.hotel_action.value!='add'){
+	      if(this.event.request.intent.slots.hotel_action.value!='add'&&this.event.request.intent.slots.hotel_action.value){
 	    	  return this.event.request.intent;
 	      }
 	      this.emit(":delegate", updatedIntent);
