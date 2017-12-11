@@ -162,7 +162,10 @@ exports.flight=function(){
 		// hotel_confirmation = this.event.request.intent.slots.confirmation.value;
 //      	this.attributes['hotel_confirmation'] = hotel_confirmation;
 
-
+    if(this.event.request.intent.confirmationStatus == 'DENIED' && this.attributes['state']=='flight_confirmation'){        		
+		speechOutput = "Canceling your booking, Please start over. Say book a hotel, book a car, book a flight, go to preferences or show my bookings.To exit say stop.";
+        this.emit(':ask',speechOutput);
+	}
     	if(this.event.request.intent.confirmationStatus == 'CONFIRMED' && this.attributes['state']=='flight_confirmation'){        		
 //            this.attributes['flight_confirmation'] = flight_confirmation; 
             flight_selection = this.attributes['flight_selection'];

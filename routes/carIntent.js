@@ -113,7 +113,10 @@ console.log("in car intent")
 	                console.log(this.attributes);
 	                this.emit(':confirmIntent', speechText, repromptText);
 	            }
-	        	
+	        	if(this.event.request.intent.confirmationStatus == 'DENIED' && this.attributes['state']=='car_confirmation'){        		
+	        		speechOutput = "Canceling your booking, Please start over. Say book a hotel, book a car, book a flight, go to preferences or show my bookings.To exit say stop.";
+	    	        this.emit(':ask',speechOutput);
+	        	}
 	        	if(this.event.request.intent.confirmationStatus == 'CONFIRMED' && this.attributes['state']=='car_confirmation'){        		
 	                this.attributes['car_confirmation'] = car_confirmation;   
 	                this.attributes['car_status'] = "booked";
