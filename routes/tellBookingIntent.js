@@ -17,22 +17,9 @@ exports.tellBookingIntent = function(){
              	  console.log("inside tell booking request : ");
                       // console.log("res"+JSON.stringify(response));
                        if (!error && response.statusCode == 200) {
-                           //console.log("place"+JSON.stringify(body));
-                           var bookingInfo = body.bookings;
-                           speechText += bookingInfo+" , If you want to book new trip say Book a flight, Book a Hotel or Book a Car";
-                          
-                           
-                           var bookingObject=body.bookingObject;
-                           this.attributes['bookingObject']=bookingObject;
-                           
-                           console.log(speechText);
-                           var repromptText = "For instructions on what you can say, please say help me.";	    	                	         	    	                	          
-             	          this.attributes['state']='show_booking_complete';
-             	          this.event.request.dialogState = "STARTED";	
-             	          console.log(this.attributes);
-             	          console.log("dialog state is "+this.event.request.dialogState);
-             	        //say the results    	    	    
-             	          console.log(this.attributes);
+                    	   	  console.log(" show booking body "+JSON.stringify(body));
+                           speechText += body+" , If you want to book new trip say Book a flight, Book a Hotel or Book a Car";
+                           speechTextReprompt=speechText;
              	          this.emit(':ask',speechText, speechTextReprompt);
                        }
                    else
