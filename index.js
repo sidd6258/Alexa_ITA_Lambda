@@ -81,7 +81,7 @@
 	        this.emit(':ask',speechOutput);
 	    },
 	    'AMAZON.StopIntent': function () {
-	        speechOutput = "Thank You for using intelligent travek agent. Have a great day.";
+	        speechOutput = "Thank You for using intelligent travel agent. Have a great day.";
 	        this.emit(':tell',speechOutput);
 	    },
 	    'Unhandled': function () {
