@@ -9,7 +9,7 @@ exports.carPreference = function(){
 		this.attributes['car_action'] = this.event.request.intent.slots.car_action.value;
 		var user=this.attributes['mongo_user'];
 		
-		if (this.attributes['car_action']=='show'){
+		if (this.attributes['car_action']=='add'){
 	    	this.attributes['car_brand']=this.event.request.intent.slots.car_brand.value;
 	    	this.attributes['car_rental_company']=this.event.request.intent.slots.car_rental_company.value;
 	    	this.attributes['car_mileage']=this.event.request.intent.slots.car_mileage.value;
@@ -69,7 +69,7 @@ exports.carPreference = function(){
 	                console.log("error----->" + error);
 				}
 	        }.bind(this));
-		} else if(this.attributes['car_action']=='view'){
+		} else if(this.attributes['car_action']=='show'){
 			
 			var speechText= 'your car preferences are as follows. '
 				

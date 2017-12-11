@@ -7,7 +7,7 @@ exports.hotelPreference = function(){
 		this.attributes['hotel_action'] = this.event.request.intent.slots.hotel_action.value;
 		var user=this.attributes['mongo_user'];
 		
-		if (this.attributes['hotel_action']=='show'){
+		if (this.attributes['hotel_action']=='add'){
 	    	this.attributes['hotel_name']=this.event.request.intent.slots.hotel_name.value;
 	    	this.attributes['hotel_location']=this.event.request.intent.slots.hotel_location.value;
 	    	this.attributes['hotel_star_rating']=this.event.request.intent.slots.hotel_star_rating.value;
@@ -67,7 +67,7 @@ exports.hotelPreference = function(){
 				}
 	        }.bind(this));
 		}
-		 else if(this.attributes['hotel_action']=='view'){
+		 else if(this.attributes['hotel_action']=='show'){
 				
 			 
 				var speechText= 'your hotel preferences are as follows. '

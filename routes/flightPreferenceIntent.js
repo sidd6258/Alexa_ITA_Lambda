@@ -10,7 +10,7 @@ exports.flightPreference = function(){
 		var user=this.attributes['mongo_user'];
 		
 		
-		if (this.attributes['flight_action']=='show'){
+		if (this.attributes['flight_action']=='add'){
 			this.attributes['airline_name']=this.event.request.intent.slots.airline_name.value;
 	    	this.attributes['airline_days']=this.event.request.intent.slots.airline_days.value;
 	    	this.attributes['airline_class']=this.event.request.intent.slots.airline_class.value;
@@ -69,7 +69,7 @@ exports.flightPreference = function(){
 				}
 	        }.bind(this));
 		}
-		 else if(this.attributes['flight_action']=='view'){
+		 else if(this.attributes['flight_action']=='show'){
 				
 				var speechText= 'your flight preferences are as follows. '
 					console.log(user);
