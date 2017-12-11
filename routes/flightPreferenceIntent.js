@@ -139,14 +139,14 @@ function delegateSlotCollection_preference(){
 	      //you have defaults, then return Dialog.Delegate with this updated intent
 	      // in the updatedIntent property
 	      console.log("request started: "+ JSON.stringify(this.event.request));
-	      if(this.event.request.intent.slots.flight_action.value=='view' || this.event.request.intent.slots.flight_action.value=='delete'  ){
+	      if(this.event.request.intent.slots.flight_action.value=='show' || this.event.request.intent.slots.flight_action.value=='delete'  ){
 	    	  return this.event.request.intent;
 	      }
 	      this.emit(":delegate", updatedIntent);
 	    } else if (this.event.request.dialogState !== "COMPLETED") {
 	      console.log("in not completed");
 	      console.log("request inprogress: "+ JSON.stringify(this.event.request));
-	      if(this.event.request.intent.slots.flight_action.value=='view' || this.event.request.intent.slots.flight_action.value=='delete'  ){
+	      if(this.event.request.intent.slots.flight_action.value=='show' || this.event.request.intent.slots.flight_action.value=='delete'  ){
 	    	  return this.event.request.intent;
 	      }
 	      this.emit(":delegate");
