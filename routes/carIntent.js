@@ -75,9 +75,26 @@ console.log("in car intent")
 
 	        //Now let's recap the trip
 	        if(this.attributes['state']=="car_selection"){
-	        	car_selection = this.event.request.intent.slots.selection.value;
-	        	this.attributes['car_selection_state'] = car_selection;
 	        	console.log('car option selection is '+car_selection);
+	        	car_selection = this.event.request.intent.slots.selection.value;
+	        	
+	        	if(car_selection=='1'||car_selection=='2'||car_selection=='3'||car_selection=='4'||car_selection=='5'||car_selection=='6'){
+	        		car_selection = parseInt(car_selection);
+	        		this.attributes['car_selection'] = car_selection;
+	        		this.attributes['state']="car_selected"
+	        	} else {
+	        		speechText='';
+	        		if (this.attributes['car_set']<6){
+	        			speechText +="the next 2 results are, "+ this.attributes['carInfo'][this.attributes['car_set']]+this.attributes['carInfo'][this.attributes['car_set']+1]+", choose one option or say more options.";
+	        			this.attributes['car_set']=this.attributes['car_set']+2;
+	        		} else{
+	        			speechText += "End of available options. Please select one from 1 to 6 or start over."
+	        		}
+	        		repromptText = speechText;
+	        		console.log(speechText);
+	        		this.emit(':elicitSlot','selection', speechText, repromptText,this.event.request.intent);
+                    	        		
+	        	}
 	        }
 	        
 //	        car_confirmation = this.event.request.intent.slots.confirmation.value;
@@ -85,7 +102,7 @@ console.log("in car intent")
 //	        this.attributes['car_confirmation_state'] = car_confirmation;
 	        	
 	        	
-	        	if(car_selection != null && this.attributes['state']=="car_selection"){               
+	        	if(car_selection != null && this.attributes['state']=="car_selected"){               
 	                this.attributes['car_selection'] = car_selection;             
 	                speechText = "You are about to book car " + this.attributes['carOptions'][car_selection] + " " + ".Please Confirm.";
 	                repromptText ="You are about to book car " + this.attributes['carOptions'][car_selection] + " " + ".Please Confirm.";
@@ -171,18 +188,20 @@ console.log("in car intent")
 	    	                         // console.log("res"+JSON.stringify(response));
 	    	                          if (!error && response.statusCode == 200) {
 	    	                              //console.log("place"+JSON.stringify(body));
-	    	                              var carinfo = body.cars;
+	    	                              var carInfo = body.cars;
 	    	                             // console.log("car object is "+carinfo);
 	    	                              var speechText = "";
-	    	                              speechText += carinfo+", choose one option";
+	    	                              speechText +="the top 2 results are, "+ carInfo[1]+carInfo[2]+", choose one option or say more options.";
 	    	                              carOptions = body.carOptions;	 
 	    	                              
+	    	                              this.attributes['car_set']=3;
 	    	                              var carObject=body.carObject;
 	    	                              this.attributes['carObject']=carObject;
 	    	                              this.attributes['carOptions']=carOptions;
+	    	                              this.attributes['carInfo']=carInfo;
 	    	                              console.log(speechText);
-	    	                              var repromptText = "For instructions on what you can say, please say help me.";	    	                	         	    	                	          
-	    	                	          this.attributes['state']='car_selection';
+	    	                              var repromptText = "choose one option or say more options.";	    	                	         
+	    	                              this.attributes['state']='car_selection';
 	    	                	          this.event.request.dialogState = "STARTED";	
 	    	                	          console.log(this.attributes);
 	    	                	          console.log("dialog state is "+this.event.request.dialogState);
