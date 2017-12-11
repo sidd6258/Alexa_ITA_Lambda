@@ -4,10 +4,10 @@ exports.hotelPreference = function(){
 	console.log("in Hotel pref");
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "hotelPreferences";
-		this.attributes['hotel_action'] = this.event.request.intent.slots.hotel_action.resolutions.resolutionsPerAuthority.values.value.name;
+		this.attributes['hotel_action'] = this.event.request.intent.slots.hotel_action.value;
 		var user=this.attributes['mongo_user'];
 		
-		if (this.attributes['hotel_action']=='add'){
+		if (this.attributes['hotel_action']=='show'){
 	    	this.attributes['hotel_name']=this.event.request.intent.slots.hotel_name.value;
 	    	this.attributes['hotel_location']=this.event.request.intent.slots.hotel_location.value;
 	    	this.attributes['hotel_star_rating']=this.event.request.intent.slots.hotel_star_rating.value;

@@ -6,11 +6,11 @@ exports.flightPreference = function(){
 	
 	var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "flightPreferences";
-		this.attributes['flight_action'] = this.event.request.intent.slots.flight_action.resolutions.resolutionsPerAuthority.values.value.name;
+		this.attributes['flight_action'] = this.event.request.intent.slots.flight_action.value;
 		var user=this.attributes['mongo_user'];
 		
 		
-		if (this.attributes['flight_action']=='add'){
+		if (this.attributes['flight_action']=='show'){
 			this.attributes['airline_name']=this.event.request.intent.slots.airline_name.value;
 	    	this.attributes['airline_days']=this.event.request.intent.slots.airline_days.value;
 	    	this.attributes['airline_class']=this.event.request.intent.slots.airline_class.value;

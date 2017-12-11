@@ -6,10 +6,10 @@ exports.carPreference = function(){
 
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "carPreferences";
-		this.attributes['car_action'] = this.event.request.intent.slots.car_action.resolutions.resolutionsPerAuthority.values.value.name;
+		this.attributes['car_action'] = this.event.request.intent.slots.car_action.value;
 		var user=this.attributes['mongo_user'];
 		
-		if (this.attributes['car_action']=='add'){
+		if (this.attributes['car_action']=='show'){
 	    	this.attributes['car_brand']=this.event.request.intent.slots.car_brand.value;
 	    	this.attributes['car_rental_company']=this.event.request.intent.slots.car_rental_company.value;
 	    	this.attributes['car_mileage']=this.event.request.intent.slots.car_mileage.value;
