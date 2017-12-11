@@ -17,7 +17,7 @@ exports.tellBookingIntent = function(){
              	  console.log("inside tell booking request : ");
                       // console.log("res"+JSON.stringify(response));
                        if (!error && response.statusCode == 200) {
-                    	   	  console.log(" show booking body "+JSON.stringify(body));
+                    	   	  console.log(" show booking body "+body);
                            speechText += body+" , If you want to book new trip say Book a flight, Book a Hotel or Book a Car";
                            speechTextReprompt=speechText;
              	          this.emit(':ask',speechText, speechTextReprompt);
