@@ -1,6 +1,6 @@
 const request=require('request');
-const speechText = "";
-const speechTextReprompt = "";
+var speechText = "";
+var speechTextReprompt = "";
 var profile={};
 
 exports.tellBookingIntent = function(){
