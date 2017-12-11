@@ -68,8 +68,17 @@ exports.flightPreference = function(){
 	                console.log("error----->" + error);
 				}
 	        }.bind(this));
+		}else if (this.attributes['flight_action']=='delete'){
+			
+			var speechText ="We only allow you to add or listen preferences on the go, for more advanced features, log on to our website you just recieved on your Alexa companion app";
+			var repromptText = speechText;
+			var cardTitle = 'Travel agent website';
+			var cardContent = "Hello " + this.attributes['profile'].name +' to edit your preferences. Go to our website on ainuco.ddns .net:4324';
+			
+			this.emit(':askWithCard', speechText, repromptText, cardTitle, cardContent);
+			
 		}
-		 else if(this.attributes['flight_action']=='show'){
+		 else {
 				
 				var speechText= 'your flight preferences are as follows. '
 					console.log(user);
@@ -117,15 +126,6 @@ exports.flightPreference = function(){
 				
 				this.emit(":ask",speechText,repromptText);
 				
-			} else if (this.attributes['flight_action']=='delete'){
-				
-				var speechText ="We only allow you to add or listen preferences on the go, for more advanced features, log on to our website you just recieved on your Alexa companion app";
-				var repromptText = speechText;
-				var cardTitle = 'Travel agent website';
-				var cardContent = "Hello " + this.attributes['profile'].name +' to edit your preferences. Go to our website on ainuco.ddns .net:4324';
-				
-				this.emit(':askWithCard', speechText, repromptText, cardTitle, cardContent);
-				
 			}
 }
 
@@ -139,14 +139,14 @@ function delegateSlotCollection_preference(){
 	      //you have defaults, then return Dialog.Delegate with this updated intent
 	      // in the updatedIntent property
 	      console.log("request started: "+ JSON.stringify(this.event.request));
-	      if(this.event.request.intent.slots.flight_action.value=='show' || this.event.request.intent.slots.flight_action.value=='delete'  ){
+	      if(this.event.request.intent.slots.flight_action.value!='add' && this.event.request.intent.slots.flight_action.value){
 	    	  return this.event.request.intent;
 	      }
 	      this.emit(":delegate", updatedIntent);
 	    } else if (this.event.request.dialogState !== "COMPLETED") {
 	      console.log("in not completed");
 	      console.log("request inprogress: "+ JSON.stringify(this.event.request));
-	      if(this.event.request.intent.slots.flight_action.value=='show' || this.event.request.intent.slots.flight_action.value=='delete'  ){
+	      if(this.event.request.intent.slots.flight_action.value!='add' && this.event.request.intent.slots.flight_action.value){
 	    	  return this.event.request.intent;
 	      }
 	      this.emit(":delegate");

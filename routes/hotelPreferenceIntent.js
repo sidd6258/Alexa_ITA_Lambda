@@ -138,7 +138,7 @@ function delegateSlotCollection_preference(){
 	      console.log("in not completed");
 	      console.log("request inprogress: "+ JSON.stringify(this.event.request));
 	      
-	      if(this.event.request.intent.slots.hotel_action.value!='add'){
+	      if(this.event.request.intent.slots.hotel_action.value!='add'&&this.event.request.intent.slots.hotel_action.value){
 	    	  return this.event.request.intent;
 	      }
 	      this.emit(":delegate");
