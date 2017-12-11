@@ -16,7 +16,7 @@ exports.carPreference = function(){
 	    	this.attributes['car_price']=this.event.request.intent.slots.car_price.value;
 	    	this.attributes['car_features']=this.event.request.intent.slots.car_features.value;
 	    	
-	    	user.preferences.car.car_brand.push(this.attributes['car_brand']);
+	    	user.preferences.car.car_model.push(this.attributes['car_brand']);
 	    	user.preferences.car.car_rental_company.push(this.attributes['car_rental_company']);
 	    	user.preferences.car.car_mileage=this.attributes['car_mileage'];
 	    	user.preferences.car.car_price=this.attributes['car_price'];
@@ -69,13 +69,24 @@ exports.carPreference = function(){
 	                console.log("error----->" + error);
 				}
 	        }.bind(this));
-		} else if(this.attributes['car_action']=='show'){
+		}  else if (this.attributes['car_action']=='delete'){
+			
+			var speechText ="We only allow you to add or listen preferences on the go, for more advanced features, log on to our website you just recieved on your Alexa companion app";
+			var repromptText = speechText;
+			var cardTitle = 'Travel agent website';
+			var cardContent = "Hello " + this.attributes['profile'].name +' to edit your preferences. Go to our website on ainuco.ddns .net:4324';
+			this.attributes['state']="launch";
+
+			this.emit(':askWithCard', speechText, repromptText, cardTitle, cardContent);
+			
+			
+		}else {
 			
 			var speechText= 'your car preferences are as follows. '
 				
-			if(user.preferences.car.car_brand){
+			if(user.preferences.car.car_model){
 					speechText += 'car brand'; 
-					user.preferences.car.car_brand.forEach(function(element) {
+					user.preferences.car.car_model.forEach(function(element) {
 					    speechText+= " , "+element ;
 					});
 					speechText+= ". ";
@@ -105,22 +116,12 @@ exports.carPreference = function(){
 					speechText+= ". ";
 				}
 			
-			speechText +="to view more preferences, say view Hotel or Flight preferences, Or start booking by saying book a flight, car or hotel";
+			speechText +="to view more preferences, say show Hotel or Flight preferences, Or start booking by saying book a flight, car or hotel";
 			
 			var repromptText = "to view Hotel or Flight preferences, " +
-                			"say view Hotel prefrences or view Flight preferences.  Or start booking by saying book a flight, car or hotel.";
-			
+                			"say show Hotel prefrences or show Flight preferences.  Or start booking by saying book a flight, car or hotel.";
+			this.attributes['state']="launch";
 			this.emit(":ask",speechText,repromptText);
-			
-		} else if (this.attributes['car_action']=='delete'){
-			
-			var speechText ="We only allow you to add or listen preferences on the go, for more advanced features, log on to our website you just recieved on your Alexa companion app";
-			var repromptText = speechText;
-			var cardTitle = 'Travel agent website';
-			var cardContent = "Hello " + this.attributes['profile'].name +' to edit your preferences. Go to our website on ainuco.ddns .net:4324';
-			
-			this.emit(':askWithCard', speechText, repromptText, cardTitle, cardContent);
-			
 			
 		}
     	

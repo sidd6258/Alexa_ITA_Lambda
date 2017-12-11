@@ -59,7 +59,8 @@ exports.hotelPreference = function(){
 	
 	            			
 	            	var repromptText = speechText;
-	                
+	    			this.attributes['state']="launch";
+
 	                
 	                this.emit(':tell', speechText);
 	            }else{
@@ -72,7 +73,8 @@ exports.hotelPreference = function(){
 			var repromptText = speechText;
 			var cardTitle = 'Travel agent website';
 			var cardContent = "Hello " + this.attributes['profile'].name +' to edit your preferences. Go to our website on ainuco.ddns .net:4324';
-			
+			this.attributes['state']="launch";
+
 			this.emit(':askWithCard', speechText, repromptText, cardTitle, cardContent);
 			
 			
@@ -110,11 +112,12 @@ exports.hotelPreference = function(){
 					speechText += 'and you like to eat '+user.preferences.food_type+ ". ";
 					}
 				
-				speechText +="to view more preferences, say view car or Flight preferences, Or start booking by saying book a flight, car or hotel";
+				speechText +="to view more preferences, say show car or Flight preferences, Or start booking by saying book a flight, car or hotel";
 				
 				var repromptText = "to view car or Flight preferences, " +
-	                			"say view car prefrences or view Flight preferences.  Or start booking by saying book a flight, car or hotel.";
-				
+	                			"say show car prefrences or show Flight preferences.  Or start booking by saying book a flight, car or hotel.";
+				this.attributes['state']="launch";
+
 				this.emit(":ask",speechText,repromptText);
 				
 			} 

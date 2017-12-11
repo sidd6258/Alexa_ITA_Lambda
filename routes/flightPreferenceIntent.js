@@ -63,6 +63,7 @@ exports.flightPreference = function(){
 	            		}
 	                
 	                console.log("speechText------------>"+speechText);
+	    			this.attributes['state']="launch";
 	                this.emit(':tell', speechText);
 	            }else{
 	                console.log("error----->" + error);
@@ -74,7 +75,8 @@ exports.flightPreference = function(){
 			var repromptText = speechText;
 			var cardTitle = 'Travel agent website';
 			var cardContent = "Hello " + this.attributes['profile'].name +' to edit your preferences. Go to our website on ainuco.ddns .net:4324';
-			
+			this.attributes['state']="launch";
+
 			this.emit(':askWithCard', speechText, repromptText, cardTitle, cardContent);
 			
 		}
@@ -119,11 +121,11 @@ exports.flightPreference = function(){
 					speechText += 'and you like to eat, '+user.preferences.food_type+ ". ";
 					}
 				
-				speechText +="to view more preferences, say view car or hotel preferences, Or start booking by saying book a flight, car or hotel";
+				speechText +="to view more preferences, say show car or hotel preferences, Or start booking by saying book a flight, car or hotel";
 				
 				var repromptText = "to view car or hotel preferences, " +
-	                			"say view car prefrences or view hotel preferences.  Or start booking by saying book a flight, car or hotel.";
-				
+	                			"say show car prefrences or show hotel preferences.  Or start booking by saying book a flight, car or hotel.";
+				this.attributes['state']="launch";
 				this.emit(":ask",speechText,repromptText);
 				
 			}
