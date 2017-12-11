@@ -22,14 +22,13 @@ exports.tellBookingIntent = function(){
                     	   	  console.log(" show booking body "+ body);
                            speechText += body["speechText"]+" , If you want to book new trip say Book a flight, Book a Hotel or Book a Car";
                            speechTextReprompt=speechText;
-                           this.event.request.dialogState = "STARTED";
+                           this.attributes['state'] = 'launch';
              	          this.emit(':ask',speechText, speechTextReprompt);
                        }
                    else
                    {
                        speechText = "snippets.ERROR";
                        repromptText = "snippets.ERROR"; 
-                       this.event.request.dialogState = "STARTED";
                        this.emit(':ask', speechText, repromptText);
                    }
                }.bind(this));
