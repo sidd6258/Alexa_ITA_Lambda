@@ -43,7 +43,7 @@ console.log("in car intent")
 	    				console.log(this.attributes);
 	    	    		this.emit(':confirmIntent', speechText, repromptText);
 	    			} else if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){
-	    				this.event.request.intent.slots.destination_car.value = this.attributes['destination_flight'];
+	    			this.event.request.intent.slots.destination_car.value = this.attributes['destination_flight'];
 	    	        	this.event.request.intent.slots.startdate_car.value=this.attributes['startdate_flight'];
 	    	        	this.event.request.intent.slots.guests_car.value=this.attributes['guests_flight'];
 	    	        	
@@ -58,6 +58,7 @@ console.log("in car intent")
 	    	}
 	    	
 	    		if(this.attributes['state']=="launch"){
+	    			console.log("in launch");
 	    		var filledSlots = delegateSlotCollection_car.call(this);
 	    		destination_car=this.event.request.intent.slots.destination_car.value;
 	            startdate_car=this.event.request.intent.slots.startdate_car.value;
@@ -85,7 +86,7 @@ console.log("in car intent")
 	        	} else {
 	        		speechText='';
 	        		if (this.attributes['car_set']<6){
-	        			speechText +="the next 2 results based on your preferences are, "+ this.attributes['carInfo'][this.attributes['car_set']]+this.attributes['carInfo'][this.attributes['car_set']+1]+", choose one option or say more options.";
+	        			speechText +="the next 2 results are, "+ this.attributes['carInfo'][this.attributes['car_set']]+this.attributes['carInfo'][this.attributes['car_set']+1]+", choose one option or say more options.";
 	        			this.attributes['car_set']=this.attributes['car_set']+2;
 	        		} else{
 	        			speechText += "End of available options. Please select one from 1 to 6 or start over."

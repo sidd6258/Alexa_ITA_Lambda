@@ -50,6 +50,7 @@ exports.hotel = function(){
 	    	        	this.event.request.intent.slots.startdate_hotel.value=this.attributes['startdate_flight'];
 	    	        	this.event.request.intent.slots.guests_hotel.value=this.attributes['guests_flight'];
 	    	        	this.event.request.intent.confirmationStatus = 'NONE';
+	    	        	
 	    	        	var filledSlots = delegateSlotCollection_hotel.call(this);
 	    			}  else {
 	    				var filledSlots = delegateSlotCollection_hotel.call(this);
