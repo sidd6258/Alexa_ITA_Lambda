@@ -163,7 +163,7 @@ exports.flight=function(){
 //      	this.attributes['hotel_confirmation'] = hotel_confirmation;
 
 
-    	if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){        		
+    	if(this.event.request.intent.confirmationStatus == 'CONFIRMED' && this.attributes['state']=='flight_confirmation'){        		
 //            this.attributes['flight_confirmation'] = flight_confirmation; 
             flight_selection = this.attributes['flight_selection'];
             console.log("before booking request : ");	

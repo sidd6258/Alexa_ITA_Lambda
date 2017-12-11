@@ -114,7 +114,7 @@ console.log("in car intent")
 	                this.emit(':confirmIntent', speechText, repromptText);
 	            }
 	        	
-	        	if(this.event.request.intent.confirmationStatus == 'CONFIRMED'){        		
+	        	if(this.event.request.intent.confirmationStatus == 'CONFIRMED' && this.attributes['state']=='car_confirmation'){        		
 	                this.attributes['car_confirmation'] = car_confirmation;   
 	                this.attributes['car_status'] = "booked";
 	                car_selection = this.attributes['car_selection'];
@@ -192,7 +192,7 @@ console.log("in car intent")
 	    	                              var carInfo = body.cars;
 	    	                             // console.log("car object is "+carinfo);
 	    	                              var speechText = "";
-	    	                              speechText +="the top 2 results are, "+ carInfo[1]+carInfo[2]+", choose one option or say more options.";
+	    	                              speechText +="the top 2 results based on your preferences are, "+ carInfo[1]+carInfo[2]+", choose one option or say more options.";
 	    	                              carOptions = body.carOptions;	 
 	    	                              
 	    	                              this.attributes['car_set']=3;
