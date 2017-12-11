@@ -8,7 +8,7 @@ exports.tellBookingIntent = function(){
         
            
             profile=this.attributes['profile'];
-            console.log(profile.name);
+            console.log(profile.email);
             request({
             url: "http://ainuco.ddns.net:4324/tellBooking",
             method: "POST",
