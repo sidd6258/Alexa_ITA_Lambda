@@ -138,7 +138,7 @@ exports.hotel = function(){
 	        	} else {
 	        		speechText='';
 	        		if (this.attributes['hotel_set']<6){
-	        			speechText +="the next 2 results are, "+ hotelInfo[this.attributes['hotel_set']]+hotelInfo[this.attributes['hotel_set']+1]+", choose one option or say more options.";
+	        			speechText +="the next 2 results are, "+ this.attributes['hotelInfo'][this.attributes['hotel_set']]+this.attributes['hotelInfo'][this.attributes['hotel_set']+1]+", choose one option or say more options.";
 	        			this.attributes['hotel_set']=this.attributes['hotel_set']+2;
 	        		} else{
 	        			speechText += "End of available options. Please select one from 1 to 6 or start over."
