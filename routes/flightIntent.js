@@ -86,18 +86,20 @@ exports.flight=function(){
                         // console.log("res"+JSON.stringify(response));
                          if (!error && response.statusCode == 200) {
                              //console.log("place"+JSON.stringify(body));
-                             var flightinfo = body.flights;
+                             var flightInfo = body.flights;
                             // console.log("hotel object is "+hotelinfo);
                              var speechText = "";
-                             speechText += flightinfo+", choose one option";
+                             speechText += "the top 2 results are, "+ flightInfo[1]+flightInfo[2]+", choose one option or say more options.";
                           flightOptions = body.flightOptions;
 							  
 							  var flightObject=body.flightObject;
                              this.attributes['flightObject']=flightObject;
                              this.attributes['flightOptions']=flightOptions;
+                             this.attributes['flightInfo']=flightInfo;
+                             
                              console.log(speechText);
-                             var repromptText = "For instructions on what you can say, please say help me.";	    	                	         
-               	          this.event.request.dialogState = "STARTED";
+                             this.attributes['flight_set']=3;
+                             var repromptText = "choose one option or say more options.";	               	          this.event.request.dialogState = "STARTED";
 							  this.attributes['state']='flight_selection';
                	        //   console.log(this.attributes);
 
@@ -121,10 +123,27 @@ exports.flight=function(){
    	
      if(this.attributes['state']=="flight_selection"){
     	flight_selection = this.event.request.intent.slots.selection.value;
-    	this.attributes['flight_selection'] = flight_selection;
+    	if(flight_selection=='1'||flight_selection=='2'||flight_selection=='3'||flight_selection=='4'||flight_selection=='5'||flight_selection=='6'){
+    		flight_selection = parseInt(flight_selection);
+    		this.attributes['flight_selection'] = flight_selection;
+    		this.attributes['state']="flight_selected"
+    	} else {
+    		speechText='';
+    		if (this.attributes['flight_set']<6){
+    			speechText +="the next 2 results are, "+ this.attributes['flightInfo'][this.attributes['flight_set']]+this.attributes['flightInfo'][this.attributes['flight_set']+1]+", choose one option or say more options.";
+    			this.attributes['flight_set']=this.attributes['flight_set']+2;
+    		} else{
+    			speechText += "End of available options. Please select one from 1 to 6 or start over."
+    		}
+    		repromptText = speechText;
+    		console.log(speechText);
+    		this.emit(':elicitSlot','selection', speechText, repromptText,this.event.request.intent);
+            	        		
+    	}
+    	
     }
 
-    if(flight_selection != null && this.attributes['state']=="flight_selection"){               
+    if(flight_selection != null && this.attributes['state']=="flight_selected"){               
             this.attributes['flight_selection'] = flight_selection;             
             speechText = "You are about to book flight " + this.attributes['flightOptions'][flight_selection] + ". Please Confirm.";
             repromptText ="You are about to book flight " + this.attributes['flightOptions'][flight_selection] + ". Please Confirm.";
