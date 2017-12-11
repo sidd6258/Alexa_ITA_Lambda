@@ -104,7 +104,7 @@ exports.hotel = function(){
 
 	    	                              speechText +="the top 2 results are, "+ hotelInfo[1]+hotelInfo[2]+", choose one option or say more options.";
 	    	                              console.log(speechText);
-	    	                              this.attributes['hotel_set']=1;
+	    	                              this.attributes['hotel_set']=3;
 	    	                              var repromptText = "choose one option or say more options.";	    	                	         
 	    	                	          this.event.request.dialogState = "STARTED";
 										  this.attributes['state']='hotel_selection';
@@ -112,7 +112,7 @@ exports.hotel = function(){
 
 // ==========================================say the results ===================================================    
 	    	
-										  console.log(this.attributes);
+										  //console.log(this.attributes);
 			                	          this.emit(':elicitSlot','selection', speechText, repromptText,this.event.request.intent);
 	    	                          }
 	    	                      else
@@ -144,6 +144,7 @@ exports.hotel = function(){
 	        			speechText += "End of available options. Please select one from 1 to 6 or start over."
 	        		}
 	        		repromptText = speechText;
+	        		console.log(speechText);
 	        		this.emit(':elicitSlot','selection', speechText, repromptText,this.event.request.intent);
                     	        		
 	        	}
@@ -157,10 +158,10 @@ exports.hotel = function(){
 	                // console.log(this.attributes);
 
 	                // console.log(this.attributes['hotelOptions'][hotel_selection]);
-	                console.log(this.attributes['hotelOptions']);
+	                //console.log(this.attributes['hotelOptions']);
 	                this.event.request.dialogState = "STARTED";	
 	                this.attributes['state']='hotel_confirmation';
-	                console.log(this.attributes);
+	                //console.log(this.attributes);
 	                this.emit(':confirmIntent', speechText, repromptText);
 	            }
 	        	
