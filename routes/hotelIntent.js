@@ -91,17 +91,21 @@ exports.hotel = function(){
 	    	                         // console.log("res"+JSON.stringify(response));
 	    	                          if (!error && response.statusCode == 200) {
 	    	                              //console.log("place"+JSON.stringify(body));
-	    	                              var hotelinfo = body.hotels;
+	    	                              var hotelInfo = body.hotels;
 	    	                             // console.log("hotel object is "+hotelinfo);
 	    	                              var speechText = "";
-	    	                              speechText += hotelinfo+", choose one option";
+	    	                              
 	    	                              hotelOptions = body.hotelOptions;
 										  
 										  var hotelObject=body.hotelObject;
 	    	                              this.attributes['hotelObject']=hotelObject;
 	    	                              this.attributes['hotelOptions']=hotelOptions;
+	    	                              this.attributes['hotelInfo']=hotelInfo;
+
+	    	                              speechText +="the top 2 results are, "+ hotelInfo[1]+hotelInfo[2]+", choose one option or say more options.";
 	    	                              console.log(speechText);
-	    	                              var repromptText = "For instructions on what you can say, please say help me.";	    	                	         
+	    	                              this.attributes['hotel_set']=1;
+	    	                              var repromptText = "choose one option or say more options.";	    	                	         
 	    	                	          this.event.request.dialogState = "STARTED";
 										  this.attributes['state']='hotel_selection';
 	    	                	        //   console.log(this.attributes);
@@ -113,7 +117,7 @@ exports.hotel = function(){
 	    	                          }
 	    	                      else
 	    	                      {
-	    	                          speechText = "error occurred";
+	    	                          speechText = "error occurred. Please start over.";
 	    	                          repromptText = "error occurred"; 
 	    	                          this.emit(':ask', speechText, repromptText);
 	    	                      }
@@ -125,11 +129,28 @@ exports.hotel = function(){
 	       	
 	         if(this.attributes['state']=="hotel_selection"){
 	        	hotel_selection = this.event.request.intent.slots.selection.value;
-	        	this.attributes['hotel_selection'] = hotel_selection;
-				console.log("hotel_selection: "+hotel_selection);
+	        	console.log("hotel_selection: "+hotel_selection);
+	        	
+	        	if(hotel_selection=='1'||hotel_selection=='2'||hotel_selection=='3'||hotel_selection=='4'||hotel_selection=='5'||hotel_selection=='6'){
+	        		hotel_selection = parseInt(hotel_selection);
+	        		this.attributes['hotel_selection'] = hotel_selection;
+	        		this.attributes['state']="hotel_selected"
+	        	} else if(hotel_selection=='more'){
+	        		speechText='';
+	        		if (this.attributes['hotel_set']<6){
+	        			speechText +="the next 2 results are, "+ hotelInfo[this.attributes['hotel_set']]+hotelInfo[this.attributes['hotel_set']+1]+", choose one option or say more options.";
+	        			this.attributes['hotel_set']=this.attributes['hotel_set']+2;
+	        		} else{
+	        			speechText += "End of available options. Please select one from 1 to 6 or start over."
+	        		}
+	        		repromptText = speechText;
+	        		this.emit(':elicitSlot','selection', speechText, repromptText,this.event.request.intent);
+                    	        		
+	        	}
+	        	
 	        }
 
-	        if(hotel_selection != null && this.attributes['state']=="hotel_selection"){               
+	        if(hotel_selection != null && this.attributes['state']=="hotel_selected"){               
 	                this.attributes['hotel_selection'] = hotel_selection;             
 	                speechText = "You are about to book hotel " + this.attributes['hotelOptions'][hotel_selection] + ". Please Confirm.";
 	                repromptText ="You are about to book hotel " + this.attributes['hotelOptions'][hotel_selection] + ". Please Confirm.";
