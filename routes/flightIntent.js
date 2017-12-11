@@ -198,6 +198,7 @@ exports.flight=function(){
 	                          		speechText += "car or a hotel? Say book a car or book a hotel."
 	                          	}
 	                          }
+	                          speechText += ", or say stop to end booking."
 	                          repromptText = speechText;
 	                          this.event.request.dialogState = "STARTED";	
 	                          this.attributes['flight_status'] = 'booked';

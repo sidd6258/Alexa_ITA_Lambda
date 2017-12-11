@@ -205,6 +205,7 @@ exports.hotel = function(){
 	    	      	                		speechText += "car or a flight? Say book a car or book a flight."
 	    	      	                	}
 	    	      	                }
+	    	      	              speechText += ", or say stop to end booking."
 	    	      	                repromptText = speechText;
 	    	        	                this.attributes['state']='hotel_booked';
 	    	        	                

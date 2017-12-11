@@ -147,6 +147,7 @@ console.log("in car intent")
 	    	          	            		speechText += "flight or a hotel? Say book a flight or book a hotel."
 	    	          	            	}
 	    	          	            }
+	    	          	              speechText += ", or say stop to end booking."
 	    	          	            repromptText = speechText;
 	    	          	            console.log(this.attributes);
 	    	        	                this.attributes['state']='car_booked';
