@@ -6,7 +6,7 @@ exports.flightPreference = function(){
 	
 	var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "flightPreferences";
-		this.attributes['flight_action'] = this.event.request.intent.slots.flight_action.value;
+		this.attributes['flight_action'] = this.event.request.intent.slots.flight_action.resolutions.resolutionsPerAuthority.values.value.name;
 		var user=this.attributes['mongo_user'];
 		
 		

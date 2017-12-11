@@ -90,7 +90,7 @@
 	                this.emit(':ask', HelpMessage, HelpMessage);
 	    },
 	    'SessionEndedRequest': function () {
-	        var speechOutput = "Thank You for using intelligent travek agent. Have a great day.";
+	        var speechOutput = "Thank You for using intelligent travel agent. Have a great day.";
 	        this.response.speak(speechOutput);
 	        this.emit(':responseReady');
 	    },

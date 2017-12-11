@@ -6,7 +6,7 @@ exports.carPreference = function(){
 
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "carPreferences";
-		this.attributes['car_action'] = this.event.request.intent.slots.car_action.value;
+		this.attributes['car_action'] = this.event.request.intent.slots.car_action.resolutions.resolutionsPerAuthority.values.value.name;
 		var user=this.attributes['mongo_user'];
 		
 		if (this.attributes['car_action']=='add'){

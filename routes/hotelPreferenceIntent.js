@@ -4,7 +4,7 @@ exports.hotelPreference = function(){
 	console.log("in Hotel pref");
 		var filledSlots = delegateSlotCollection_preference.call(this);
 		this.attributes['state'] = "hotelPreferences";
-		this.attributes['hotel_action'] = this.event.request.intent.slots.hotel_action.value;
+		this.attributes['hotel_action'] = this.event.request.intent.slots.hotel_action.resolutions.resolutionsPerAuthority.values.value.name;
 		var user=this.attributes['mongo_user'];
 		
 		if (this.attributes['hotel_action']=='add'){
