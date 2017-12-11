@@ -72,28 +72,25 @@
 	    	tellBookingFunc();	    	
 	    },
 	    'AMAZON.HelpIntent': function () {
-	        speechOutput = "Help Intent";
+	        speechOutput = "I can see that you are stuck. Please start over. Say book a hotel, book a car, book a flight, go to preferences or show my bookings.To exit say stop.";
 	        reprompt = "";
-	        this.response.speak(speechOutput).listen(reprompt);
-	        this.emit(':responseReady');
+	        this.emit(':ask',speechOutput);
 	    },
 	    'AMAZON.CancelIntent': function () {
-	        speechOutput = "Cancel Intent";
-	        this.response.speak(speechOutput);
-	        this.emit(':responseReady');
+	        speechOutput = "Canceling, Please start over. Say book a hotel, book a car, book a flight, go to preferences or show my bookings.To exit say stop.";
+	        this.emit(':ask',speechOutput);
 	    },
 	    'AMAZON.StopIntent': function () {
-	        speechOutput = "Stop Intent";
-	        this.response.speak(speechOutput);
-	        this.emit(':responseReady');
+	        speechOutput = "Thank You for using intelligent travek agent. Have a great day.";
+	        this.emit(':tell',speechOutput);
 	    },
 	    'Unhandled': function () {
 	    				console.log("unhandled reached");
-	                HelpMessage ="help me"; 
-	                this.emit(':tell', HelpMessage, HelpMessage);
+	                HelpMessage ="There was some problem. Please start over. Say book a hotel, book a car, book a flight, go to preferences or show my bookings."; 
+	                this.emit(':ask', HelpMessage, HelpMessage);
 	    },
 	    'SessionEndedRequest': function () {
-	        var speechOutput = "Session End request";
+	        var speechOutput = "Thank You for using intelligent travek agent. Have a great day.";
 	        this.response.speak(speechOutput);
 	        this.emit(':responseReady');
 	    },

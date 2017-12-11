@@ -1,6 +1,6 @@
 const request=require('request');
-const welcomeOutput = "Let's plan a trip. What would you like to book? Say book a hotel, car or flight. If you want to update your preferences, you can also say go to preferences";
-const welcomeReprompt = "Let me know how can i help you. Say book a hotel, book a car or book a flight";
+const welcomeOutput = "Let's plan a trip. What would you like to book? Say book a hotel, car or flight. If you want to update your preferences, you can also say go to preferences. Say show my bookings to see your upcoming bookings";
+const welcomeReprompt = "Let me know how can i help you. Say book a hotel, book a car, book a flight, go to preferences or show my bookings.";
 
 
 exports.intro = function(){

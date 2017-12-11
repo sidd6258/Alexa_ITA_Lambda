@@ -89,7 +89,7 @@ exports.flight=function(){
                              var flightInfo = body.flights;
                             // console.log("hotel object is "+hotelinfo);
                              var speechText = "";
-                             speechText += "the top 2 results are, "+ flightInfo[1]+flightInfo[2]+", choose one option or say more options.";
+                             speechText += "the top 2 results based on your preferences are, "+ flightInfo[1]+flightInfo[2]+", choose one option or say more options.";
                           flightOptions = body.flightOptions;
 							  
 							  var flightObject=body.flightObject;

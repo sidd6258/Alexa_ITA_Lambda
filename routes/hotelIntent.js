@@ -102,7 +102,7 @@ exports.hotel = function(){
 	    	                              this.attributes['hotelOptions']=hotelOptions;
 	    	                              this.attributes['hotelInfo']=hotelInfo;
 
-	    	                              speechText +="the top 2 results are, "+ hotelInfo[1]+hotelInfo[2]+", choose one option or say more options.";
+	    	                              speechText +="the top 2 results based on your preferences are, "+ hotelInfo[1]+hotelInfo[2]+", choose one option or say more options.";
 	    	                              console.log(speechText);
 	    	                              this.attributes['hotel_set']=3;
 	    	                              var repromptText = "choose one option or say more options.";	    	                	         
